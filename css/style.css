@@ -111,7 +111,7 @@ h4 a,
 h5 a,
 h6 a {
      color: #212121;
-     text-decoration: none!important;
+     text-decoration: none !important;
      opacity: 1
 }
 
@@ -156,7 +156,7 @@ img {
      height: auto;
 }
 
- :focus {
+:focus {
      outline: 0;
 }
 
@@ -369,12 +369,25 @@ ul.btn li:last-child {
      z-index: 999;
 }
 
+.logo {
+     margin-top: 8px
+}
+
 .logo a {
-     font-size: 40px;
+     display: flex;
+     flex-direction: row;
+     justify-content: center;
+     align-items: center;
+     gap: 16px;
+     font-size: 32px;
      font-weight: bold;
      text-transform: uppercase;
      color: #fff;
      line-height: 40px;
+}
+
+.logo a img {
+     width: 64px;
 }
 
 
@@ -391,36 +404,44 @@ ul.btn li:last-child {
      align-items: center;
      position: relative;
 }
+
 .banner_main::before {
      position: absolute;
      content: "";
-     width:50px; 
-     height:40px;
+     width: 50px;
+     height: 40px;
      background: url(../images/cross.png);
      background-repeat: no-repeat;
      bottom: -38px;
      right: 38px;
 }
+
 .banner_main::after {
      position: absolute;
      content: "";
-     width:50px; 
-     height:40px;
+     width: 50px;
+     height: 40px;
      background: url(../images/cross.png);
      background-repeat: no-repeat;
      bottom: -38px;
      left: 38px;
 }
+
 .text-bg {
      text-align: left;
 }
 
 .text-bg h1 {
      color: #fff;
-     font-size: 81px;
-     line-height: 80px;
-     padding-bottom: 45px;
+     font-size: 40px;
+     /* line-height: 80px;
+     padding-bottom: 45px; */
      font-weight: bold;
+}
+
+.text-bg h2 {
+     color: #fff;
+     font-size: 28px;
 }
 
 .text-bg span {
@@ -444,25 +465,31 @@ ul.btn li:last-child {
      padding-top: 70px;
 }
 
-.text_img {
+/* .text_img {
      margin-right: -130px;
-}
+} */
 
 .text_img figure {
      margin: 0;
 }
 
 .text_img figure img {
-     width: 100%;
+     width: 60%;
 }
 
 .carousel-caption {
      position: inherit;
 }
 
-#banner1 .carousel-inner {
-     padding-right: 130px;
+.center-vertical {
+     display: flex;
+     align-items: center;
 }
+
+
+/* #banner1 .carousel-inner {
+     padding-right: 130px;
+} */
 
 #banner1 .carousel-indicators {
      left: inherit;
@@ -632,8 +659,8 @@ ul.btn li:last-child {
 }
 
 .our_products .product_box h3:hover {
-    background: #48ca95;
-    transition: ease-in all 0.5s;
+     background: #48ca95;
+     transition: ease-in all 0.5s;
 }
 
 .margin_bottom1 {
@@ -880,6 +907,7 @@ ul.btn li:last-child {
 .logo1 {
      float: left;
      margin-top: -30px;
+     width: 64px;
 }
 
 ul.social_icon {
@@ -1081,4 +1109,3 @@ ul.social_icon li a:hover {
 
 
 /** end laptop **/
-
