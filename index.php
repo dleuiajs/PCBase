@@ -40,7 +40,7 @@ loadPart("head");
                                     bez lagov.
                                     Objav zostavy prispôsobené presne tvojim požiadavkám!
                                  </p>
-                                 <a href="#">Buy Now </a> <a href="contact.html">Contact </a>
+                                 <a href="#">Kúpiť teraz</a> <a href="contact.html">Kontakt</a>
                            </div>
                         </div>
                         <div class="col-md-6 center-vertical">
@@ -66,7 +66,7 @@ loadPart("head");
                                     najkomplexnejšie projekty. S rýchlym SSD, vysokou RAM a spoľahlivým procesorom bude
                                     tvoja práca efektívnejšia než kedykoľvek predtým.
                                  </p>
-                                 <a href="#">Buy Now </a> <a href="contact.html">Contact </a>
+                                 <a href="#">Kúpiť teraz</a> <a href="contact.html">Kontakt</a>
                            </div>
                         </div>
                         <div class="col-md-6 center-vertical">
@@ -92,7 +92,7 @@ loadPart("head");
                                     zlomok ceny. Pracujte bez obáv s počítačom, ktorý vám umožní pracovať bez toho, aby
                                     vás sklamal.
                                  </p>
-                                 <a href="#">Buy Now </a> <a href="contact.html">Contact </a>
+                                 <a href="#">Kúpiť teraz</a> <a href="contact.html">Kontakt</a>
                            </div>
                         </div>
                         <div class="col-md-6 center-vertical">
@@ -217,7 +217,7 @@ loadPart("head");
                         </div>
                      </div>
                      <div class="col-md-12">
-                        <a class="read_more" href="#">Pozri viac</a>
+                        <a class="read_more" href="#">Zobraziť viac</a>
                      </div>
                   </div>
                </div>

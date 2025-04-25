@@ -18,7 +18,7 @@ loadPart("head");
          <div class="row">
             <div class="col-md-12">
                <div class="titlepage">
-                  <h2>Contact Now</h2>
+                  <h2>Kontaktujte nás teraz</h2>
                </div>
             </div>
          </div>
@@ -27,19 +27,19 @@ loadPart("head");
                <form id="request" class="main_form">
                   <div class="row">
                      <div class="col-md-12 ">
-                        <input class="contactus" placeholder="Name" type="type" name="Name">
+                        <input class="contactus" placeholder="Meno" type="type" name="Name">
                      </div>
                      <div class="col-md-12">
                         <input class="contactus" placeholder="Email" type="type" name="Email">
                      </div>
                      <div class="col-md-12">
-                        <input class="contactus" placeholder="Phone Number" type="type" name="Phone Number">
+                        <input class="contactus" placeholder="Telefónne číslo" type="type" name="Phone Number">
                      </div>
                      <div class="col-md-12">
-                        <textarea class="textarea" placeholder="Message" type="type" Message="Name">Message </textarea>
+                        <textarea class="textarea" placeholder="Správa" type="type" Message="Name"></textarea>
                      </div>
                      <div class="col-md-12">
-                        <button class="send_btn">Send</button>
+                        <button class="send_btn">Odoslať</button>
                      </div>
                   </div>
                </form>

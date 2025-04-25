@@ -827,7 +827,32 @@ ul.btn li:last-child {
      margin: 0 50px;
 }
 
-.main_form .contactus {
+.main_form label {
+     color: #fff;
+     font-size: 18px;
+     font-weight: normal;
+}
+
+.main_form select {
+     border: #fff solid 2px;
+     padding: 0px 15px;
+     margin-bottom: 25px;
+     width: 100%;
+     height: 57px;
+     background-color: transparent;
+     color: #fff;
+     font-size: 18px;
+     font-weight: normal;
+}
+
+
+ .main_form select:focus option {
+     background-color: #49459A;
+     color: #fff;
+     width: 100%;
+ }
+
+.main_form input {
      border: #fff solid 2px;
      padding: 0px 15px;
      margin-bottom: 25px;
@@ -839,7 +864,7 @@ ul.btn li:last-child {
      font-weight: normal;
 }
 
-.main_form .textarea {
+.main_form textarea {
      border: #fff solid 2px;
      padding: 0px 15px;
      margin-bottom: 25px;
