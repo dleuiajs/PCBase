@@ -125,7 +125,7 @@ loadPart("head");
                   <i><img src="images/category_img_01.png" alt="#" /></i>
                   <h3>Herné počítače</h3>
                   <p>Výkonný herný počítač vytvorený špeciálne na hranie hier s najlepšou grafickou kartou a procesorom.
-                     Všetky hry s rezervou 5 rokov bez problémov spustíte pri vysokých nastaveniach v 120 fps.</p>
+                     Všetky hry s rezervou 5 rokov bez problémov spustíte.</p>
                </div>
             </div>
             <div class="col-md-4">
@@ -164,20 +164,20 @@ loadPart("head");
                   <div class="row">
                      <div class="col-md-4 margin_bottom1">
                         <div class="product_box">
-                           <figure><img src="images/product1.png" alt="#" /></figure>
+                           <figure><img src="images/product3.png" alt="#" /></figure>
                            <h3>Počítač</h3>
                         </div>
                      </div>
                      <div class="col-md-4 margin_bottom1">
                         <div class="product_box">
-                           <figure><img src="images/product2.png" alt="#" /></figure>
-                           <h3>Notebook</h3>
+                           <figure><img src="images/product1.png" alt="#" /></figure>
+                           <h3>Klávesnica</h3>
                         </div>
                      </div>
                      <div class="col-md-4 margin_bottom1">
                         <div class="product_box">
-                           <figure><img src="images/product3.png" alt="#" /></figure>
-                           <h3>Tablet</h3>
+                           <figure><img src="images/product2.png" alt="#" /></figure>
+                           <h3>Myš</h3>
                         </div>
                      </div>
                      <div class="col-md-4 margin_bottom1">
@@ -189,7 +189,7 @@ loadPart("head");
                      <div class="col-md-4 margin_bottom1">
                         <div class="product_box">
                            <figure><img src="images/product5.png" alt="#" /></figure>
-                           <h3>internet</h3>
+                           <h3>Internet</h3>
                         </div>
                      </div>
                      <div class="col-md-4 margin_bottom1">
