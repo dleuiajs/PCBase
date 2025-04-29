@@ -15,7 +15,7 @@ loadPart("head");
       ?>
       <!-- end header -->
       <!-- products -->
-      <div class="products">
+      <div class="tovary">
          <div class="container">
             <div class="row">
                <div class="col-md-12">
@@ -26,7 +26,7 @@ loadPart("head");
             </div>
             <div class="row">
                <div class="col-md-12">
-                  <div class="our_products">
+                  <div class="our_tovary">
                      <div class="row ">
                         <div class="col-md-12 margin_bottom1">
                            <form id="request" class="">

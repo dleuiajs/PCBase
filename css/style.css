@@ -627,47 +627,47 @@ ul.btn li:last-child {
      justify-content: center;
      margin-top: 30px;
      gap: 8px;
-   }
-   
-   .pagination a {
+}
+
+.pagination a {
      padding: 8px 14px;
      text-decoration: none;
      background-color: #f0f0f0;
      color: #333;
      border-radius: 5px;
      transition: background-color 0.3s;
-   }
-   
-   .pagination a:hover {
+}
+
+.pagination a:hover {
      background-color: #ddd;
-   }
-   
-   .pagination a.active {
+}
+
+.pagination a.active {
      background-color: #333;
      color: white;
-   }
-   
+}
+
 
 /** products section **/
 
-.products {
+.tovary {
      margin-top: 90px;
      background: #f7f7f7;
      padding: 90px 0 90px 0;
 }
 
-.our_products {
+.our_tovary {
      background-color: #fff;
      padding: 90px 90px;
 }
 
-.our_products label {
+.our_tovary label {
      color: black;
      font-size: 18px;
      font-weight: normal;
 }
 
-.our_products select {
+.our_tovary select {
      border: black solid 2px;
      padding: 0px 15px;
      margin-bottom: 25px;
@@ -679,7 +679,7 @@ ul.btn li:last-child {
      font-weight: normal;
 }
 
-.our_products input {
+.our_tovary input {
      border: black solid 2px;
      padding: 0px 15px;
      margin-bottom: 25px;
@@ -691,11 +691,11 @@ ul.btn li:last-child {
      font-weight: normal;
 }
 
-.our_products input::placeholder {
+.our_tovary input::placeholder {
      color: black !important;
 }
 
-.our_products textarea {
+.our_tovary textarea {
      border: #fff solid 2px;
      padding: 0px 15px;
      margin-bottom: 25px;
@@ -708,7 +708,7 @@ ul.btn li:last-child {
      height: 151px;
 }
 
-.our_products .product_box {
+.our_tovary .product_box {
      text-align: left;
      margin-bottom: 30px;
      padding: 15px 0;
@@ -717,22 +717,22 @@ ul.btn li:last-child {
      cursor: pointer;
 }
 
-.our_products .product_box:hover {
+.our_tovary .product_box:hover {
      transform: scale(1.05);
 }
 
-.our_products .product_box figure {
+.our_tovary .product_box figure {
      margin: 0;
 }
 
-.our_products .product_box img {
+.our_tovary .product_box img {
      width: 100%;
      aspect-ratio: 1 / 1;
      object-fit: contain;
      margin-bottom: 10px;
 }
 
-.our_products .product_box p.name {
+.our_tovary .product_box p.name {
      color: black;
      font-weight: 300;
      margin: 5px 10px;
@@ -752,34 +752,72 @@ ul.btn li:last-child {
      white-space: normal;
 } */
 
-.our_products .product_box p.availability {
+.our_tovary .product_box p.availability {
      font-weight: 400;
      margin: 5px 10px;
      font-size: 13px;
 }
 
-.our_products .product_box p.availability.in-stock {
+.our_tovary .product_box p.availability.in-stock {
      color: rgb(0, 162, 0);
 }
 
-.our_products .product_box p.availability.out-of-stock {
+.our_tovary .product_box p.availability.out-of-stock {
      color: rgb(200, 0, 0);
 }
 
-.our_products .product_box p.price {
+.our_tovary .product_box p.price {
      color: rgb(0, 0, 0);
      font-weight: 500;
      margin: 5px 10px;
      font-size: 20px;
 }
 
-.our_products .product_box p.price::after {
+.our_tovary .product_box p.price::after {
      content: "€";
      font-size: 15px;
 }
 
 .margin_bottom1 {
      margin-bottom: 60px;
+}
+
+.products {
+     margin-top: 90px;
+     background: #f7f7f7;
+     padding: 90px 0 90px 0;
+}
+
+.our_products {
+     background-color: #fff;
+     padding: 90px 0;
+}
+
+.our_products .product_box {
+     text-align: center;
+     margin-bottom: 30px;
+}
+
+.our_products .product_box figure {
+     margin: 0;
+}
+
+.our_products .product_box h3 {
+     width: 200px;
+     color: #fff;
+     font-size: 20px;
+     line-height: 20px;
+     background-color: #252525;
+     font-weight: 500;
+     margin: 0 auto;
+     padding: 10px 0;
+     margin-top: 40px;
+     transition: ease-in all 0.5s;
+}
+
+.our_products .product_box h3:hover {
+     background: #48ca95;
+     transition: ease-in all 0.5s;
 }
 
 .our_products .read_more {
