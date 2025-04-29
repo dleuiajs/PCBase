@@ -20,70 +20,86 @@ loadPart("head");
             <div class="row">
                <div class="col-md-12">
                   <div class="titlepage">
-                     <h2>Our Products</h2>
+                     <h2>Tovary</h2>
                   </div>
                </div>
             </div>
             <div class="row">
                <div class="col-md-12">
                   <div class="our_products">
-                     <div class="row">
-                        <div class="col-md-4 margin_bottom1">
+                     <div class="row ">
+                        <div class="col-md-12 margin_bottom1">
+                           <form id="request" class="">
+                              <div class="row justify-content-between">
+                                 <div class="col-md-6 ">
+                                    <label for="search">Zadajte názov</label><br>
+                                    <input class="search" type="text" name="search" placeholder="Zadajte názov">
+                                 </div>
+                                 <div class="col-md-6 ">
+                                    <label for="sort">Zoradiť podľa:</label><br>
+                                    <select id="sort" name="sort" onchange="this.form.submit()">
+                                       <option value="default">Predvolené zoradenie</option>
+                                       <option value="price-asc">Cena: od najnižšej</option>
+                                       <option value="price-desc">Cena: od najvyššej</option>
+                                       <option value="popularity">Podľa obľúbenosti</option>
+                                       <option value="newest">Najnovšie</option>
+                                    </select>
+                                 </div>
+                              </div>
+                           </form>
+                        </div>
+                        <div class="col-md-3">
                            <div class="product_box">
-                              <figure><img src="images/product1.png" alt="#" /></figure>
-                              <h3>Computer</h3>
+                              <figure><img src="images/category_img_01.png" alt="#" /></figure>
+                              <p class="name">Výkonný počítač na hranie hier</p>
+                              <p class="availability in-stock">Na sklade</p>
+                              <p class="price">1 499</p>
                            </div>
                         </div>
-                        <div class="col-md-4 margin_bottom1">
+                        <div class="col-md-3">
                            <div class="product_box">
-                              <figure><img src="images/product2.png" alt="#" /></figure>
-                              <h3>Laptop</h3>
+                              <figure><img src="images/category_img_02.png" alt="#" /></figure>
+                              <p class="name">Veľmi výkonný počítač na náročnú prácu</p>
+                              <p class="availability in-stock">Na sklade</p>
+                              <p class="price">2 199</p>
                            </div>
                         </div>
-                        <div class="col-md-4 margin_bottom1">
+                        <div class="col-md-3">
                            <div class="product_box">
-                              <figure><img src="images/product3.png" alt="#" /></figure>
-                              <h3>Tablet</h3>
+                              <figure><img src="images/banner_img_02.png" alt="#" /></figure>
+                              <p class="name">Počítač na prácu s 3D grafikou</p>
+                              <p class="availability in-stock">Na sklade</p>
+                              <p class="price">1 699</p>
                            </div>
                         </div>
-                        <div class="col-md-4 margin_bottom1">
+                        <div class="col-md-3">
                            <div class="product_box">
-                              <figure><img src="images/product4.png" alt="#" /></figure>
-                              <h3>Speakers</h3>
+                              <figure><img src="images/category_img_03.png" alt="#" /></figure>
+                              <p class="name">Rozpočtový herný počítač na hranie na minimálnych nastaveniach</p>
+                              <p class="availability out-of-stock">Vypredané </p>
+                              <p class="price">349</p>
                            </div>
                         </div>
-                        <div class="col-md-4 margin_bottom1">
+                        <div class="col-md-3">
                            <div class="product_box">
-                              <figure><img src="images/product5.png" alt="#" /></figure>
-                              <h3>internet</h3>
+                              <figure><img src="images/banner_img_03.png" alt="#" /></figure>
+                              <p class="name">Lacný počítač na jednoduché účely</p>
+                              <p class="availability in-stock">Na sklade</p>
+                              <p class="price">289</p>
                            </div>
                         </div>
-                        <div class="col-md-4 margin_bottom1">
-                           <div class="product_box">
-                              <figure><img src="images/product6.png" alt="#" /></figure>
-                              <h3>Hardisk</h3>
-                           </div>
-                        </div>
-                        <div class="col-md-4">
-                           <div class="product_box">
-                              <figure><img src="images/product7.png" alt="#" /></figure>
-                              <h3>Rams</h3>
-                           </div>
-                        </div>
-                        <div class="col-md-4">
-                           <div class="product_box">
-                              <figure><img src="images/product8.png" alt="#" /></figure>
-                              <h3>Bettery</h3>
-                           </div>
-                        </div>
-                        <div class="col-md-4">
-                           <div class="product_box">
-                              <figure><img src="images/product9.png" alt="#" /></figure>
-                              <h3>Drive</h3>
-                           </div>
-                        </div>
-                        <div class="col-md-12">
+                        <!-- <div class="col-md-12">
                            <a class="read_more" href="#">See More</a>
+                        </div> -->
+                        <!-- <div class="col-md-12">
+                           <div class="pagination">
+                              <a href="#">&laquo;</a>
+                              <a href="#" class="active">1</a>
+                              <a href="#">2</a>
+                              <a href="#">3</a>
+                              <a href="#">&raquo;</a>
+                           </div> -->
+
                         </div>
                      </div>
                   </div>

@@ -116,6 +116,15 @@ loadPart("head");
                         </select>
                      </div>
                      <div class="col-md-12">
+                        <label for="budget">Zadajte rozpočet:</label><br>
+                        <input type="number" id="budget" name="budget" placeholder="Zadajte rozpočet" min="0"
+                           step="1"><br>
+                     </div>
+                     <div class="col-md-12">
+                        <label for="email">Zadajte e‑mail:</label><br>
+                        <input type="email" id="email" name="email" placeholder="Zadajte e‑mail">
+                     </div>
+                     <div class="col-md-12">
                         <button class="send_btn">Odoslať</button>
                      </div>
                   </div>
