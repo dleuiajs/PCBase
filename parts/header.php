@@ -7,7 +7,7 @@
                     <div class="full">
                         <div class="center-desk">
                             <div class="logo">
-                                <a href="index.html"><img src="images/logo.png" alt="#" />PCBASE</a>
+                                <a href="index.php"><img src="images/logo.png" alt="#" />PCBASE</a>
                             </div>
                         </div>
                     </div>
