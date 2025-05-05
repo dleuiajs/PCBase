@@ -39,7 +39,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-12">
-                        <p>© 2025 All Rights Reserved. PCBase. Design by<a href="https://html.design/"> Free Html
+                        <p>© 2025 Všetky práva vyhradené. PCBase. Dizajn od <a href="https://html.design/">Free Html
                                 Templates</a></p>
                     </div>
                 </div>

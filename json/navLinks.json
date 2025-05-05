@@ -1,9 +1,8 @@
 {
     "index.php": "Domov",
     "about.php": "O nás",
-    "computer.php": "Počítač",
-    "laptop.php": "Notebook",
-    "product.php": "Produkty",
+    "computer.php": "Objednať zostavenie PC",
+    "products.php": "Tovary",
     "contact.php": "Kontaktujte nás",
     "search.php": "<i class=\"fa fa-search\" aria-hidden=\"true\"></i>",
     "login.php": "Prihlásenie"

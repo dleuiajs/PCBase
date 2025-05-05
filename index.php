@@ -40,7 +40,7 @@ loadPart("head");
                                     bez lagov.
                                     Objav zostavy prispôsobené presne tvojim požiadavkám!
                                  </p>
-                                 <a href="#">Buy Now </a> <a href="contact.html">Contact </a>
+                                 <a href="#">Kúpiť teraz</a> <a href="contact.html">Kontakt</a>
                            </div>
                         </div>
                         <div class="col-md-6 center-vertical">
@@ -66,7 +66,7 @@ loadPart("head");
                                     najkomplexnejšie projekty. S rýchlym SSD, vysokou RAM a spoľahlivým procesorom bude
                                     tvoja práca efektívnejšia než kedykoľvek predtým.
                                  </p>
-                                 <a href="#">Buy Now </a> <a href="contact.html">Contact </a>
+                                 <a href="#">Kúpiť teraz</a> <a href="contact.html">Kontakt</a>
                            </div>
                         </div>
                         <div class="col-md-6 center-vertical">
@@ -92,7 +92,7 @@ loadPart("head");
                                     zlomok ceny. Pracujte bez obáv s počítačom, ktorý vám umožní pracovať bez toho, aby
                                     vás sklamal.
                                  </p>
-                                 <a href="#">Buy Now </a> <a href="contact.html">Contact </a>
+                                 <a href="#">Kúpiť teraz</a> <a href="contact.html">Kontakt</a>
                            </div>
                         </div>
                         <div class="col-md-6 center-vertical">
@@ -125,7 +125,7 @@ loadPart("head");
                   <i><img src="images/category_img_01.png" alt="#" /></i>
                   <h3>Herné počítače</h3>
                   <p>Výkonný herný počítač vytvorený špeciálne na hranie hier s najlepšou grafickou kartou a procesorom.
-                     Všetky hry s rezervou 5 rokov bez problémov spustíte pri vysokých nastaveniach v 120 fps.</p>
+                     Všetky hry s rezervou 5 rokov bez problémov spustíte.</p>
                </div>
             </div>
             <div class="col-md-4">
@@ -164,20 +164,20 @@ loadPart("head");
                   <div class="row">
                      <div class="col-md-4 margin_bottom1">
                         <div class="product_box">
-                           <figure><img src="images/product1.png" alt="#" /></figure>
+                           <figure><img src="images/product3.png" alt="#" /></figure>
                            <h3>Počítač</h3>
                         </div>
                      </div>
                      <div class="col-md-4 margin_bottom1">
                         <div class="product_box">
-                           <figure><img src="images/product2.png" alt="#" /></figure>
-                           <h3>Notebook</h3>
+                           <figure><img src="images/product1.png" alt="#" /></figure>
+                           <h3>Klávesnica</h3>
                         </div>
                      </div>
                      <div class="col-md-4 margin_bottom1">
                         <div class="product_box">
-                           <figure><img src="images/product3.png" alt="#" /></figure>
-                           <h3>Tablet</h3>
+                           <figure><img src="images/product2.png" alt="#" /></figure>
+                           <h3>Myš</h3>
                         </div>
                      </div>
                      <div class="col-md-4 margin_bottom1">
@@ -189,7 +189,7 @@ loadPart("head");
                      <div class="col-md-4 margin_bottom1">
                         <div class="product_box">
                            <figure><img src="images/product5.png" alt="#" /></figure>
-                           <h3>internet</h3>
+                           <h3>Internet</h3>
                         </div>
                      </div>
                      <div class="col-md-4 margin_bottom1">
@@ -217,7 +217,7 @@ loadPart("head");
                         </div>
                      </div>
                      <div class="col-md-12">
-                        <a class="read_more" href="#">Pozri viac</a>
+                        <a class="read_more" href="#">Zobraziť viac</a>
                      </div>
                   </div>
                </div>
