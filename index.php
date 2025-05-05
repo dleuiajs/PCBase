@@ -217,7 +217,7 @@ loadPart("head");
                         </div>
                      </div>
                      <div class="col-md-12">
-                        <a class="read_more" href="#">Zobraziť viac</a>
+                        <a class="read_more" href="products.php">Zobraziť viac</a>
                      </div>
                   </div>
                </div>
@@ -234,7 +234,7 @@ loadPart("head");
                <div class="titlepage">
                   <p>Každý počítač</p>
                   <h2>Až 40 % zľava!</h2>
-                  <a class="read_more" href="#">Nakúp teraz</a>
+                  <a class="read_more" href="products.php">Nakúp teraz</a>
                </div>
             </div>
             <div class="col-md-6">
