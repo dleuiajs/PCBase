@@ -6,7 +6,7 @@ loadPart("head");
 ?>
 <!-- body -->
 
-<body class="main-layout inner_posituong contact_page">
+<body class="main-layout inner_posituong">
    <!-- header -->
    <?php
    loadPart("header");
