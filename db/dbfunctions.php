@@ -5,13 +5,8 @@ use PDO, PDOException;
 
 class Database
 {
-    private $conn;
-
-    public function __construct()
-    {
-        $this->connect();
-    }
-    protected function connect()
+    protected $connection;
+    static function connect()
     {
         $config = DATABASE;
         // možnosti
@@ -22,7 +17,8 @@ class Database
 
         // pripojenie PDO
         try {
-            $this->conn = new PDO("mysql:host=" . $config["HOST"] . ";dbname=" . $config["DBNAME"] . ";port=" . $config["PORT"], $config["USER_NAME"], $config["PASSWORD"], $options);
+            $conn = new PDO("mysql:host=" . $config["HOST"] . ";dbname=" . $config["DBNAME"] . ";port=" . $config["PORT"], $config["USER_NAME"], $config["PASSWORD"], $options);
+            return $conn;
         } catch (PDOException $e) {
             die("Chyba propojenia: " . $e->getMessage());
         }
@@ -30,7 +26,19 @@ class Database
 
     protected function getConnection()
     {
-        return $this->conn;
+        return $this->connect();
+    }
+
+    protected function getData($nazov)
+    {
+        try {
+            $stmt = $this->connection->prepare('SELECT * FROM ' . $nazov);
+            $stmt->execute();
+            return $stmt->fetchAll();
+        } catch (PDOException $e) {
+            echo "Chyba: " . $e->getMessage();
+            return false;
+        }
     }
 }
 ?>

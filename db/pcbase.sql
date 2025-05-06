@@ -49,7 +49,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `pcbase`.`zakladna_doska` (
   `idzakladna_doska` INT NOT NULL AUTO_INCREMENT,
-  `nazov` VARCHAR(45) NOT NULL,
+  `nazov` VARCHAR(255) NOT NULL,
   `model` VARCHAR(45) NOT NULL,
   `socket` VARCHAR(45) NOT NULL,
   `chipset` VARCHAR(45) NOT NULL,
@@ -64,7 +64,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `pcbase`.`procesor` (
   `idprocesor` INT NOT NULL AUTO_INCREMENT,
-  `nazov` VARCHAR(45) NOT NULL,
+  `nazov` VARCHAR(255) NOT NULL,
   `model` VARCHAR(45) NOT NULL,
   `jadra` INT NOT NULL,
   `vlaken` INT NOT NULL,
@@ -80,7 +80,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `pcbase`.`napajaci_zdroj` (
   `idnapajaci_zdroj` INT NOT NULL AUTO_INCREMENT,
-  `nazov` VARCHAR(45) NOT NULL,
+  `nazov` VARCHAR(255) NOT NULL,
   `model` VARCHAR(45) NOT NULL,
   `vystupny_vykon` INT NOT NULL,
   `efektivita` VARCHAR(45) NOT NULL,
@@ -96,7 +96,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `pcbase`.`operacna_pamat` (
   `idoperacna_pamat` INT NOT NULL AUTO_INCREMENT,
-  `nazov` VARCHAR(45) NOT NULL,
+  `nazov` VARCHAR(255) NOT NULL,
   `model` VARCHAR(45) NOT NULL,
   `typ_pamati` VARCHAR(45) NOT NULL,
   `kapacita` FLOAT NOT NULL,
@@ -111,7 +111,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `pcbase`.`ulozisko` (
   `idulozisko` INT NOT NULL AUTO_INCREMENT,
-  `nazov` VARCHAR(45) NOT NULL,
+  `nazov` VARCHAR(255) NOT NULL,
   `model` VARCHAR(45) NOT NULL,
   `typ` VARCHAR(45) NOT NULL,
   `kapacita` INT NOT NULL,
@@ -129,7 +129,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `pcbase`.`chladenie` (
   `idchladenie` INT NOT NULL AUTO_INCREMENT,
-  `nazov` VARCHAR(45) NOT NULL,
+  `nazov` VARCHAR(255) NOT NULL,
   `model` VARCHAR(45) NOT NULL,
   `typ` VARCHAR(45) NOT NULL,
   `velkost_fan` VARCHAR(45) NULL,
@@ -144,7 +144,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `pcbase`.`operacny_system` (
   `idoperacny_system` INT NOT NULL AUTO_INCREMENT,
-  `nazov` VARCHAR(45) NOT NULL,
+  `nazov` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`idoperacny_system`))
 ENGINE = InnoDB;
 
@@ -214,13 +214,14 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `pcbase`.`graficka_karta` (
   `idgraficka_karta` INT NOT NULL AUTO_INCREMENT,
-  `nazov` VARCHAR(45) NOT NULL,
+  `nazov` VARCHAR(255) NOT NULL,
   `model` VARCHAR(45) NOT NULL,
   `typ_pamati` VARCHAR(45) NOT NULL,
   `velkost_pamati` INT NOT NULL,
   `zbernica` INT NOT NULL,
   `taktny_rychlost` INT NOT NULL,
   `rozhranie` VARCHAR(45) NOT NULL,
+  `napajanie` INT NOT NULL,
   PRIMARY KEY (`idgraficka_karta`))
 ENGINE = InnoDB;
 
