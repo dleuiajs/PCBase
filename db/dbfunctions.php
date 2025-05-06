@@ -3,9 +3,15 @@ namespace databaza;
 require_once("db/config.php");
 use PDO, PDOException;
 
-class Db
+class Database
 {
-    static function connect()
+    private $conn;
+
+    public function __construct()
+    {
+        $this->connect();
+    }
+    protected function connect()
     {
         $config = DATABASE;
         // možnosti
@@ -16,11 +22,15 @@ class Db
 
         // pripojenie PDO
         try {
-            $conn = new PDO("mysql:host=" . $config["HOST"] . ";dbname=" . $config["DBNAME"] . ";port=" . $config["PORT"], $config["USER_NAME"], $config["PASSWORD"], $options);
-            return $conn;
+            $this->conn = new PDO("mysql:host=" . $config["HOST"] . ";dbname=" . $config["DBNAME"] . ";port=" . $config["PORT"], $config["USER_NAME"], $config["PASSWORD"], $options);
         } catch (PDOException $e) {
             die("Chyba propojenia: " . $e->getMessage());
         }
+    }
+
+    protected function getConnection()
+    {
+        return $this->conn;
     }
 }
 ?>
