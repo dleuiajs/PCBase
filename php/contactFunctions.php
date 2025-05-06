@@ -7,8 +7,6 @@ use Exception, databaza\Database;
 
 class ContactFunctions extends Database
 {
-    protected $connection;
-
     public function __construct()
     {
         $this->connect();
@@ -22,6 +20,7 @@ class ContactFunctions extends Database
         $tel_cislo = $_POST['tel_cislo'] ?? '';
         $sprava = $_POST['sprava'] ?? '';
         $this->insertContact($meno, $email, $tel_cislo, $sprava);
+        $this->connection = null; // uzavrie pripojenie nastavením na null
     }
 
     private function insertContact($meno, $email, $tel_cislo, $sprava)
