@@ -48,8 +48,18 @@ ENGINE = InnoDB;
 -- Table `pcbase`.`zakladna_doska`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `pcbase`.`zakladna_doska` (
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
   `idzakladna_doska` INT NOT NULL,
   `nazov` VARCHAR(45) NOT NULL,
+=======
+  `idzakladna_doska` INT NOT NULL AUTO_INCREMENT,
+  `nazov` VARCHAR(255) NOT NULL,
+>>>>>>> Stashed changes
+=======
+  `idzakladna_doska` INT NOT NULL AUTO_INCREMENT,
+  `nazov` VARCHAR(255) NOT NULL,
+>>>>>>> Stashed changes
   `model` VARCHAR(45) NOT NULL,
   `socket` VARCHAR(45) NOT NULL,
   `chipset` VARCHAR(45) NOT NULL,
@@ -63,8 +73,18 @@ ENGINE = InnoDB;
 -- Table `pcbase`.`procesor`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `pcbase`.`procesor` (
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
   `idprocesor` INT NOT NULL,
   `nazov` VARCHAR(45) NOT NULL,
+=======
+  `idprocesor` INT NOT NULL AUTO_INCREMENT,
+  `nazov` VARCHAR(255) NOT NULL,
+>>>>>>> Stashed changes
+=======
+  `idprocesor` INT NOT NULL AUTO_INCREMENT,
+  `nazov` VARCHAR(255) NOT NULL,
+>>>>>>> Stashed changes
   `model` VARCHAR(45) NOT NULL,
   `jadra` INT NOT NULL,
   `vlaken` INT NOT NULL,
@@ -79,8 +99,18 @@ ENGINE = InnoDB;
 -- Table `pcbase`.`napajaci_zdroj`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `pcbase`.`napajaci_zdroj` (
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
   `idnapajaci_zdroj` INT NOT NULL,
   `nazov` VARCHAR(45) NOT NULL,
+=======
+  `idnapajaci_zdroj` INT NOT NULL AUTO_INCREMENT,
+  `nazov` VARCHAR(255) NOT NULL,
+>>>>>>> Stashed changes
+=======
+  `idnapajaci_zdroj` INT NOT NULL AUTO_INCREMENT,
+  `nazov` VARCHAR(255) NOT NULL,
+>>>>>>> Stashed changes
   `model` VARCHAR(45) NOT NULL,
   `vystupny_vykon` INT NOT NULL,
   `efektivita` VARCHAR(45) NOT NULL,
@@ -95,8 +125,18 @@ ENGINE = InnoDB;
 -- Table `pcbase`.`operacna_pamat`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `pcbase`.`operacna_pamat` (
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
   `idoperacna_pamat` INT NOT NULL,
   `nazov` VARCHAR(45) NOT NULL,
+=======
+  `idoperacna_pamat` INT NOT NULL AUTO_INCREMENT,
+  `nazov` VARCHAR(255) NOT NULL,
+>>>>>>> Stashed changes
+=======
+  `idoperacna_pamat` INT NOT NULL AUTO_INCREMENT,
+  `nazov` VARCHAR(255) NOT NULL,
+>>>>>>> Stashed changes
   `model` VARCHAR(45) NOT NULL,
   `typ_pamati` VARCHAR(45) NOT NULL,
   `kapacita` FLOAT NOT NULL,
@@ -110,8 +150,18 @@ ENGINE = InnoDB;
 -- Table `pcbase`.`ulozisko`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `pcbase`.`ulozisko` (
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
   `idulozisko` INT NOT NULL,
   `nazov` VARCHAR(45) NOT NULL,
+=======
+  `idulozisko` INT NOT NULL AUTO_INCREMENT,
+  `nazov` VARCHAR(255) NOT NULL,
+>>>>>>> Stashed changes
+=======
+  `idulozisko` INT NOT NULL AUTO_INCREMENT,
+  `nazov` VARCHAR(255) NOT NULL,
+>>>>>>> Stashed changes
   `model` VARCHAR(45) NOT NULL,
   `typ` VARCHAR(45) NOT NULL,
   `kapacita` INT NOT NULL,
@@ -128,8 +178,18 @@ ENGINE = InnoDB;
 -- Table `pcbase`.`chladenie`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `pcbase`.`chladenie` (
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
   `idchladenie` INT NOT NULL,
   `nazov` VARCHAR(45) NOT NULL,
+=======
+  `idchladenie` INT NOT NULL AUTO_INCREMENT,
+  `nazov` VARCHAR(255) NOT NULL,
+>>>>>>> Stashed changes
+=======
+  `idchladenie` INT NOT NULL AUTO_INCREMENT,
+  `nazov` VARCHAR(255) NOT NULL,
+>>>>>>> Stashed changes
   `model` VARCHAR(45) NOT NULL,
   `typ` VARCHAR(45) NOT NULL,
   `velkost_fan` VARCHAR(45) NULL,
@@ -143,8 +203,18 @@ ENGINE = InnoDB;
 -- Table `pcbase`.`operacny_system`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `pcbase`.`operacny_system` (
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
   `idoperacny_system` INT NOT NULL,
   `nazov` VARCHAR(45) NOT NULL,
+=======
+  `idoperacny_system` INT NOT NULL AUTO_INCREMENT,
+  `nazov` VARCHAR(255) NOT NULL,
+>>>>>>> Stashed changes
+=======
+  `idoperacny_system` INT NOT NULL AUTO_INCREMENT,
+  `nazov` VARCHAR(255) NOT NULL,
+>>>>>>> Stashed changes
   PRIMARY KEY (`idoperacny_system`))
 ENGINE = InnoDB;
 
@@ -213,14 +283,25 @@ ENGINE = InnoDB;
 -- Table `pcbase`.`graficka_karta`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `pcbase`.`graficka_karta` (
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
   `idgraficka_karta` INT NOT NULL,
   `nazov` VARCHAR(45) NOT NULL,
+=======
+  `idgraficka_karta` INT NOT NULL AUTO_INCREMENT,
+  `nazov` VARCHAR(255) NOT NULL,
+>>>>>>> Stashed changes
+=======
+  `idgraficka_karta` INT NOT NULL AUTO_INCREMENT,
+  `nazov` VARCHAR(255) NOT NULL,
+>>>>>>> Stashed changes
   `model` VARCHAR(45) NOT NULL,
   `typ_pamati` VARCHAR(45) NOT NULL,
   `velkost_pamati` INT NOT NULL,
   `zbernica` INT NOT NULL,
   `taktny_rychlost` INT NOT NULL,
   `rozhranie` VARCHAR(45) NOT NULL,
+  `napajanie` INT NOT NULL,
   PRIMARY KEY (`idgraficka_karta`))
 ENGINE = InnoDB;
 

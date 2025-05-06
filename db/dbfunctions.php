@@ -3,8 +3,9 @@ namespace databaza;
 require_once("db/config.php");
 use PDO, PDOException;
 
-class Db
+class Database
 {
+    private $conn;
     static function connect()
     {
         $config = DATABASE;
@@ -22,5 +23,30 @@ class Db
             die("Chyba propojenia: " . $e->getMessage());
         }
     }
+
+    protected function getConnection()
+    {
+        return $this->connect();
+    }
+
+    protected function getData($nazov)
+    {
+        $this->connect();
+        $this->conn = $this->getConnection();
+        try {
+            $stmt = $this->conn->prepare('SELECT * FROM ' . $nazov);
+            $stmt->execute();
+            return $stmt->fetchAll();
+        } catch (PDOException $e) {
+            echo "Chyba: " . $e->getMessage();
+            return false;
+        }
+    }
+
+    protected function closeConnection()
+    {
+        $this->conn = null; // uzavrie pripojenie nastavením na null
+    }
+
 }
 ?>
