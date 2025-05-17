@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS `pcbase`.`pouzivatel` (
   `meno` VARCHAR(45) NOT NULL,
   `priezvisko` VARCHAR(45) NOT NULL,
   `email` VARCHAR(45) NOT NULL,
-  `heslo` VARCHAR(45) NOT NULL,
+  `heslo` VARCHAR(255) NOT NULL,
   `tel_cislo` VARCHAR(20) NULL,
   `krajina` VARCHAR(45) NULL,
   `mesto` VARCHAR(45) NULL,

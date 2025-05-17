@@ -11,6 +11,12 @@
                 $links = json_decode(file_get_contents("json/navLinks.json"), true);
                 // pre každý odkaz
                 foreach ($links as $href => $title) {
+                    
+                    if ($href == "login.php" && isset($_SESSION['user_id'])) {
+                        continue;
+                    } if ($href == "account.php" && !isset($_SESSION['user_id'])) {
+                        continue;
+                    }
                     echo "<li class=\"nav-item ";
                     // ak sa kľúč zhoduje s názvom stránky
                     if (basename($_SERVER['REQUEST_URI']) == $href)
