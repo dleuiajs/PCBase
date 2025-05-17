@@ -14,6 +14,10 @@ class PcBuildFunctions extends Database
     }
     public function handler()
     {
+        $idpouzivatel = $_SESSION['user_id'];
+        if (empty($idpouzivatel)) {
+            throw new Exception("Nie ste prihlásený.");
+        }
         $rozpocet = $_POST['rozpocet'] ?? 0;
         $idzakladna_doska = $_POST['zakladna_doska'] ?? 0;
         $idgraficka_karta = $_POST['graficka_karta'] ?? 0;
@@ -23,30 +27,25 @@ class PcBuildFunctions extends Database
         $idchladenie = $_POST['chladenie'] ?? 0;
         $idoperacny_system = $_POST['operacny_system'] ?? 0;
         $idulozisko = $_POST['ulozisko'] ?? 0;
-        $this->insertObjednavka_Zostavenie($rozpocet, 0, $idzakladna_doska, $idgraficka_karta, $idprocesor, $idoperacna_pamat, $idnapajaci_zdroj, $idchladenie, $idoperacny_system, $idulozisko);
+        $this->insertObjednavka_Zostavenie($rozpocet, $idpouzivatel, $idzakladna_doska, $idgraficka_karta, $idprocesor, $idoperacna_pamat, $idnapajaci_zdroj, $idchladenie, $idoperacny_system, $idulozisko);
         $this->connection = null; // uzavrie pripojenie nastavením na null
     }
 
     private function insertObjednavka_Zostavenie($rozpocet, $idpouzivatel, $idzakladna_doska, $idgraficka_karta, $idprocesor, $idoperacna_pamat, $idnapajaci_zdroj, $idchladenie, $idoperacny_system, $idulozisko)
     {
-        try {
-            $sql = "INSERT INTO objednavka_zostavenie (dorucene, datum, rozpocet, idpouzivatel, idzakladna_doska, idgraficka_karta, idprocesor, idoperacna_pamat, idnapajaci_zdroj, idchladenie, idoperacny_system, idulozisko) VALUES (0, CURRENT_TIMESTAMP, :rozpocet, :idpouzivatel, :idzakladna_doska, :idgraficka_karta, :idprocesor, :idoperacna_pamat, :idnapajaci_zdroj, :idchladenie, :idoperacny_system, :idulozisko)";
-            $stmt = $this->connection->prepare($sql);
-            $stmt->bindParam(':rozpocet', $rozpocet);
-            $stmt->bindParam(':idpouzivatel', $idpouzivatel);
-            $stmt->bindParam(':idzakladna_doska', $idzakladna_doska);
-            $stmt->bindParam(':idgraficka_karta', $idgraficka_karta);
-            $stmt->bindParam(':idprocesor', $idprocesor);
-            $stmt->bindParam(':idoperacna_pamat', $idoperacna_pamat);
-            $stmt->bindParam(':idnapajaci_zdroj', $idnapajaci_zdroj);
-            $stmt->bindParam(':idchladenie', $idchladenie);
-            $stmt->bindParam(':idoperacny_system', $idoperacny_system);
-            $stmt->bindParam(':idulozisko', $idulozisko);
-            return $stmt->execute();
-        } catch (Exception $e) {
-            echo "Chyba: " . $e->getMessage();
-            return false;
-        }
+        $sql = "INSERT INTO objednavka_zostavenie (dorucene, datum, rozpocet, idpouzivatel, idzakladna_doska, idgraficka_karta, idprocesor, idoperacna_pamat, idnapajaci_zdroj, idchladenie, idoperacny_system, idulozisko) VALUES (0, CURRENT_TIMESTAMP, :rozpocet, :idpouzivatel, :idzakladna_doska, :idgraficka_karta, :idprocesor, :idoperacna_pamat, :idnapajaci_zdroj, :idchladenie, :idoperacny_system, :idulozisko)";
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindParam(':rozpocet', $rozpocet);
+        $stmt->bindParam(':idpouzivatel', $idpouzivatel);
+        $stmt->bindParam(':idzakladna_doska', $idzakladna_doska);
+        $stmt->bindParam(':idgraficka_karta', $idgraficka_karta);
+        $stmt->bindParam(':idprocesor', $idprocesor);
+        $stmt->bindParam(':idoperacna_pamat', $idoperacna_pamat);
+        $stmt->bindParam(':idnapajaci_zdroj', $idnapajaci_zdroj);
+        $stmt->bindParam(':idchladenie', $idchladenie);
+        $stmt->bindParam(':idoperacny_system', $idoperacny_system);
+        $stmt->bindParam(':idulozisko', $idulozisko);
+        $stmt->execute();
     }
 
     public function generateForm()

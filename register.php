@@ -12,18 +12,31 @@ loadPart("head");
     <!-- end header -->
     <div class="container my-5" style="max-width: 400px;">
         <h2>Registrácia</h2>
-        <form action="process_register.php" method="post">
+        <form id="request" action="thxyou_register.php" method="post">
+            <div class="form-group mb-3">
+                <label for="meno">Meno:</label>
+                <input class="form-control" id="meno" name="meno" placeholder="Zadajte váše meno" required>
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="priezvisko">Priezvisko:</label>
+                <input class="form-control" id="priezvisko" name="priezvisko" placeholder="Zadajte váše priezvisko"
+                    required>
+            </div>
             <div class="form-group mb-3">
                 <label for="email">E-mail:</label>
-                <input type="email" class="form-control" id="email" name="email" placeholder="Zadajte váš e-mail" required>
+                <input type="email" class="form-control" id="email" name="email" placeholder="Zadajte váš e-mail"
+                    required>
             </div>
             <div class="form-group mb-3">
-                <label for="password">Heslo:</label>
-                <input type="password" class="form-control" id="password" name="password" placeholder="Zadajte vaše heslo" required>
+                <label for="heslo">Heslo:</label>
+                <input type="password" class="form-control" id="heslo" name="heslo" placeholder="Zadajte vaše heslo"
+                    required>
             </div>
             <div class="form-group mb-4">
-                <label for="password_confirm">Potvrďte heslo:</label>
-                <input type="password" class="form-control" id="password_confirm" name="password_confirm" placeholder="Zopakujte vaše heslo" required>
+                <label for="heslo_confirm">Potvrďte heslo:</label>
+                <input type="password" class="form-control" id="heslo_confirm" name="heslo_confirm"
+                    placeholder="Zopakujte vaše heslo" required>
             </div>
             <div class="d-flex align-items-center">
                 <button type="submit" class="btn btn-primary">Registrovať sa</button>
@@ -44,9 +57,10 @@ loadPart("head");
     <script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
     <script src="js/custom.js"></script>
 </body>
-</html>ms-3 text-decoration-underline        <hr class="my-5">
-    <!--  footer -->
-    <!-- end footer -->
-    <!-- Javascript files-->
-    <!-- sidebar -->
 
+</html>ms-3 text-decoration-underline
+<hr class="my-5">
+<!--  footer -->
+<!-- end footer -->
+<!-- Javascript files-->
+<!-- sidebar -->

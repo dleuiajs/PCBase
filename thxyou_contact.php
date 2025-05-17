@@ -14,7 +14,6 @@ loadPart("head");
     // odosielanie údajov z formulára
     error_reporting(E_ALL);
     ini_set("display_errors", "On");
-    define('__ROOT__', dirname(__FILE__));
     require_once(__ROOT__ . "\php\contactFunctions.php");
     use contact\ContactFunctions;
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {

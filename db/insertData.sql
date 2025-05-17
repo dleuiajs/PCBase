@@ -88,4 +88,10 @@ INSERT INTO `pcbase`.`operacny_system` (`nazov`) VALUES
 ('Debian 10 Buster'),
 ('Debian 11'),
 ('Fedora 28'),
-('Fedora 35')
+('Fedora 35');
+INSERT INTO rola (nazov) VALUES
+("Používateľ"),
+("Správca zostáv počítačov"),
+("Správca kontaktných požiadaviek"),
+("Správca produktov"),
+("Správca");

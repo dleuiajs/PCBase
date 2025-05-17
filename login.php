@@ -14,14 +14,14 @@ loadPart("head");
     <!-- end header -->
     <div class="container my-5" style="max-width: 400px;">
         <h2>Prihlásenie</h2>
-        <form action="process_login.php" method="post">
+        <form id="request" action="thxyou_login.php" method="post">
             <div class="form-group mb-3">
                 <label for="email">E-mail:</label>
                 <input type="email" class="form-control" id="email" name="email" placeholder="Zadajte váš e-mail" required>
             </div>
             <div class="form-group mb-4">
-                <label for="password">Heslo:</label>
-                <input type="password" class="form-control" id="password" name="password" placeholder="Zadajte vaše heslo" required>
+                <label for="heslo">Heslo:</label>
+                <input type="password" class="form-control" id="heslo" name="heslo" placeholder="Zadajte vaše heslo" required>
             </div>
             <div class="d-flex align-items-center">
                 <button type="submit" class="btn btn-primary">Prihlásiť sa</button>
