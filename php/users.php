@@ -86,6 +86,12 @@ class Users extends Database
         $_SESSION['user_priezvisko'] = $user['priezvisko'];
         $_SESSION['user_idrola'] = $user['rola_idrola'];
         $_SESSION['user_email'] = $user['email'];
+        $_SESSION['user_tel_cislo'] = $user['tel_cislo'];
+        $_SESSION['user_krajina'] = $user['krajina'];
+        $_SESSION['user_mesto'] = $user['mesto'];
+        $_SESSION['user_psc'] = $user['PSC'];
+        $_SESSION['user_ulica'] = $user['ulica'];
+        $_SESSION['user_cislo_domu'] = $user['cislo_domu'];
         $this->connection = null; // uzavrie pripojenie nastavením na null
     }
 
@@ -97,15 +103,32 @@ class Users extends Database
         exit;
     }
 
+    public function reloadData()
+    {
+        $sql = "SELECT * FROM pouzivatel WHERE idpouzivatel = :idpouzivatel";
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindParam(':idpouzivatel', $_SESSION['user_id']);
+        $stmt->execute();
+        $user = $stmt->fetch();
+        if ($user) {
+            $_SESSION['user_meno'] = $user['meno'];
+            $_SESSION['user_priezvisko'] = $user['priezvisko'];
+            $_SESSION['user_idrola'] = $user['rola_idrola'];
+            $_SESSION['user_email'] = $user['email'];
+            $_SESSION['user_tel_cislo'] = $user['tel_cislo'];
+            $_SESSION['user_krajina'] = $user['krajina'];
+            $_SESSION['user_mesto'] = $user['mesto'];
+            $_SESSION['user_psc'] = $user['PSC'];
+            $_SESSION['user_ulica'] = $user['ulica'];
+            $_SESSION['user_cislo_domu'] = $user['cislo_domu'];
+        }
+    }
+
     public function getName()
     {
         return $_SESSION['user_meno'] . " " . $_SESSION['user_priezvisko'];
     }
 
-    public function getEmail()
-    {
-        return $_SESSION['user_email'];
-    }
     public function getRole()
     {
         $sql = "SELECT nazov FROM rola WHERE idrola = :idrola";
@@ -114,6 +137,70 @@ class Users extends Database
         $stmt->execute();
         $role = $stmt->fetchColumn();
         return $role;
+    }
+
+    public function editProfile($meno, $priezvisko, $tel_cislo, $krajina, $mesto, $psc, $ulica, $cislo_domu)
+    {
+        $sql = "UPDATE pouzivatel SET meno = :meno, priezvisko = :priezvisko, tel_cislo = :tel_cislo, krajina = :krajina, mesto = :mesto, PSC = :psc, ulica = :ulica, cislo_domu = :cislo_domu WHERE idpouzivatel = :idpouzivatel";
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindParam(':meno', $meno);
+        $stmt->bindParam(':priezvisko', $priezvisko);
+        $stmt->bindParam(':tel_cislo', $tel_cislo);
+        $stmt->bindParam(':krajina', $krajina);
+        $stmt->bindParam(':mesto', $mesto);
+        $stmt->bindParam(':psc', $psc);
+        $stmt->bindParam(':ulica', $ulica);
+        $stmt->bindParam(':cislo_domu', $cislo_domu);
+        $stmt->bindParam(':idpouzivatel', $_SESSION['user_id']);
+        $stmt->execute();
+    }
+
+    public function editPassword($heslo, $heslo_confirm)
+    {
+        if ($heslo !== $heslo_confirm)
+            throw new Exception("Heslá sa nezhodujú.");
+        else if (strlen($heslo) < 6)
+            throw new Exception("Heslo musí mať aspoň 6 znakov.");
+        else if (!preg_match('/[0-9]/', $heslo))
+            throw new Exception("Heslo musí obsahovať aspoň jedno číslo.");
+
+        $hashedPassword = password_hash($heslo, PASSWORD_BCRYPT);
+
+        $sql = "UPDATE pouzivatel SET heslo = :heslo WHERE idpouzivatel = :idpouzivatel";
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindParam(':heslo', $hashedPassword);
+        $stmt->bindParam(':idpouzivatel', $_SESSION['user_id']);
+        $stmt->execute();
+    }
+
+    public function editEmail($email)
+    {
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL))
+            throw new Exception("Neplatný formát e-mailu.");
+
+        $sql = "UPDATE pouzivatel SET email = :email WHERE idpouzivatel = :idpouzivatel";
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindParam(':email', $email);
+        $stmt->bindParam(':idpouzivatel', $_SESSION['user_id']);
+        $stmt->execute();
+        $_SESSION['user_email'] = $email;
+    }
+
+    public function checkPassword($heslo)
+    {
+        $sql = "SELECT heslo FROM pouzivatel WHERE idpouzivatel = :idpouzivatel";
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindParam(':idpouzivatel', $_SESSION['user_id']);
+        $stmt->execute();
+        $user = $stmt->fetch();
+        if ($user && password_verify($heslo, $user['heslo'])) {
+            return true;
+        }
+        return false;
+    }
+    public function isLoggedIn()
+    {
+        return isset($_SESSION['user_id']);
     }
 }
 ?>
