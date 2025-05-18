@@ -6,4 +6,8 @@ function loadPart(string $name)
         echo "Chyba: Nepodarilo sa načítať" . $name . ".php";
     }
 }
+function neuvedeneIfNull($value)
+{
+    return !empty($value) ? $value : 'Neuvedené';
+}
 ?>

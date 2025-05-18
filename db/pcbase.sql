@@ -280,6 +280,7 @@ CREATE TABLE IF NOT EXISTS `pcbase`.`objednavka_kontakt` (
   `tel_cislo` VARCHAR(20) NOT NULL,
   `sprava` VARCHAR(255) NOT NULL,
   `preskumane` TINYINT NOT NULL,
+  `datum` DATETIME NOT NULL,
   PRIMARY KEY (`idobjednavka_kontakt`))
 ENGINE = InnoDB;
 

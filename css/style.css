@@ -1495,5 +1495,22 @@ ul.social_icon li a:hover {
 }
 
 .thxyou p {
-     font-size: 14px;    
+     font-size: 14px;
+}
+
+.limitedText {
+     display: -webkit-box;
+     -webkit-box-orient: vertical;
+     -webkit-line-clamp: 2;
+     line-clamp: 2;
+     overflow: hidden;
+     text-overflow: ellipsis;
+}
+
+.increaseSizeHover{
+     transition: transform 0.15s ease-in-out;
+}
+
+.increaseSizeHover:hover {
+     transform: scale(1.025);
 }

@@ -202,5 +202,15 @@ class Users extends Database
     {
         return isset($_SESSION['user_id']);
     }
+
+    public function deleteAccount()
+    {
+        $sql = "DELETE FROM pouzivatel WHERE idpouzivatel = :idpouzivatel";
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindParam(':idpouzivatel', $_SESSION['user_id']);
+        $stmt->execute();
+        session_unset();
+        session_destroy();
+    }
 }
 ?>

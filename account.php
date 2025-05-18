@@ -1,10 +1,17 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <?php
 require_once("php/functions.php");
 loadPart("head");
 
 require_once(__ROOT__ . "\php\users.php");
-use users\Users;
+require_once(__ROOT__ . "\php\accountFunctions.php");
+require_once(__ROOT__ . "\php\contactFunctions.php");
+use users\Users, account\AccountFunctions, contact\ContactFunctions;
+
 $users = new Users();
+$accountFunctions = new AccountFunctions();
+$contactFunctions = new ContactFunctions();
+
 if (!$users->isLoggedIn()) {
     header("Location: login.php");
     exit();
@@ -12,7 +19,13 @@ if (!$users->isLoggedIn()) {
 $users->reloadData();
 if (isset($_GET['logout']) && $_GET['logout'] === 'true') {
     $users->logout();
-    header("Location: /");
+    header("Location: index.php");
+    exit();
+}
+
+if (isset($_GET['deleteaccount']) && $_GET['deleteaccount'] === 'true') {
+    $users->deleteAccount();
+    header("Location: index.php");
     exit();
 }
 ?>
@@ -25,22 +38,13 @@ if (isset($_GET['logout']) && $_GET['logout'] === 'true') {
     <div class="container my-5" style="max-width: 800px;">
         <div class="row">
             <!-- Sidebar -->
-            <div class="col-md-4">
-                <ul class="list-group">
-                    <li class="list-group-item">
-                        <a href="?page=details">Podrobnosti o používateľovi</a>
-                    </li>
-                    <li class="list-group-item">
-                        <a href="?page=edit">Upraviť profil</a>
-                    </li>
-                    <li class="list-group-item">
-                        <a href="?page=security">Bezpečnosť</a>
-                    </li>
-                </ul>
-            </div>
+            <?php
+            $accountFunctions->sidebarGenerator();
+            ?>
             <!-- Content -->
             <div class="col-md-8">
                 <?php
+                $elements = $accountFunctions->getSidebarElements();
                 function valueOrSession($key, $sessionKey)
                 {
                     return (isset($_POST[$key]) && $_POST[$key] !== '') ? $_POST[$key] : $_SESSION[$sessionKey];
@@ -53,35 +57,70 @@ if (isset($_GET['logout']) && $_GET['logout'] === 'true') {
 
                 $page = isset($_GET['page']) ? $_GET['page'] : 'details';
                 $securityEdit = isset($_GET['edit']) ? $_GET['edit'] : null;
+                $message = isset($_GET['message']) ? $_GET['message'] : null;
 
                 switch ($page) {
                     case 'details':
-                        echo "<div>";
-                        echo "<h2>Podrobnosti o používateľovi</h2>";
-                        echo "Dobrý deň, <b>" . $users->getName() . "</b>!<br>";
-                        echo "Vaša rola je: <b>" . $users->getRole() . "</b><br>";
-                        echo "</div>";
+                        if (in_array('details', $elements)) {
+                            echo "<div>";
+                            echo "<h2>Podrobnosti o používateľovi</h2>";
+                            echo "Dobrý deň, <b>" . $users->getName() . "</b>!<br>";
+                            echo "Vaša rola je: <b>" . $users->getRole() . "</b><br>";
+                            echo "</div>";
 
-                        echo "<div class='mt-2'>";
-                        echo "Váš email je: <b>" . getSessionValue('user_email') . "</b><br>";
-                        echo "Vaše telefónne číslo je: <b>" . getSessionValue('user_tel_cislo') . "</b><br>";
-                        echo "</div>";
+                            echo "<div class='mt-2'>";
+                            echo "Váš email je: <b>" . getSessionValue('user_email') . "</b><br>";
+                            echo "Vaše telefónne číslo je: <b>" . getSessionValue('user_tel_cislo') . "</b><br>";
+                            echo "</div>";
 
-                        echo "<div class='mt-2'>";
-                        echo "Vaša krajina je: <b>" . getSessionValue('user_krajina') . "</b><br>";
-                        echo "Vaše mesto je: <b>" . getSessionValue('user_mesto') . "</b><br>";
-                        echo "Vaše PSČ je: <b>" . getSessionValue('user_psc') . "</b><br>";
-                        echo "Vaša ulica je: <b>" . getSessionValue('user_ulica') . "</b><br>";
-                        echo "Vaše číslo domu je: <b>" . getSessionValue('user_cislo_domu') . "</b><br>";
-                        echo '<div class="mt-2">
+                            echo "<div class='mt-2'>";
+                            echo "Vaša krajina je: <b>" . getSessionValue('user_krajina') . "</b><br>";
+                            echo "Vaše mesto je: <b>" . getSessionValue('user_mesto') . "</b><br>";
+                            echo "Vaše PSČ je: <b>" . getSessionValue('user_psc') . "</b><br>";
+                            echo "Vaša ulica je: <b>" . getSessionValue('user_ulica') . "</b><br>";
+                            echo "Vaše číslo domu je: <b>" . getSessionValue('user_cislo_domu') . "</b><br>";
+                            echo '<div class="mt-2">
                                 <a href="?logout=true" class="text-decoration-underline">Odhlásiť sa</a>
                                 </div>';
-                        echo "</div>";
+                            echo "</div>";
+                        }
+                        break;
+
+                    case 'contactmsg':
+                        if (in_array('contactmsg', $elements)) {
+                            echo "<h2>Kontaktné správy</h2>";
+                            if ($message) {
+                                $contactFunctions->generateContactMessage($message);
+                            } else {
+                                $contactFunctions->generateContactMsgList();
+                            }
+                        } else {
+                            echo '<div class="alert alert-danger" role="alert">Nemáte prístup k tejto sekcii.</div>';
+                        }
+                        break;
+
+                    case 'pcbuildmsg':
+                        if (in_array('pcbuildmsg', $elements)) {
+                            echo "<h2>Žiadosti o zostavenie počítača</h2>";
+                            echo "<p>Tu sa zobrazia správy, ktoré ste poslali ohľadom zostáv.</p>";
+                        } else {
+                            echo '<div class="alert alert-danger" role="alert">Nemáte prístup k tejto sekcii.</div>';
+                        }
+                        break;
+
+                    case 'productsmsg':
+                        if (in_array('productsmsg', $elements)) {
+                            echo "<h2>Objednávky</h2>";
+                            echo "<p>Tu sa zobrazia správy, ktoré ste poslali ohľadom produktov.</p>";
+                        } else {
+                            echo '<div class="alert alert-danger" role="alert">Nemáte prístup k tejto sekcii.</div>';
+                        }
                         break;
 
                     case 'edit':
-                        echo '<h2>Upraviť profil</h2>';
-                        echo '<form id="request" action="#editInfo" method="post">
+                        if (in_array('edit', $elements)) {
+                            echo '<h2>Upraviť profil</h2>';
+                            echo '<form id="request" action="#editInfo" method="post">
                                     <div class="form-group mb-3">
                                         <label for="meno">Meno:</label>
                                         <input class="form-control" id="meno" name="meno" placeholder="Zadajte váše meno">
@@ -118,35 +157,37 @@ if (isset($_GET['logout']) && $_GET['logout'] === 'true') {
                                     </div>
                                     <button type="submit" class="btn btn-primary" style="width:50%;">Uložiť</button>
                                 </form>';
-                        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                            try {
-                                // ak je formulár prázdny, vyhodíme výnimku
-                                if (empty($_POST['meno']) && empty($_POST['priezvisko']) && empty($_POST['tel_cislo']) && empty($_POST['krajina']) && empty($_POST['mesto']) && empty($_POST['psc']) && empty($_POST['ulica']) && empty($_POST['cislo_domu'])) {
-                                    throw new Exception("Žiadne údaje na aktualizáciu.");
+                            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                                try {
+                                    // ak je formulár prázdny, vyhodíme výnimku
+                                    if (empty($_POST['meno']) && empty($_POST['priezvisko']) && empty($_POST['tel_cislo']) && empty($_POST['krajina']) && empty($_POST['mesto']) && empty($_POST['psc']) && empty($_POST['ulica']) && empty($_POST['cislo_domu'])) {
+                                        throw new Exception("Žiadne údaje na aktualizáciu.");
+                                    }
+                                    // ak je formulár odoslaný, upravíme profil
+                                    $users->editProfile(
+                                        valueOrSession('meno', 'user_meno'),
+                                        valueOrSession('priezvisko', 'user_priezvisko'),
+                                        valueOrSession('tel_cislo', 'user_tel_cislo'),
+                                        valueOrSession('krajina', 'user_krajina'),
+                                        valueOrSession('mesto', 'user_mesto'),
+                                        valueOrSession('psc', 'user_psc'),
+                                        valueOrSession('ulica', 'user_ulica'),
+                                        valueOrSession('cislo_domu', 'user_cislo_domu')
+                                    );
+                                    echo '<p id="editInfo" class="text-success mt-3">Profil bol aktualizovaný.</p>';
+                                } catch (Exception $e) {
+                                    echo '<p id="editInfo" class="text-danger mt-3">' . $e->getMessage() . '</p>';
                                 }
-                                // ak je formulár odoslaný, upravíme profil
-                                $users->editProfile(
-                                    valueOrSession('meno', 'user_meno'),
-                                    valueOrSession('priezvisko', 'user_priezvisko'),
-                                    valueOrSession('tel_cislo', 'user_tel_cislo'),
-                                    valueOrSession('krajina', 'user_krajina'),
-                                    valueOrSession('mesto', 'user_mesto'),
-                                    valueOrSession('psc', 'user_psc'),
-                                    valueOrSession('ulica', 'user_ulica'),
-                                    valueOrSession('cislo_domu', 'user_cislo_domu')
-                                );
-                                echo '<p id="editInfo" class="text-success mt-3">Profil bol aktualizovaný.</p>';
-                            } catch (Exception $e) {
-                                echo '<p id="editInfo" class="text-danger mt-3">' . $e->getMessage() . '</p>';
                             }
                         }
                         break;
 
                     case 'security':
-                        echo "<h2>Bezpečnosť</h2>";
-                        echo '<div>';
-                        echo '<h4>Zmena e-mailu</h4>';
-                        echo '<form id="request" action="?page=security&edit=email" method="post">
+                        if (in_array('security', $elements)) {
+                            echo "<h2>Bezpečnosť</h2>";
+                            echo '<div>';
+                            echo '<h4>Zmena e-mailu</h4>';
+                            echo '<form id="request" action="?page=security&edit=email" method="post">
                                     <div class="form-group mb-3">
                                         <label for="email">E-mail:</label>
                                         <input type="email" class="form-control" id="email" name="email" placeholder="Zadajte váš e-mail" required>
@@ -158,27 +199,27 @@ if (isset($_GET['logout']) && $_GET['logout'] === 'true') {
                                     </div>
                                     <button type="submit" class="btn btn-primary" style="width:50%;">Uložiť</button>
                                 </form>';
-                        echo '</div>';
-                        if ($securityEdit == 'email') {
-                            try {
-                                if (empty($_POST["heslo"]))
-                                    throw new Exception("Nie je zadané heslo.");
-                                if ($users->checkPassword($_POST['heslo'])) {
-                                    $users->editEmail(
-                                        $_POST['email'],
-                                    );
-                                    echo '<p id="emailEditInfo" class="text-success mt-3">E-mail bol úspešne zmenený.</p>';
-                                } else {
-                                    throw new Exception("Nesprávne heslo.");
-                                }
+                            echo '</div>';
+                            if ($securityEdit == 'email' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+                                try {
+                                    if (empty($_POST["heslo"]))
+                                        throw new Exception("Nie je zadané heslo.");
+                                    if ($users->checkPassword($_POST['heslo'])) {
+                                        $users->editEmail(
+                                            $_POST['email'],
+                                        );
+                                        echo '<p id="emailEditInfo" class="text-success mt-3">E-mail bol úspešne zmenený.</p>';
+                                    } else {
+                                        throw new Exception("Nesprávne heslo.");
+                                    }
 
-                            } catch (Exception $e) {
-                                echo '<p id="emailEditInfo" class="text-danger mt-3">' . $e->getMessage() . '</p>';
+                                } catch (Exception $e) {
+                                    echo '<p id="emailEditInfo" class="text-danger mt-3">' . $e->getMessage() . '</p>';
+                                }
                             }
-                        }
-                        echo '<div class="mt-5">';
-                        echo '<h4>Zmena hesla</h4>';
-                        echo '<form id="request" action="?page=security&edit=password#passwordEditInfo" method="post">
+                            echo '<div class="mt-5">';
+                            echo '<h4>Zmena hesla</h4>';
+                            echo '<form id="request" action="?page=security&edit=password#passwordEditInfo" method="post">
                                     <div class="form-group mb-3">
                                         <label for="old_heslo">Staré heslo:</label>
                                         <input class="form-control" type="password" id="old_heslo" name="old_heslo"
@@ -195,10 +236,8 @@ if (isset($_GET['logout']) && $_GET['logout'] === 'true') {
                                     </div>
                                     <button type="submit" class="btn btn-primary" style="width:50%;">Uložiť</button>
                                 </form>';
-                        echo '</div>';
-
-                        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                            if ($securityEdit == 'password') {
+                            echo '</div>';
+                            if ($securityEdit == 'password' && $_SERVER['REQUEST_METHOD'] === 'POST') {
                                 try {
                                     if (empty($_POST['old_heslo']))
                                         throw new Exception("Pre zmenu hesla je potrebné zadať aj staré heslo.");
@@ -218,6 +257,10 @@ if (isset($_GET['logout']) && $_GET['logout'] === 'true') {
                                     echo '<p id="passwordEditInfo" class="text-danger mt-3">' . $e->getMessage() . '</p>';
                                 }
                             }
+                            echo '<div class="mt-4">
+                                <a href="?page=security&deleteaccount=true" class="text-decoration-underline" onclick="return confirm(\'Naozaj chcete odstrániť svoj účet?\');">Odstrániť účet</a>
+                                </div>';
+                            echo "</div>";
                         }
                         break;
 
