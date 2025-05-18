@@ -56,19 +56,27 @@ if (isset($_GET['logout']) && $_GET['logout'] === 'true') {
 
                 switch ($page) {
                     case 'details':
+                        echo "<div>";
                         echo "<h2>Podrobnosti o používateľovi</h2>";
-                        echo "Dobrý deň, " . $users->getName() . "!<br>";
-                        echo "Vaša rola je: " . $users->getRole() . "<br><br>";
-                        echo "Váš email je: " . getSessionValue('user_email') . "<br>";
-                        echo "Vaše telefónne číslo je: " . getSessionValue('user_tel_cislo') . "<br><br>";
-                        echo "Vaša krajina je: " . getSessionValue('user_krajina') . "<br>";
-                        echo "Vaše mesto je: " . getSessionValue('user_mesto') . "<br>";
-                        echo "Vaše PSČ je: " . getSessionValue('user_psc') . "<br>";
-                        echo "Vaša ulica je: " . getSessionValue('user_ulica') . "<br>";
-                        echo "Vaše číslo domu je: " . getSessionValue('user_cislo_domu') . "<br>";
+                        echo "Dobrý deň, <b>" . $users->getName() . "</b>!<br>";
+                        echo "Vaša rola je: <b>" . $users->getRole() . "</b><br>";
+                        echo "</div>";
+
+                        echo "<div class='mt-2'>";
+                        echo "Váš email je: <b>" . getSessionValue('user_email') . "</b><br>";
+                        echo "Vaše telefónne číslo je: <b>" . getSessionValue('user_tel_cislo') . "</b><br>";
+                        echo "</div>";
+
+                        echo "<div class='mt-2'>";
+                        echo "Vaša krajina je: <b>" . getSessionValue('user_krajina') . "</b><br>";
+                        echo "Vaše mesto je: <b>" . getSessionValue('user_mesto') . "</b><br>";
+                        echo "Vaše PSČ je: <b>" . getSessionValue('user_psc') . "</b><br>";
+                        echo "Vaša ulica je: <b>" . getSessionValue('user_ulica') . "</b><br>";
+                        echo "Vaše číslo domu je: <b>" . getSessionValue('user_cislo_domu') . "</b><br>";
                         echo '<div class="mt-2">
                                 <a href="?logout=true" class="text-decoration-underline">Odhlásiť sa</a>
                                 </div>';
+                        echo "</div>";
                         break;
 
                     case 'edit':
