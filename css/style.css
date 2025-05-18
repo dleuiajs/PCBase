@@ -1507,10 +1507,45 @@ ul.social_icon li a:hover {
      text-overflow: ellipsis;
 }
 
-.increaseSizeHover{
+.increaseSizeHover {
      transition: transform 0.15s ease-in-out;
 }
 
 .increaseSizeHover:hover {
      transform: scale(1.025);
+}
+
+.f label {
+     color: black;
+     font-weight: normal;
+}
+
+.f select {
+     border: black solid 2px;
+     padding: 0px 15px;
+     width: 100%;
+     height: 34px;
+     margin-bottom: 4px;
+     background-color: transparent;
+     color: black;
+     font-weight: normal;
+     border: #7a7a7a7a solid 2px;
+     border-radius: 4px;
+}
+
+.f input {
+     border: black solid 2px;
+     padding: 0px 15px;
+     width: 100%;
+     height: 34px;
+     margin-bottom: 4px;
+     background: transparent;
+     color: black;
+     font-weight: normal;
+     border: #7a7a7a7a solid 2px;
+     border-radius: 4px;
+}
+
+.f input::placeholder {
+     color: black !important;
 }

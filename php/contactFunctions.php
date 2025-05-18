@@ -117,9 +117,48 @@ class ContactFunctions extends Database
         }
     }
 
+    private function optionSelect($variable, $value)
+    {
+        return $variable == $value ? 'selected' : '';
+    }
+
     public function generateContactMsgList()
     {
-        $data = $this->getData("objednavka_kontakt", "datum");
+        $dictionaryFilter = [
+            'all' => '',
+            'not-checked' => 'WHERE preskumane = 0',
+            'checked' => 'WHERE preskumane = 1'
+        ];
+        $dictionarySort = [
+            'date-desc' => 'ORDER BY datum DESC',
+            'date-asc' => 'ORDER BY datum ASC',
+            'name' => 'ORDER BY meno ASC',
+            'email' => 'ORDER BY email ASC'
+        ];
+
+        $filter = $_GET['filter'] ?? 'all';
+        $sort = $_GET['sort'] ?? 'date-desc';
+        echo '<form id="request" method="get" class="f">
+        <input type="hidden" name="page" value="contactmsg">
+                              <div class="row justify-content-between">
+                                 <div class="col-md-6 ">
+                                    <select id="filter" name="filter" onchange="this.form.submit()">
+                                       <option value="all" ' . $this->optionSelect($filter, "all") . '>Zobraziť všetky</option>
+                                       <option value="not-checked" ' . $this->optionSelect($filter, "not-checked") . '>Nepreskúmané</option>
+                                       <option value="checked" ' . $this->optionSelect($filter, "checked") . '>Preskúmané</option>
+                                       </select>
+                                 </div>
+                                 <div class="col-md-6 ">
+                                    <select id="sort" name="sort" onchange="this.form.submit()">
+                                       <option value="date-desc" ' . $this->optionSelect($sort, "date-desc") . '>Zoradiť od najnovších</option>
+                                       <option value="date-asc" ' . $this->optionSelect($sort, "date-asc") . '>Zoradiť od najstarších</option>
+                                       <option value="name" ' . $this->optionSelect($sort, "name") . '>Zoradiť podľa mena</option>
+                                       <option value="email" ' . $this->optionSelect($sort, "email") . '>Zoradiť podľa e-mailu</option>
+                                    </select>
+                                 </div>
+                              </div>
+                           </form>';
+        $data = $this->getData("objednavka_kontakt", additionally: $dictionaryFilter[$filter] . " " . $dictionarySort[$sort]);
         foreach ($data as $row) {
             echo '<div class="row row-cols-1 g-3 mt-3 increaseSizeHover">
                 <div class="col">
@@ -144,8 +183,8 @@ class ContactFunctions extends Database
                                         <small class="text-secondary">' . $row['datum'] . '</small>
                                     </div>
                                     <div class="text-end mt-2">
-                <button type="submit" class="btn btn-sm btn-outline-primary">Zobraziť</button>
-            </div>
+                                        <button type="submit" class="btn btn-sm btn-outline-primary">Zobraziť</button>
+                                    </div>
                                 </div>
                             </div>
                     </form>
