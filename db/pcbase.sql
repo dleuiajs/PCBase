@@ -240,10 +240,11 @@ ENGINE = InnoDB;
 -- Table `pcbase`.`objednavka_zostavenie`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `pcbase`.`objednavka_zostavenie` (
-  `idobjednavka` INT NOT NULL AUTO_INCREMENT,
+  `idobjednavka_zostavenie` INT NOT NULL AUTO_INCREMENT,
   `dorucene` TINYINT NOT NULL,
   `datum` DATETIME NOT NULL,
   `rozpocet` FLOAT NOT NULL,
+  `poznamka` TEXT NULL,
   `idpouzivatel` INT NOT NULL,
   `idzakladna_doska` INT NOT NULL,
   `idgraficka_karta` INT NOT NULL,
@@ -253,7 +254,7 @@ CREATE TABLE IF NOT EXISTS `pcbase`.`objednavka_zostavenie` (
   `idoperacna_pamat` INT NOT NULL,
   `idchladenie` INT NOT NULL,
   `idoperacny_system` INT NOT NULL,
-  PRIMARY KEY (`idobjednavka`, `idpouzivatel`, `idzakladna_doska`, `idgraficka_karta`, `idprocesor`, `idnapajaci_zdroj`, `idulozisko`, `idoperacna_pamat`, `idchladenie`, `idoperacny_system`))
+  PRIMARY KEY (`idobjednavka_zostavenie`, `idpouzivatel`, `idzakladna_doska`, `idgraficka_karta`, `idprocesor`, `idnapajaci_zdroj`, `idulozisko`, `idoperacna_pamat`, `idchladenie`, `idoperacny_system`))
 ENGINE = InnoDB;
 
 
@@ -278,7 +279,7 @@ CREATE TABLE IF NOT EXISTS `pcbase`.`objednavka_kontakt` (
   `meno` VARCHAR(45) NOT NULL,
   `email` VARCHAR(45) NOT NULL,
   `tel_cislo` VARCHAR(20) NOT NULL,
-  `sprava` VARCHAR(255) NOT NULL,
+  `sprava` TEXT NOT NULL,
   `preskumane` TINYINT NOT NULL,
   `datum` DATETIME NOT NULL,
   PRIMARY KEY (`idobjednavka_kontakt`))

@@ -6,11 +6,13 @@ loadPart("head");
 require_once(__ROOT__ . "\php\users.php");
 require_once(__ROOT__ . "\php\accountFunctions.php");
 require_once(__ROOT__ . "\php\contactFunctions.php");
-use users\Users, account\AccountFunctions, contact\ContactFunctions;
+require_once(__ROOT__ . "\php\pcbuildFunctions.php");
+use users\Users, account\AccountFunctions, contact\ContactFunctions, pcbuild\PCBuildFunctions;
 
 $users = new Users();
 $accountFunctions = new AccountFunctions();
 $contactFunctions = new ContactFunctions();
+$pcbuildFunctions = new PcBuildFunctions();
 
 if (!$users->isLoggedIn()) {
     header("Location: login.php");
@@ -101,8 +103,12 @@ if (isset($_GET['deleteaccount']) && $_GET['deleteaccount'] === 'true') {
 
                     case 'pcbuildmsg':
                         if (in_array('pcbuildmsg', $elements)) {
-                            echo "<h2>Žiadosti o zostavenie počítača</h2>";
-                            echo "<p>Tu sa zobrazia správy, ktoré ste poslali ohľadom zostáv.</p>";
+                            echo "<h2>Žiadosti o zostavenie počítačov</h2>";
+                            if ($message) {
+                                $pcbuildFunctions->generateMessage($message);
+                            } else {
+                                $pcbuildFunctions->generateMessagesList();
+                            }
                         } else {
                             echo '<div class="alert alert-danger" role="alert">Nemáte prístup k tejto sekcii.</div>';
                         }

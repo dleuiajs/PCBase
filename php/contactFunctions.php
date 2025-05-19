@@ -117,11 +117,6 @@ class ContactFunctions extends Database
         }
     }
 
-    private function optionSelect($variable, $value)
-    {
-        return $variable == $value ? 'selected' : '';
-    }
-
     public function generateContactMsgList()
     {
         $dictionaryFilter = [
@@ -139,25 +134,25 @@ class ContactFunctions extends Database
         $filter = $_GET['filter'] ?? 'all';
         $sort = $_GET['sort'] ?? 'date-desc';
         echo '<form id="request" method="get" class="f">
-        <input type="hidden" name="page" value="contactmsg">
-                              <div class="row justify-content-between">
-                                 <div class="col-md-6 ">
-                                    <select id="filter" name="filter" onchange="this.form.submit()">
-                                       <option value="all" ' . $this->optionSelect($filter, "all") . '>Zobraziť všetky</option>
-                                       <option value="not-checked" ' . $this->optionSelect($filter, "not-checked") . '>Nepreskúmané</option>
-                                       <option value="checked" ' . $this->optionSelect($filter, "checked") . '>Preskúmané</option>
-                                       </select>
-                                 </div>
-                                 <div class="col-md-6 ">
-                                    <select id="sort" name="sort" onchange="this.form.submit()">
-                                       <option value="date-desc" ' . $this->optionSelect($sort, "date-desc") . '>Zoradiť od najnovších</option>
-                                       <option value="date-asc" ' . $this->optionSelect($sort, "date-asc") . '>Zoradiť od najstarších</option>
-                                       <option value="name" ' . $this->optionSelect($sort, "name") . '>Zoradiť podľa mena</option>
-                                       <option value="email" ' . $this->optionSelect($sort, "email") . '>Zoradiť podľa e-mailu</option>
-                                    </select>
-                                 </div>
-                              </div>
-                           </form>';
+                <input type="hidden" name="page" value="contactmsg">
+                <div class="row justify-content-between">
+                   <div class="col-md-6 ">
+                      <select id="filter" name="filter" onchange="this.form.submit()">
+                         <option value="all" ' . optionSelect($filter, "all") . '>Zobraziť všetky</option>
+                         <option value="not-checked" ' . optionSelect($filter, "not-checked") . '>Nepreskúmané</option>
+                         <option value="checked" ' . optionSelect($filter, "checked") . '>Preskúmané</option>
+                         </select>
+                   </div>
+                   <div class="col-md-6 ">
+                      <select id="sort" name="sort" onchange="this.form.submit()">
+                         <option value="date-desc" ' . optionSelect($sort, "date-desc") . '>Zoradiť od najnovších</option>
+                         <option value="date-asc" ' . optionSelect($sort, "date-asc") . '>Zoradiť od najstarších</option>
+                         <option value="name" ' . optionSelect($sort, "name") . '>Zoradiť podľa mena</option>
+                         <option value="email" ' . optionSelect($sort, "email") . '>Zoradiť podľa e-mailu</option>
+                      </select>
+                   </div>
+                </div>
+            </form>';
         $data = $this->getData("objednavka_kontakt", additionally: $dictionaryFilter[$filter] . " " . $dictionarySort[$sort]);
         foreach ($data as $row) {
             echo '<div class="row row-cols-1 g-3 mt-3 increaseSizeHover">
@@ -167,7 +162,7 @@ class ContactFunctions extends Database
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between align-items-center mb-2">
                                         <div>
-                                            <h5 class="card-title mb-0">' . $row['meno'] . '</h5>
+                                            <h5 class="card-title mb-0 pb-0">' . $row['meno'] . '</h5>
                                             <small class="text-muted">' . $row['email'] . '</small>
                                         </div>
                                         <span class="badge bg-' . ($row['preskumane'] == 0 ? 'warning text-dark">Nepreskúmané' : 'success text-white">Preskúmané') . '</span>
