@@ -185,9 +185,9 @@ CREATE TABLE IF NOT EXISTS `pcbase`.`tovar` (
   `idtovar` INT NOT NULL AUTO_INCREMENT,
   `nazov` VARCHAR(45) NOT NULL,
   `popis` VARCHAR(255) NOT NULL,
-  `dostupnost` TINYINT NOT NULL,
+  `mnozstvo` INT NOT NULL,
   `cena` FLOAT NOT NULL,
-  `obrazok` BLOB NOT NULL,
+  `obrazok` MEDIUMBLOB NOT NULL,
   `idpodrobnosti_tovara` INT NOT NULL,
   `idkategoria_tovara` INT NOT NULL,
   PRIMARY KEY (`idtovar`, `idpodrobnosti_tovara`, `idkategoria_tovara`))

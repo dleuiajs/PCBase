@@ -84,7 +84,7 @@ class PcBuildFunctions extends Database
                            step="1" required><br>
                      </div>
                      <div class="col-md-12">
-                     <label for="poznamka">Zadajte rozpočet:</label><br>
+                     <label for="poznamka">Zadajte poznámku:</label><br>
                         <textarea class="textarea" placeholder="Zadajte poznámku" name="poznamka" id="poznamka"></textarea>
                      </div>
                      <div class="col-md-12">
@@ -169,7 +169,7 @@ class PcBuildFunctions extends Database
                     <div class="row mb-3">
                         <div class="col-md-12">
                             <div class="mb-3 p-3 rounded border border-info bg-light">
-                                <h5 class="mb-3 text-info"><strong>Komponenty počítača</strong></h5>
+                                <h5 class="text-info mb-1"><strong>Komponenty počítača:</strong></h5>
                                 <dl class="row mb-0">
                                     <dt class="col-sm-5">Základná doska:</dt>
                                     <dd class="col-sm-7 mb-2">' . $data["zakladna_doska"] . '</dd>

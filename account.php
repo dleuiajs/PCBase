@@ -7,12 +7,14 @@ require_once(__ROOT__ . "\php\users.php");
 require_once(__ROOT__ . "\php\accountFunctions.php");
 require_once(__ROOT__ . "\php\contactFunctions.php");
 require_once(__ROOT__ . "\php\pcbuildFunctions.php");
-use users\Users, account\AccountFunctions, contact\ContactFunctions, pcbuild\PCBuildFunctions;
+require_once(__ROOT__ . "\php\productsFunctions.php");
+use users\Users, account\AccountFunctions, contact\ContactFunctions, pcbuild\PCBuildFunctions, products\ProductsFunctions;
 
 $users = new Users();
 $accountFunctions = new AccountFunctions();
 $contactFunctions = new ContactFunctions();
 $pcbuildFunctions = new PcBuildFunctions();
+$productsFunctions = new ProductsFunctions();
 
 if (!$users->isLoggedIn()) {
     header("Location: login.php");
@@ -117,7 +119,11 @@ if (isset($_GET['deleteaccount']) && $_GET['deleteaccount'] === 'true') {
                     case 'productsmsg':
                         if (in_array('productsmsg', $elements)) {
                             echo "<h2>Objednávky</h2>";
-                            echo "<p>Tu sa zobrazia správy, ktoré ste poslali ohľadom produktov.</p>";
+                            if ($message) {
+                                $productsFunctions->generateMessage($message);
+                            } else {
+                                $productsFunctions->generateMessagesList();
+                            }
                         } else {
                             echo '<div class="alert alert-danger" role="alert">Nemáte prístup k tejto sekcii.</div>';
                         }
