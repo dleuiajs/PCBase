@@ -6,7 +6,7 @@ use PDO, PDOException;
 class Database
 {
     protected $connection;
-    static function connect()
+    protected function connect()
     {
         $config = DATABASE;
         // možnosti
@@ -29,12 +29,28 @@ class Database
         return $this->connect();
     }
 
-    protected function getData($nazov)
+    protected function getData($nazov, $orderDesc = null, $additionally = null, $single = false)
     {
         try {
-            $stmt = $this->connection->prepare('SELECT * FROM ' . $nazov);
+            $stmt = $this->connection->prepare('SELECT * FROM ' . $nazov . ($additionally !== null ? ' ' . $additionally . ' ' : '') . ($orderDesc !== null ? ' ORDER BY ' . $orderDesc . ' DESC' : ''));
             $stmt->execute();
-            return $stmt->fetchAll();
+            if ($single) {
+                return $stmt->fetch();
+            } else {
+                return $stmt->fetchAll();
+            }
+        } catch (PDOException $e) {
+            echo "Chyba: " . $e->getMessage();
+            return false;
+        }
+    }
+
+    protected function getColumnNames($nazov)
+    {
+        try {
+            $stmt = $this->connection->prepare('SELECT * FROM ' . $nazov . ' LIMIT 1');
+            $stmt->execute();
+            return array_keys($stmt->fetch());
         } catch (PDOException $e) {
             echo "Chyba: " . $e->getMessage();
             return false;

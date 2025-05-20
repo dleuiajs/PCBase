@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS `pcbase`.`pouzivatel` (
   `meno` VARCHAR(45) NOT NULL,
   `priezvisko` VARCHAR(45) NOT NULL,
   `email` VARCHAR(45) NOT NULL,
-  `heslo` VARCHAR(45) NOT NULL,
+  `heslo` VARCHAR(255) NOT NULL,
   `tel_cislo` VARCHAR(20) NULL,
   `krajina` VARCHAR(45) NULL,
   `mesto` VARCHAR(45) NULL,
@@ -153,7 +153,7 @@ ENGINE = InnoDB;
 -- Table `pcbase`.`podrobnosti_tovara`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `pcbase`.`podrobnosti_tovara` (
-  `idpodrobnosti_tovara` INT NOT NULL,
+  `idpodrobnosti_tovara` INT NOT NULL AUTO_INCREMENT,
   `rozmery` VARCHAR(45) NOT NULL,
   `hmotnost` VARCHAR(45) NOT NULL,
   `zaruka` VARCHAR(45) NOT NULL,
@@ -185,9 +185,9 @@ CREATE TABLE IF NOT EXISTS `pcbase`.`tovar` (
   `idtovar` INT NOT NULL AUTO_INCREMENT,
   `nazov` VARCHAR(45) NOT NULL,
   `popis` VARCHAR(255) NOT NULL,
-  `dostupnost` TINYINT NOT NULL,
+  `mnozstvo` INT NOT NULL,
   `cena` FLOAT NOT NULL,
-  `obrazok` BLOB NOT NULL,
+  `obrazok` VARCHAR(255) NOT NULL,
   `idpodrobnosti_tovara` INT NOT NULL,
   `idkategoria_tovara` INT NOT NULL,
   PRIMARY KEY (`idtovar`, `idpodrobnosti_tovara`, `idkategoria_tovara`))
@@ -240,10 +240,11 @@ ENGINE = InnoDB;
 -- Table `pcbase`.`objednavka_zostavenie`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `pcbase`.`objednavka_zostavenie` (
-  `idobjednavka` INT NOT NULL AUTO_INCREMENT,
+  `idobjednavka_zostavenie` INT NOT NULL AUTO_INCREMENT,
   `dorucene` TINYINT NOT NULL,
   `datum` DATETIME NOT NULL,
   `rozpocet` FLOAT NOT NULL,
+  `poznamka` TEXT NULL,
   `idpouzivatel` INT NOT NULL,
   `idzakladna_doska` INT NOT NULL,
   `idgraficka_karta` INT NOT NULL,
@@ -253,7 +254,7 @@ CREATE TABLE IF NOT EXISTS `pcbase`.`objednavka_zostavenie` (
   `idoperacna_pamat` INT NOT NULL,
   `idchladenie` INT NOT NULL,
   `idoperacny_system` INT NOT NULL,
-  PRIMARY KEY (`idobjednavka`, `idpouzivatel`, `idzakladna_doska`, `idgraficka_karta`, `idprocesor`, `idnapajaci_zdroj`, `idulozisko`, `idoperacna_pamat`, `idchladenie`, `idoperacny_system`))
+  PRIMARY KEY (`idobjednavka_zostavenie`, `idpouzivatel`, `idzakladna_doska`, `idgraficka_karta`, `idprocesor`, `idnapajaci_zdroj`, `idulozisko`, `idoperacna_pamat`, `idchladenie`, `idoperacny_system`))
 ENGINE = InnoDB;
 
 
@@ -278,8 +279,9 @@ CREATE TABLE IF NOT EXISTS `pcbase`.`objednavka_kontakt` (
   `meno` VARCHAR(45) NOT NULL,
   `email` VARCHAR(45) NOT NULL,
   `tel_cislo` VARCHAR(20) NOT NULL,
-  `sprava` VARCHAR(255) NOT NULL,
+  `sprava` TEXT NOT NULL,
   `preskumane` TINYINT NOT NULL,
+  `datum` DATETIME NOT NULL,
   PRIMARY KEY (`idobjednavka_kontakt`))
 ENGINE = InnoDB;
 

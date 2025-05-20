@@ -1,0 +1,71 @@
+{
+    "accountSidebar": [
+        {
+            "href": "details",
+            "text": "Podrobnosti o používateľovi",
+            "roles": [
+                1,
+                2,
+                3,
+                4,
+                5
+            ]
+        },
+        {
+            "href": "adminpanel",
+            "text": "Panel správcu",
+            "roles": [
+                2,
+                3,
+                4,
+                5
+            ]
+        },
+        {
+            "href": "contactmsg",
+            "text": "Kontaktné správy",
+            "roles": [
+                3,
+                5
+            ]
+        },
+        {
+            "href": "pcbuildmsg",
+            "text": "Žiadosti o zostavenie počítačov",
+            "roles": [
+                2,
+                5
+            ]
+        },
+        {
+            "href": "productsmsg",
+            "text": "Objednávky",
+            "roles": [
+                4,
+                5
+            ]
+        },
+        {
+            "href": "edit",
+            "text": "Upraviť profil",
+            "roles": [
+                1,
+                2,
+                3,
+                4,
+                5
+            ]
+        },
+        {
+            "href": "security",
+            "text": "Bezpečnosť",
+            "roles": [
+                1,
+                2,
+                3,
+                4,
+                5
+            ]
+        }
+    ]
+}
