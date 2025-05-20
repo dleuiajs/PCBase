@@ -341,7 +341,7 @@ class ProductsFunctions extends Database
                         </div>
                     </div>
                     <hr>
-                    <img src="data:image/png;base64,' . base64_encode($data['obrazok']) . '" style="width: 30%; height: auto;" class="img-fluid" alt="' . $data['nazov'] . '">
+                    <img src="' . $data['obrazok'] . '" style="width: 30%; height: auto;" class="img-fluid mb-2" alt="' . $data['nazov'] . '">
                     <div class="row mb-3">
                         <div class="col-md-12">
                             <strong>Názov produktu:</strong>
@@ -433,7 +433,6 @@ class ProductsFunctions extends Database
         $data = $stmt->fetchAll();
 
         foreach ($data as $row) {
-            $base64 = base64_encode($row['obrazok']);
             echo '<div class="row row-cols-1 g-3 mt-3 increaseSizeHover">
                 <div class="col">
                     <form method="post" action="?page=productsmsg&message=' . $row['id'] . '">
@@ -452,7 +451,7 @@ class ProductsFunctions extends Database
                                     <div class="mb-2">
                                         <span class="font-weight-bold">Cena: </span>' . $row['cena'] . '€
                                     </div>';
-            echo '<img src="data:image/png;base64,' . $base64 . '" style="width: 20%; height: auto;" class="img-fluid mb-2" alt="' . $row['nazov'] . '">';
+            echo '<img src="' . $row['obrazok'] . '" style="width: 20%; height: auto;" class="img-fluid mb-2" alt="' . $row['nazov'] . '">';
             echo '<div class="text-end">
                                         <small class="text-secondary">' . $row['datum'] . '</small>
                                     </div>
