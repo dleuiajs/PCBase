@@ -13,16 +13,6 @@ class AccountFunctions extends Database
         $this->connection = $this->getConnection();
     }
 
-    public function getPCBuildMsg()
-    {
-        return $this->getData("objednavka_zostavenie");
-    }
-
-    public function getProductsMsg()
-    {
-        return $this->getData("objednavka_tovar");
-    }
-
     public function getSidebarElements()
     {
         $elements = [];

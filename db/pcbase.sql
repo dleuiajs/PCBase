@@ -153,7 +153,7 @@ ENGINE = InnoDB;
 -- Table `pcbase`.`podrobnosti_tovara`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `pcbase`.`podrobnosti_tovara` (
-  `idpodrobnosti_tovara` INT NOT NULL,
+  `idpodrobnosti_tovara` INT NOT NULL AUTO_INCREMENT,
   `rozmery` VARCHAR(45) NOT NULL,
   `hmotnost` VARCHAR(45) NOT NULL,
   `zaruka` VARCHAR(45) NOT NULL,
@@ -187,7 +187,7 @@ CREATE TABLE IF NOT EXISTS `pcbase`.`tovar` (
   `popis` VARCHAR(255) NOT NULL,
   `mnozstvo` INT NOT NULL,
   `cena` FLOAT NOT NULL,
-  `obrazok` MEDIUMBLOB NOT NULL,
+  `obrazok` VARCHAR(255) NOT NULL,
   `idpodrobnosti_tovara` INT NOT NULL,
   `idkategoria_tovara` INT NOT NULL,
   PRIMARY KEY (`idtovar`, `idpodrobnosti_tovara`, `idkategoria_tovara`))

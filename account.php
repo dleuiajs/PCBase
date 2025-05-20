@@ -59,9 +59,9 @@ if (isset($_GET['deleteaccount']) && $_GET['deleteaccount'] === 'true') {
                     return !empty($_SESSION[$key]) ? $_SESSION[$key] : 'Neuvedené';
                 }
 
-                $page = isset($_GET['page']) ? $_GET['page'] : 'details';
-                $securityEdit = isset($_GET['edit']) ? $_GET['edit'] : null;
-                $message = isset($_GET['message']) ? $_GET['message'] : null;
+                $page = $_GET['page'] ?? 'details';
+                $securityEdit = $_GET['edit'] ?? null;
+                $message = $_GET['message'] ?? null;
 
                 switch ($page) {
                     case 'details':
@@ -87,6 +87,74 @@ if (isset($_GET['deleteaccount']) && $_GET['deleteaccount'] === 'true') {
                                 <a href="?logout=true" class="text-decoration-underline">Odhlásiť sa</a>
                                 </div>';
                             echo "</div>";
+                        }
+                        break;
+
+                    case 'adminpanel':
+                        if (in_array('adminpanel', $elements)) {
+                            echo "<h2>Panel správcu</h2>";
+                            $idrola = $_SESSION['user_idrola'];
+                            $form = isset($_GET['form']) ? $_GET['form'] : null;
+                            if ($idrola == 5) {
+                                echo "<h4>Pre administrátora</h4>";
+                                // Správa rolí používateľov
+                                echo '<div class="card shadow mb-4">
+                                    <div class="card-header bg-primary text-white">
+                                        <h4 class="mb-0 text-white"><i class="bi bi-person-gear mr-2"></i>Správa rolí používateľov</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <form id="request" action="?page=adminpanel&form=edit-user-roles" method="post">
+                                        <div class="form-group mb-3">
+                                            <label for="email">E-mail používateľa:</label>
+                                            <input class="form-control" type="email" id="email" name="email"
+                                                placeholder="Zadajte e-mail používateľa">
+                                        </div>
+                                        <div class="form-group mb-3">
+                                            <label for="rola">Rola:</label>
+                                            <select class="form-control" id="rola" name="rola">';
+                                $roles = $users->getRolesList();
+                                foreach ($roles as $role) {
+                                    echo '<option value="' . $role['idrola'] . '">' . $role['nazov'] . '</option>';
+                                }
+                                echo '</select>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary" style="width:50%;">Uložiť</button>
+                                    </form>
+                                    </div>
+                                </div>';
+                                if ($form == "edit-user-roles" && $_SERVER['REQUEST_METHOD'] === 'POST') {
+                                    try {
+                                        if (empty($_POST['email']) || empty($_POST['rola'])) {
+                                            throw new Exception("Nezadan e-mail používateľa alebo rola.");
+                                        }
+                                        if (!in_array($_POST['email'], $users->getUsersEmailList())) {
+                                            throw new Exception("Používateľ s týmto e-mailom neexistuje.");
+                                        }
+                                        $users->setUserRole(
+                                            $_POST['email'],
+                                            $_POST['rola']
+                                        );
+                                        echo '<p id="spravaRoliInfo" class="text-success mb-4">Rola bola úspešne zmenená.</p>';
+                                    } catch (Exception $e) {
+                                        echo '<p id="spravaRoliInfo" class="text-danger mb-4">' . $e->getMessage() . '</p>';
+                                    }
+                                }
+                            }
+                            if (in_array($idrola, [2, 4, 5])) {
+                                echo "<h4>Pre správcov zostáv počítačov alebo produktov</h4>";
+                                // Správa počítačových komponentov
+                                $pcbuildFunctions->generateAddComponentsForm($form);
+                                $pcbuildFunctions->removeComponentsForm($form);
+
+                            }
+                            if (in_array($idrola, [4, 5])) {
+                                echo "<h4>Pre správcov produktov</h4>";
+                                // Správa objednávok
+                                $productsFunctions->generateAddProductsForm($form);
+                                $productsFunctions->generateRemoveProductsForm($form);
+                            }
+                        } else {
+                            echo '<div class="alert alert-danger" role="alert">Nemáte prístup k tejto sekcii.</div>';
                         }
                         break;
 
@@ -198,8 +266,8 @@ if (isset($_GET['deleteaccount']) && $_GET['deleteaccount'] === 'true') {
                         if (in_array('security', $elements)) {
                             echo "<h2>Bezpečnosť</h2>";
                             echo '<div>';
-                            echo '<h4>Zmena e-mailu</h4>';
-                            echo '<form id="request" action="?page=security&edit=email" method="post">
+                            echo '<h4 id="emailChangeForm">Zmena e-mailu</h4>';
+                            echo '<form action="?page=security&edit=email#emailChangeForm" method="post">
                                     <div class="form-group mb-3">
                                         <label for="email">E-mail:</label>
                                         <input type="email" class="form-control" id="email" name="email" placeholder="Zadajte váš e-mail" required>
@@ -220,18 +288,18 @@ if (isset($_GET['deleteaccount']) && $_GET['deleteaccount'] === 'true') {
                                         $users->editEmail(
                                             $_POST['email'],
                                         );
-                                        echo '<p id="emailEditInfo" class="text-success mt-3">E-mail bol úspešne zmenený.</p>';
+                                        echo '<p class="text-success mt-3">E-mail bol úspešne zmenený.</p>';
                                     } else {
                                         throw new Exception("Nesprávne heslo.");
                                     }
 
                                 } catch (Exception $e) {
-                                    echo '<p id="emailEditInfo" class="text-danger mt-3">' . $e->getMessage() . '</p>';
+                                    echo '<p class="text-danger mt-3">' . $e->getMessage() . '</p>';
                                 }
                             }
                             echo '<div class="mt-5">';
-                            echo '<h4>Zmena hesla</h4>';
-                            echo '<form id="request" action="?page=security&edit=password#passwordEditInfo" method="post">
+                            echo '<h4 id="passwordChangeForm">Zmena hesla</h4>';
+                            echo '<form action="?page=security&edit=password#passwordChangeForm" method="post">
                                     <div class="form-group mb-3">
                                         <label for="old_heslo">Staré heslo:</label>
                                         <input class="form-control" type="password" id="old_heslo" name="old_heslo"
@@ -261,12 +329,12 @@ if (isset($_GET['deleteaccount']) && $_GET['deleteaccount'] === 'true') {
                                             $_POST['heslo'],
                                             $_POST['heslo_confirm']
                                         );
-                                        echo '<p id="passwordEditInfo" class="text-success mt-3">Heslo bolo úspešne zmenené.</p>';
+                                        echo '<p class="text-success mt-3">Heslo bolo úspešne zmenené.</p>';
                                     } else {
                                         throw new Exception("Nesprávne heslo.");
                                     }
                                 } catch (Exception $e) {
-                                    echo '<p id="passwordEditInfo" class="text-danger mt-3">' . $e->getMessage() . '</p>';
+                                    echo '<p class="text-danger mt-3">' . $e->getMessage() . '</p>';
                                 }
                             }
                             echo '<div class="mt-4">

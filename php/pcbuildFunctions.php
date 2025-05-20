@@ -51,6 +51,154 @@ class PcBuildFunctions extends Database
         $stmt->execute();
     }
 
+    public function removeComponentsForm($form)
+    {
+        $type = "none";
+        $columnNames = [];
+        if ($form == "remove-computer-components" && $_SERVER['REQUEST_METHOD'] === 'POST') {
+            // načítanie typu komponentu z POST
+            $type = $_POST['type'] ?? "none";
+
+            // načítanie názvov stĺpcov z databázy
+            if (in_array($type, ["zakladna_doska", "graficka_karta", "procesor", "operacna_pamat", "napajaci_zdroj", "ulozisko", "chladenie", "operacny_system"])) {
+                $columnNames = $this->getColumnNames($type);
+                array_shift($columnNames); // odstráni prvý prvok poľa (id)
+            }
+        }
+
+        // generovanie formulára
+        echo '<div class="card shadow mb-4" id="removeComponentsCard">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0 text-white"><i class="bi bi-dash-square mr-2"></i>Odstránenie počítačových komponentov</h4>
+            </div>
+            <div class="card-body">
+                <form id="request" action="?page=adminpanel&form=remove-computer-components#removeComponentsCard" method="post">
+                    <div class="form-group mb-3">
+                        <label for="type">Vyberte typ komponentu:</label>
+                        <select class="form-control" id="type" name="type" onchange="this.form.submit()" required>
+                            <option value="none" ' . optionSelect($type, "none") . '>Vyberte typ komponentu</option>
+                            <option value="zakladna_doska" ' . optionSelect($type, "zakladna_doska") . '>Základná doska</option>
+                            <option value="graficka_karta" ' . optionSelect($type, "graficka_karta") . '>Grafická karta</option>
+                            <option value="procesor" ' . optionSelect($type, "procesor") . '>Procesor</option>
+                            <option value="operacna_pamat" ' . optionSelect($type, "operacna_pamat") . '>Operačná pamäť</option>
+                            <option value="napajaci_zdroj" ' . optionSelect($type, "napajaci_zdroj") . '>Napájací zdroj</option>
+                            <option value="ulozisko" ' . optionSelect($type, "ulozisko") . '>Úložisko</option>
+                            <option value="chladenie" ' . optionSelect($type, "chladenie") . '>Chladenie</option>
+                            <option value="operacny_system" ' . optionSelect($type, "operacny_system") . '>Operačný systém</option>
+                        </select>
+                    </div>';
+        // načítanie údajov z formulára
+        $components = null;
+        if ($form == "remove-computer-components" && $_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (isset($_POST['idkomponent']) && $_POST['idkomponent'] != "") {
+                try {
+                    $sql = "DELETE FROM " . $_POST['type'] . " WHERE id" . $_POST['type'] . " = :id";
+                    $stmt = $this->connection->prepare($sql);
+                    $stmt->bindValue(':id', $_POST['idkomponent']);
+                    $stmt->execute();
+                    $textinfo = '<p class="text-success mb-4">Komponent bol úspešne odstránený.</p>';
+                } catch (Exception $e) {
+                    $textinfo = '<p class="text-danger mb-4">' . $e->getMessage() . '</p>';
+                }
+            }
+            try {
+                $sql = "SELECT * FROM " . $_POST['type'];
+                $stmt = $this->connection->prepare($sql);
+                $stmt->execute();
+                $components = $stmt->fetchAll();
+            } catch (Exception $e) {
+                echo '<p class="text-danger mt-3">' . $e->getMessage() . '</p>';
+            }
+        }
+        if ($components != null) {
+            echo '<div class="form-group mb-3">
+                    <label for="idkomponent">Vyberte komponent:</label>
+                    <select class="form-control" id="idkomponent" name="idkomponent">';
+            foreach ($components as $row) {
+                echo '<option value="' . $row['id' . $_POST['type']] . '">' . $row['nazov'] . '</option>';
+            }
+            echo '  </select>
+                </div>';
+            echo '<div class="form-group mb-3">
+                    <button class="btn btn-danger" type="submit">Odstrániť</button>
+                  </div>';
+        }
+        echo '  </form>
+            </div>
+        </div>';
+        echo $textinfo ?? '';
+
+    }
+
+    public function generateAddComponentsForm($form)
+    {
+        $type = "none";
+        $columnNames = [];
+        if ($form == "add-computer-components" && $_SERVER['REQUEST_METHOD'] === 'POST') {
+            // načítanie typu komponentu z POST
+            $type = $_POST['type'] ?? "none";
+
+            // načítanie názvov stĺpcov z databázy
+            if (in_array($type, ["zakladna_doska", "graficka_karta", "procesor", "operacna_pamat", "napajaci_zdroj", "ulozisko", "chladenie", "operacny_system"])) {
+                $columnNames = $this->getColumnNames($type);
+                array_shift($columnNames); // odstráni prvý prvok poľa (id)
+            }
+        }
+
+        // generovanie formulára
+        echo '<div class="card shadow mb-4" id="addComponentsCard">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0 text-white"><i class="bi bi-plus-square mr-2"></i>Pridanie počítačových komponentov</h4>
+            </div>
+            <div class="card-body">
+                <form id="request" action="?page=adminpanel&form=add-computer-components#addComponentsCard" method="post">
+                    <div class="form-group mb-3">
+                        <label for="type">Vyberte typ komponentu:</label>
+                        <select class="form-control" id="type" name="type" onchange="this.form.submit()" required>
+                            <option value="none" ' . optionSelect($type, "none") . '>Vyberte typ komponentu</option>
+                            <option value="zakladna_doska" ' . optionSelect($type, "zakladna_doska") . '>Základná doska</option>
+                            <option value="graficka_karta" ' . optionSelect($type, "graficka_karta") . '>Grafická karta</option>
+                            <option value="procesor" ' . optionSelect($type, "procesor") . '>Procesor</option>
+                            <option value="operacna_pamat" ' . optionSelect($type, "operacna_pamat") . '>Operačná pamäť</option>
+                            <option value="napajaci_zdroj" ' . optionSelect($type, "napajaci_zdroj") . '>Napájací zdroj</option>
+                            <option value="ulozisko" ' . optionSelect($type, "ulozisko") . '>Úložisko</option>
+                            <option value="chladenie" ' . optionSelect($type, "chladenie") . '>Chladenie</option>
+                            <option value="operacny_system" ' . optionSelect($type, "operacny_system") . '>Operačný systém</option>
+                        </select>
+                    </div>';
+        if ($form == "add-computer-components" && $_SERVER['REQUEST_METHOD'] === 'POST') {
+            foreach ($columnNames as $columnName) {
+                echo '<div class="form-group mb-3">
+                        <label for="' . $columnName . '">Zadajte ' . $columnName . '</label>
+                        <input type="text" class="form-control" id="' . $columnName . '" name="' . $columnName . '" placeholder="Zadajte ' . $columnName . '" required>
+                    </div>';
+            }
+            echo '<div class="form-group mb-3">
+                    <button class="btn btn-primary" type="submit">Pridať</button>
+                  </div>';
+        }
+
+        echo '        </form>
+            </div>
+        </div>';
+        // načítanie údajov z formulára
+        if ($form == "add-computer-components" && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nazov']) && $_POST['nazov'] != "") {
+            $data = $_POST;
+            array_shift($data); // odstráni prvý prvok poľa (type)
+            try {
+                $sql = "INSERT INTO $type (" . implode(", ", array_keys($data)) . ") VALUES (:" . implode(", :", array_keys($data)) . ")";
+                $stmt = $this->connection->prepare($sql);
+                foreach ($data as $key => $value) {
+                    $stmt->bindValue(':' . $key, $value);
+                }
+                $stmt->execute();
+                echo '<p class="text-success mb-4">Údaje boli úspešne pridané.</p>';
+            } catch (Exception $e) {
+                echo '<p class="text-danger mb-4">' . $e->getMessage() . '</p>';
+            }
+        }
+    }
+
     public function generateForm()
     {
         $components = [

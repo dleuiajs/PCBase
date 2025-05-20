@@ -94,7 +94,7 @@ INSERT INTO rola (nazov) VALUES
 ("Správca zostáv počítačov"),
 ("Správca kontaktných požiadaviek"),
 ("Správca produktov"),
-("Správca");
+("Administrátor");
 INSERT INTO tovar (nazov, popis, mnozstvo, cena, idpodrobnosti_tovara, idkategoria_tovara)
 VALUES ("Výkonný počítač na hranie hier", "Výkonný herný počítač vytvorený špeciálne na hranie hier s najlepšou grafickou kartou a procesorom. Všetky hry s rezervou 5 rokov bez problémov spustíte.", 13, 1499, 1, 3);
 INSERT INTO podrobnosti_tovara (rozmery, hmotnost, zaruka, idzakladna_doska, idprocesor, idnapajaci_zdroj, idoperacna_pamat, idulozisko, idchladenie, idoperacny_system) VALUES ("450mm x 210mm x 450mm", "15 kg", "2 roky", 5, 6, 6, 9, 1, 10, 5);

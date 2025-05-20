@@ -44,5 +44,17 @@ class Database
             return false;
         }
     }
+
+    protected function getColumnNames($nazov)
+    {
+        try {
+            $stmt = $this->connection->prepare('SELECT * FROM ' . $nazov . ' LIMIT 1');
+            $stmt->execute();
+            return array_keys($stmt->fetch());
+        } catch (PDOException $e) {
+            echo "Chyba: " . $e->getMessage();
+            return false;
+        }
+    }
 }
 ?>

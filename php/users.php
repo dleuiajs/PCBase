@@ -2,7 +2,7 @@
 namespace users;
 ini_set("display_errors", "On");
 require_once(__ROOT__ . "/db/dbfunctions.php");
-use Exception, databaza\Database;
+use Exception, databaza\Database, PDO;
 
 class Users extends Database
 {
@@ -137,6 +137,31 @@ class Users extends Database
         $stmt->execute();
         $role = $stmt->fetchColumn();
         return $role;
+    }
+
+    public function getRolesList()
+    {
+        $sql = "SELECT * FROM rola";
+        $stmt = $this->connection->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
+
+    public function setUserRole($email, $idrola)
+    {
+        $sql = "UPDATE pouzivatel SET rola_idrola = :idrola WHERE email = :email";
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindParam(':email', $email);
+        $stmt->bindParam(':idrola', $idrola);
+        return $stmt->execute();
+    }
+
+    public function getUsersEmailList()
+    {
+        $sql = "SELECT email FROM pouzivatel";
+        $stmt = $this->connection->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
     }
 
     public function editProfile($meno, $priezvisko, $tel_cislo, $krajina, $mesto, $psc, $ulica, $cislo_domu)

@@ -12,6 +12,16 @@
             ]
         },
         {
+            "href": "adminpanel",
+            "text": "Panel správcu",
+            "roles": [
+                2,
+                3,
+                4,
+                5
+            ]
+        },
+        {
             "href": "contactmsg",
             "text": "Kontaktné správy",
             "roles": [

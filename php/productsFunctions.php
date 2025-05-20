@@ -14,6 +14,272 @@ class ProductsFunctions extends Database
         $this->connection = $this->getConnection();
     }
 
+    public function generateRemoveProductsForm($form)
+    {
+        $textinfo = null;
+        if ($form == "remove-products" && $_SERVER['REQUEST_METHOD'] === 'POST') {
+            try {
+                $id = $_POST['id'];
+                $sql = "SELECT obrazok FROM tovar WHERE idtovar = :id";
+                $stmt = $this->connection->prepare($sql);
+                $stmt->bindParam(':id', $id);
+                $stmt->execute();
+                $result = $stmt->fetch();
+                if ($result) {
+                    $obrazok = $result['obrazok'];
+                    if (file_exists($obrazok)) {
+                        unlink($obrazok);
+                    }
+                } else {
+                    throw new Exception("Obrázok neexistuje.");
+                }
+                $sql = "DELETE FROM tovar WHERE idtovar = :id";
+                $stmt = $this->connection->prepare($sql);
+                $stmt->bindParam(':id', $id);
+                $stmt->execute();
+                $sql = "DELETE FROM podrobnosti_tovara WHERE idpodrobnosti_tovara = :id";
+                $stmt = $this->connection->prepare($sql);
+                $stmt->bindParam(':id', $id);
+                $stmt->execute();
+                $sql = "DELETE FROM podrobnosti_tovara_has_graficka_karta WHERE idpodrobnosti_tovara = :id";
+                $stmt = $this->connection->prepare($sql);
+                $stmt->bindParam(':id', $id);
+                $stmt->execute();
+                $textinfo = '<p class="text-success mb-4">Tovar bol úspešne odstránený.</p>';
+            } catch (Exception $e) {
+                $textinfo = '<p class="text-danger mb-4">' . $e->getMessage() . '</p>';
+            }
+        }
+        echo '<div class="card shadow mb-4" id="removeProductsCard">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0 text-white"><i class="bi bi-trash mr-2"></i>Odstránenie počítačových komponentov</h4>
+            </div>
+            <div class="card-body">
+                <form id="request" action="?page=adminpanel&form=remove-products#removeProductsCard" method="post">
+                    <div class="form-group mb-3">
+                        <label for="id">Vyberte produkt</label>
+                        <select class="form-control" id="id" name="id" required>
+                            <option value="" disabled selected>Vyberte produkt</option>';
+        $products = $this->getData("tovar");
+        foreach ($products as $product) {
+            echo '          <option value="' . $product['idtovar'] . '">' . $product['nazov'] . '</option>';
+        }
+        echo '          </select>
+                    </div>
+                    <div class="form-group mb-3">
+                        <button class="btn btn-danger" type="submit">Odstrániť</button>
+                    </div>
+                </form>
+            </div>
+        </div>';
+        if ($textinfo) {
+            echo $textinfo;
+        }
+    }
+
+    public function generateAddProductsForm($form)
+    {
+        echo '<div class="card shadow mb-4" id="addProductsCard">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0 text-white"><i class="bi bi-plus-square mr-2"></i>Pridanie počítačových komponentov</h4>
+            </div>
+            <div class="card-body">
+                <form id="request" action="?page=adminpanel&form=add-products#addProductsCard" method="post" enctype="multipart/form-data">
+                    <div class="form-group mb-3">
+                        <label for="nazov">Zadajte názov produktu</label>
+                        <input type="text" class="form-control" id="nazov" name="nazov" placeholder="Názov produktu" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="popis">Zadajte popis produktu</label>
+                        <textarea class="form-control" id="popis" name="popis" rows="3" placeholder="Popis produktu" required></textarea>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="cena">Zadajte cenu produktu</label>
+                        <input type="number" class="form-control" id="cena" name="cena" placeholder="Cena produktu" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="obrazok">Zadajte obrázok produktu</label>
+                        <input type="file" class="form-control" id="obrazok" name="obrazok" accept="image/*" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="mnozstvo">Zadajte množstvo produktu</label>
+                        <input type="number" class="form-control" id="mnozstvo" name="mnozstvo" placeholder="Množstvo produktu" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="idkategoria_tovara">Vyberte kategóriu produktu</label>
+                        <select class="form-control" id="idkategoria_tovara" name="idkategoria_tovara" required>
+                            <option value="" disabled selected>Vyberte kategóriu</option>';
+        $categories = $this->getData("kategoria_tovara");
+        foreach ($categories as $category) {
+            echo '          <option value="' . $category['idkategoria_tovara'] . '">' . $category['nazov'] . '</option>';
+        }
+        echo '          </select>
+                    </div>
+                    <div class="form-group-mb-3">
+                        <label for="rozmery">Zadajte rozmer produktu</label>
+                        <input type="text" class="form-control" id="rozmery" name="rozmery" placeholder="Rozmer produktu" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="hmotnost">Zadajte hmotnosť produktu</label>
+                        <input type="text" class="form-control" id="hmotnost" name="hmotnost" placeholder="Hmotnosť produktu" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="zaruka">Uveďte dĺžku záruky</label>
+                        <input type="text" class="form-control" id="zaruka" name="zaruka" placeholder="Dĺžka záruky" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="idzakladna_doska">Vyberte základnú dosku</label>
+                        <select class="form-control" id="idzakladna_doska" name="idzakladna_doska" required>
+                            <option value="" disabled selected>Vyberte základnú dosku</option>';
+        $motherboards = $this->getData("zakladna_doska");
+        foreach ($motherboards as $motherboard) {
+            echo '          <option value="' . $motherboard['idzakladna_doska'] . '">' . $motherboard['nazov'] . '</option>';
+        }
+        echo '          </select>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="idprocesor">Vyberte procesor</label>
+                        <select class="form-control" id="idprocesor" name="idprocesor" required>
+                            <option value="" disabled selected>Vyberte procesor</option>';
+        $processors = $this->getData("procesor");
+        foreach ($processors as $processor) {
+            echo '          <option value="' . $processor['idprocesor'] . '">' . $processor['nazov'] . '</option>';
+        }
+        echo '          </select>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="idchladenie">Vyberte chladenie</label>
+                        <select class="form-control" id="idchladenie" name="idchladenie" required>
+                            <option value="" disabled selected>Vyberte chladenie</option>';
+        $coolings = $this->getData("chladenie");
+        foreach ($coolings as $cooling) {
+            echo '          <option value="' . $cooling['idchladenie'] . '">' . $cooling['nazov'] . '</option>';
+        }
+        echo '          </select>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="idnapajaci_zdroj">Vyberte napájací zdroj</label>
+                        <select class="form-control" id="idnapajaci_zdroj" name="idnapajaci_zdroj" required>
+                            <option value="" disabled selected>Vyberte napájací zdroj</option>';
+        $powerSupplies = $this->getData("napajaci_zdroj");
+        foreach ($powerSupplies as $powerSupply) {
+            echo '          <option value="' . $powerSupply['idnapajaci_zdroj'] . '">' . $powerSupply['nazov'] . '</option>';
+        }
+        echo '          </select>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="idoperacna_pamat">Vyberte operačnú pamäť</label>
+                        <select class="form-control" id="idoperacna_pamat" name="idoperacna_pamat" required>
+                            <option value="" disabled selected>Vyberte operačnú pamäť</option>';
+        $memories = $this->getData("operacna_pamat");
+        foreach ($memories as $memory) {
+            echo '          <option value="' . $memory['idoperacna_pamat'] . '">' . $memory['nazov'] . '</option>';
+        }
+        echo '          </select>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="idgraficka_karta">Vyberte grafickú kartu</label>
+                        <select class="form-control" id="idgraficka_karta" name="idgraficka_karta" required>
+                            <option value="" disabled selected>Vyberte grafickú kartu</option>';
+        $graphicsCards = $this->getData("graficka_karta");
+        foreach ($graphicsCards as $graphicsCard) {
+            echo '          <option value="' . $graphicsCard['idgraficka_karta'] . '">' . $graphicsCard['nazov'] . '</option>';
+        }
+        echo '          </select>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="idulozisko">Vyberte úložisko</label>
+                        <select class="form-control" id="idulozisko" name="idulozisko" required>
+                            <option value="" disabled selected>Vyberte úložisko</option>';
+        $storage = $this->getData("ulozisko");
+        foreach ($storage as $storageItem) {
+            echo '          <option value="' . $storageItem['idulozisko'] . '">' . $storageItem['nazov'] . '</option>';
+        }
+        echo '          </select>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="idoperacny_system">Vyberte operačný systém</label>
+                        <select class="form-control" id="idoperacny_system" name="idoperacny_system" required>
+                            <option value="" disabled selected>Vyberte operačný systém</option>';
+        $operatingSystems = $this->getData("operacny_system");
+        foreach ($operatingSystems as $operatingSystem) {
+            echo '          <option value="' . $operatingSystem['idoperacny_system'] . '">' . $operatingSystem['nazov'] . '</option>';
+        }
+        echo '          </select>
+                    </div>';
+        echo '<div class="form-group mb-3">
+                    <button class="btn btn-primary" type="submit">Pridať</button>
+                  </div>';
+        echo '  </form>
+            </div>
+        </div>';
+        if ($form == "add-products" && $_SERVER['REQUEST_METHOD'] === 'POST') {
+            try {
+                // nahravanie obrazka
+                $targetDir = "uploads/";
+                $originalFileName = basename($_FILES["obrazok"]["name"]);
+                $targetFile = $targetDir . time() . "_" . $originalFileName;
+                $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
+
+                $validTypes = ['jpg', 'jpeg', 'png'];
+                if (!in_array($imageFileType, $validTypes)) {
+                    throw new Exception("Nepovolený formát obrázku.");
+                }
+
+                if (!move_uploaded_file($_FILES["obrazok"]["tmp_name"], $targetFile)) {
+                    throw new Exception("Nepodarilo sa nahrať obrázok.");
+                }
+
+                $sql = "SELECT idtovar + 1 AS id FROM tovar ORDER BY idtovar DESC LIMIT 1";
+                $stmt = $this->connection->prepare($sql);
+                if ($stmt->execute())
+                    $id = $stmt->fetch()['id'];
+                else
+                    $id = 1;
+
+                $sql = "INSERT INTO podrobnosti_tovara (idpodrobnosti_tovara, rozmery, hmotnost, zaruka, idzakladna_doska, idprocesor, idchladenie, idnapajaci_zdroj, idoperacna_pamat, idulozisko, idoperacny_system) 
+                    VALUES (:idpodrobnosti_tovara, :rozmery, :hmotnost, :zaruka, :idzakladna_doska, :idprocesor, :idchladenie, :idnapajaci_zdroj, :idoperacna_pamat, :idulozisko, :idoperacny_system)";
+                $stmt = $this->connection->prepare($sql);
+                $stmt->bindParam(':idpodrobnosti_tovara', $id);
+                $stmt->bindParam(':rozmery', $_POST['rozmery']);
+                $stmt->bindParam(':hmotnost', $_POST['hmotnost']);
+                $stmt->bindParam(':zaruka', $_POST['zaruka']);
+                $stmt->bindParam(':idzakladna_doska', $_POST['idzakladna_doska']);
+                $stmt->bindParam(':idprocesor', $_POST['idprocesor']);
+                $stmt->bindParam(':idchladenie', $_POST['idchladenie']);
+                $stmt->bindParam(':idnapajaci_zdroj', $_POST['idnapajaci_zdroj']);
+                $stmt->bindParam(':idoperacna_pamat', $_POST['idoperacna_pamat']);
+                $stmt->bindParam(':idulozisko', $_POST['idulozisko']);
+                $stmt->bindParam(':idoperacny_system', $_POST['idoperacny_system']);
+                $stmt->execute();
+
+                $sql = "INSERT INTO podrobnosti_tovara_has_graficka_karta (idpodrobnosti_tovara, idgraficka_karta)
+                    VALUES (:idpodrobnosti_tovara, :idgraficka_karta)";
+                $stmt = $this->connection->prepare($sql);
+                $stmt->bindParam(':idpodrobnosti_tovara', $id);
+                $stmt->bindParam(':idgraficka_karta', $_POST['idgraficka_karta']);
+                $stmt->execute();
+
+                $sql = "INSERT INTO tovar (idtovar, nazov, popis, mnozstvo, cena, obrazok, idpodrobnosti_tovara, idkategoria_tovara)
+                    VALUES (:idtovar, :nazov, :popis, :mnozstvo, :cena, :obrazok, :idpodrobnosti_tovara, :idkategoria_tovara)";
+                $stmt = $this->connection->prepare($sql);
+                $stmt->bindParam(':idtovar', $id);
+                $stmt->bindParam(':nazov', $_POST['nazov']);
+                $stmt->bindParam(':popis', $_POST['popis']);
+                $stmt->bindParam(':mnozstvo', $_POST['mnozstvo']);
+                $stmt->bindParam(':cena', $_POST['cena']);
+                $stmt->bindParam(':obrazok', $targetFile);
+                $stmt->bindParam(':idpodrobnosti_tovara', $id);
+                $stmt->bindParam(':idkategoria_tovara', $_POST['idkategoria_tovara']);
+                $stmt->execute();
+                echo '<p class="text-success mb-4">Tovar bol úspešne pridaný.</p>';
+            } catch (Exception $e) {
+                echo '<p class="text-danger mb-4">' . $e->getMessage() . '</p>';
+            }
+
+        }
+    }
+
     public function generateMessage($id)
     {
         if (!is_numeric($id)) {
