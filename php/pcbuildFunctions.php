@@ -69,7 +69,7 @@ class PcBuildFunctions extends Database
         // generovanie formulára
         echo '<div class="card shadow mb-4" id="removeComponentsCard">
             <div class="card-header bg-primary text-white">
-                <h4 class="mb-0 text-white"><i class="bi bi-dash-square mr-2"></i>Odstránenie počítačových komponentov</h4>
+                <h4 class="mb-0 text-white"><i class="bi bi-trash mr-2"></i>Odstránenie počítačových komponentov</h4>
             </div>
             <div class="card-body">
                 <form id="request" action="?page=adminpanel&form=remove-computer-components#removeComponentsCard" method="post">

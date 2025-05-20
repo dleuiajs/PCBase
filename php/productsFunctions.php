@@ -52,7 +52,7 @@ class ProductsFunctions extends Database
         }
         echo '<div class="card shadow mb-4" id="removeProductsCard">
             <div class="card-header bg-primary text-white">
-                <h4 class="mb-0 text-white"><i class="bi bi-trash mr-2"></i>Odstránenie počítačových komponentov</h4>
+                <h4 class="mb-0 text-white"><i class="bi bi-trash mr-2"></i>Odstránenie produktov</h4>
             </div>
             <div class="card-body">
                 <form id="request" action="?page=adminpanel&form=remove-products#removeProductsCard" method="post">
@@ -81,7 +81,7 @@ class ProductsFunctions extends Database
     {
         echo '<div class="card shadow mb-4" id="addProductsCard">
             <div class="card-header bg-primary text-white">
-                <h4 class="mb-0 text-white"><i class="bi bi-plus-square mr-2"></i>Pridanie počítačových komponentov</h4>
+                <h4 class="mb-0 text-white"><i class="bi bi-plus-square mr-2"></i>Pridanie produktov</h4>
             </div>
             <div class="card-body">
                 <form id="request" action="?page=adminpanel&form=add-products#addProductsCard" method="post" enctype="multipart/form-data">
