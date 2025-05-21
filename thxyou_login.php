@@ -13,11 +13,15 @@ loadPart("head");
         use users\Users;
         // načítanie údajov o používateľovi
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            try {
-                $users = new Users();
-                $users->handlerLogin();
-            } catch (Exception $e) {
-                $userException = $e->getMessage();
+            if ($_POST['captcha'] != $_POST['captcha1'] + $_POST['captcha2']) {
+                $userException = "Nesprávny výsledok CAPTCHA!";
+            } else {
+                try {
+                    $users = new Users();
+                    $users->handlerLogin();
+                } catch (Exception $e) {
+                    $userException = $e->getMessage();
+                }
             }
         }
         loadPart("header"); ?>

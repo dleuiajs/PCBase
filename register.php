@@ -8,11 +8,16 @@ loadPart("head");
 
 <body class="main-layout inner_posituong computer_page">
     <!-- header -->
-    <?php loadPart("header"); ?>
-    <!-- end header -->
-    <div class="container my-5" style="max-width: 400px;">
+    <?php
+    loadPart("header");
+    $rand1 = rand(1, 9);
+    $rand2 = rand(1, 9);
+    // <!-- end header -->
+    echo '<div class="container my-5" style="max-width: 400px;">
         <h2>Registrácia</h2>
         <form id="request" action="thxyou_register.php" method="post">
+                    <input type="hidden" name="captcha1" value="' . $rand1 . '">
+            <input type="hidden" name="captcha2" value="' . $rand2 . '">
             <div class="form-group mb-3">
                 <label for="meno">Meno:</label>
                 <input class="form-control" id="meno" name="meno" placeholder="Zadajte váše meno" required>
@@ -38,13 +43,19 @@ loadPart("head");
                 <input type="password" class="form-control" id="heslo_confirm" name="heslo_confirm"
                     placeholder="Zopakujte vaše heslo" required>
             </div>
+            <div class="form-group mb-4">
+                <label for="captcha">Koľko je ' . $rand1 . ' + ' . $rand2 . '?:</label>
+                <input type="number" min="0" class="form-control" id="captcha" name="captcha" placeholder="Overte, že nie ste robot"
+                    required>
+            </div>
             <div class="d-flex align-items-center">
                 <button type="submit" class="btn btn-primary">Registrovať sa</button>
                 <a href="login.php" class="ms-3 text-decoration-underline" style="margin-left: 16px;">Prihlásiť sa</a>
             </div>
         </form>
         <hr class="my-5">
-    </div>
+    </div>';
+    ?>
     <!--  footer -->
     <?php loadPart("footer"); ?>
     <!-- end footer -->
