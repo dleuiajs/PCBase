@@ -45,6 +45,10 @@ class ProductsFunctions extends Database
                 $stmt = $this->connection->prepare($sql);
                 $stmt->bindParam(':id', $id);
                 $stmt->execute();
+                $sql = "DELETE FROM objednavka_tovar WHERE idtovar = :id";
+                $stmt = $this->connection->prepare($sql);
+                $stmt->bindParam(':id', $id);
+                $stmt->execute();
                 $textinfo = '<p class="text-success mb-4">Tovar bol úspešne odstránený.</p>';
             } catch (Exception $e) {
                 $textinfo = '<p class="text-danger mb-4">' . $e->getMessage() . '</p>';
