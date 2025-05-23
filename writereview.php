@@ -5,22 +5,18 @@ loadPart("head");
 
 <body class="main-layout inner_posituong">
     <header>
-        <?php loadPart("header"); ?>
+        <?php
+        loadPart("header"); ?>
     </header>
 
     <?php
-    $id = $_GET['id'] ?? null;
-    if ($id === null) {
-        header("Location: products.php");
-        exit();
-    }
     require_once("php/productsFunctions.php");
     use products\ProductsFunctions;
     $productsFunctions = new ProductsFunctions();
-    $productsFunctions->generateProduct($id);
+    $productsFunctions->generateWriteReviewForm();
+    // načítanie dolnej časti stránky
+    loadPart("footer");
     ?>
-
-    <?php loadPart("footer"); ?>
 
     <!-- Javascript files -->
     <script src="js/jquery.min.js"></script>

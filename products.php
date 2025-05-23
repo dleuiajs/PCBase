@@ -48,7 +48,14 @@ loadPart("head");
                               </div>
                            </form>
                         </div>
-                        <div class="col-md-3">
+                        <?php
+                        // nahravanie tovarov
+                        require_once("php/productsFunctions.php");
+                        use products\ProductsFunctions;
+                        $productsFunctions = new ProductsFunctions();
+                        $productsFunctions->generateProductsList();
+                        ?>
+                        <!-- <div class="col-md-3">
                            <a href="product.php?id=1">
                               <div class="product_box">
                                  <figure><img src="images/category_img_01.png" alt="#" /></figure>
@@ -57,9 +64,9 @@ loadPart("head");
                                  <p class="price">1 499</p>
                               </div>
                            </a>
-                        </div>
+                        </div> -->
 
-                        <div class="col-md-3">
+                        <!-- <div class="col-md-3">
                            <a href="product.php?id=2">
                               <div class="product_box">
                                  <figure><img src="images/category_img_02.png" alt="#" /></figure>
@@ -101,7 +108,7 @@ loadPart("head");
                                  <p class="price">289</p>
                               </div>
                            </a>
-                        </div>
+                        </div> -->
                         <!-- <div class="col-md-12">
                            <a class="read_more" href="#">See More</a>
                         </div> -->

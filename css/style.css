@@ -1534,7 +1534,6 @@ ul.social_icon li a:hover {
 }
 
 .f input {
-     border: black solid 2px;
      padding: 0px 15px;
      width: 100%;
      height: 34px;
@@ -1548,4 +1547,28 @@ ul.social_icon li a:hover {
 
 .f input::placeholder {
      color: black !important;
+}
+
+.f textarea {
+     padding: 0px 15px;
+     width: 100%;
+     height: 34px;
+     margin-bottom: 4px;
+     background: transparent;
+     color: black;
+     font-weight: normal;
+     border: #7a7a7a7a solid 2px;
+     border-radius: 4px;
+     height: 151px;
+     padding: 9px 15px;
+}
+
+.review-image {
+     transition: all 0.3s ease-in-out;
+     width: 150px;
+}
+
+.review-image:hover {
+     width: 500px;
+     height: 500px;
 }
