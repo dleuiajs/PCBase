@@ -15,39 +15,8 @@ loadPart("head");
       ?>
       <!-- end header -->
       <!-- products -->
-      <div class="tovary">
-         <div class="container">
-            <div class="row">
-               <div class="col-md-12">
-                  <div class="titlepage">
-                     <h2>Tovary</h2>
-                  </div>
-               </div>
-            </div>
-            <div class="row">
-               <div class="col-md-12">
-                  <div class="our_tovary">
-                     <div class="row ">
-                        <div class="col-md-12 margin_bottom1">
-                           <form id="request" class="">
-                              <div class="row justify-content-between">
-                                 <div class="col-md-6 ">
-                                    <label for="search">Zadajte názov</label><br>
-                                    <input class="search" type="text" name="search" placeholder="Zadajte názov">
-                                 </div>
-                                 <div class="col-md-6 ">
-                                    <label for="sort">Zoradiť podľa:</label><br>
-                                    <select id="sort" name="sort" onchange="this.form.submit()">
-                                       <option value="default">Predvolené zoradenie</option>
-                                       <option value="price-asc">Cena: od najnižšej</option>
-                                       <option value="price-desc">Cena: od najvyššej</option>
-                                       <option value="popularity">Podľa obľúbenosti</option>
-                                       <option value="newest">Najnovšie</option>
-                                    </select>
-                                 </div>
-                              </div>
-                           </form>
-                        </div>
+     
+                        
                         <?php
                         // nahravanie tovarov
                         require_once("php/productsFunctions.php");
@@ -121,13 +90,7 @@ loadPart("head");
                               <a href="#">&raquo;</a>
                            </div> -->
 
-                     </div>
-                  </div>
-               </div>
-            </div>
-         </div>
-      </div>
-      </div>
+                     
       <!-- end products -->
       <!--  footer -->
       <?php

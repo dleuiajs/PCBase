@@ -321,16 +321,63 @@ class ProductsFunctions extends Database
 
     public function generateProductsList()
     {
-        $sql = "SELECT idtovar, nazov, popis, cena, obrazok, mnozstvo FROM tovar";
+        $dictionarySort = [
+            'default' => 'ORDER BY t.idtovar DESC',
+            'popularity' => 'ORDER BY (SELECT COUNT(*) FROM objednavka_tovar WHERE idtovar = t.idtovar) DESC, t.idtovar DESC',
+            'cena-asc' => 'ORDER BY cena ASC',
+            'cena-desc' => 'ORDER BY cena DESC'
+        ];
+
+        $nazov = $_GET['search'] ?? '';
+        $sort = $_GET['sort'] ?? 'default';
+
+        echo ' <div class="tovary">
+         <div class="container">
+            <div class="row">
+               <div class="col-md-12">
+                  <div class="titlepage">
+                     <h2>Tovary</h2>
+                  </div>
+               </div>
+            </div>
+            <div class="row">
+               <div class="col-md-12">
+                  <div class="our_tovary" id="productsList">
+                     <div class="row">
+                        <div class="col-md-12 margin_bottom1">
+                           <form id="request" method="get" action="#productsList" class="">
+                              <div class="row justify-content-between">
+                                 <div class="col-md-6 ">
+                                    <label for="search">Zadajte názov</label><br>
+                                    <input class="search" type="text" name="search" placeholder="Zadajte názov" value="' . htmlspecialchars($nazov) . '">
+                                 </div>
+                                 <div class="col-md-6 ">
+                                    <label for="sort">Zoradiť podľa:</label><br>
+                                    <select id="sort" name="sort" onchange="this.form.submit()">
+                                       <option value="default" ' . optionSelect($sort, "default") . '>Predvolené zoradenie</option>
+                                       <option value="cena-asc" ' . optionSelect($sort, "cena-asc") . '>Cena: od najnižšej</option>
+                                       <option value="cena-desc" ' . optionSelect($sort, "cena-desc") . '>Cena: od najvyššej</option>
+                                       <option value="popularity" ' . optionSelect($sort, "popularity") . '>Podľa obľúbenosti</option>
+                                    </select>
+                                 </div>
+                              </div>
+                           </form>
+                        </div>';
+        $sql = 'SELECT idtovar, nazov, popis, cena, obrazok, mnozstvo FROM tovar t
+        WHERE nazov LIKE :nazov
+        ' . $dictionarySort[$sort];
         $stmt = $this->connection->prepare($sql);
+        $nazov = '%' . $nazov . '%';
+        $stmt->bindParam(':nazov', $nazov);
         $stmt->execute();
         $products = $stmt->fetchAll();
         if (empty($products)) {
-            echo '<p class="text-danger mb-4">Žiadne tovary nenájdené.</p>';
-            return;
-        }
-        foreach ($products as $product) {
-            echo '<div class="col-md-3">
+            echo '<div class="col-md-12">
+            <p class="text-danger mb-4">Žiadne tovary nenájdené.</p>
+            </div>';
+        } else {
+            foreach ($products as $product) {
+                echo '<div class="col-md-3">
                            <a href="product.php?id=' . $product['idtovar'] . '">
                               <div class="product_box">
                                  <figure><img src="' . $product['obrazok'] . '" alt="' . $product['nazov'] . '" style="object-fit: cover;" class="p-2"/></figure>
@@ -340,7 +387,15 @@ class ProductsFunctions extends Database
                               </div>
                            </a>
                         </div>';
+            }
         }
+        echo '</div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      </div>';
     }
 
     public function generateRemoveProductsForm($form)
