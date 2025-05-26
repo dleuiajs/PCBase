@@ -14,6 +14,42 @@ class ProductsFunctions extends Database
         $this->connection = $this->getConnection();
     }
 
+    public function buyProduct($productid, $userid)
+    {
+        if ($productid) {
+            $sql = "SELECT mnozstvo FROM tovar WHERE idtovar = :idtovar";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->bindParam(':idtovar', $productid);
+            $stmt->execute();
+            $product = $stmt->fetch();
+            if ($product) {
+                if ($product['mnozstvo'] == 0) {
+                    throw new Exception('Produkt nie je na sklade');
+                }
+            } else {
+                throw new Exception('Produkt nebol nájdený');
+            }
+            if ($userid) {
+                $sql = "INSERT INTO objednavka_tovar (dorucene, datum, idpouzivatel, idtovar) VALUES (0, NOW(), :idpouzivatel, :idtovar)";
+                $stmt = $this->connection->prepare($sql);
+                $stmt->bindParam(':idpouzivatel', $userid);
+                $stmt->bindParam(':idtovar', $productid);
+                $stmt->execute();
+
+                $sql = "UPDATE tovar SET mnozstvo = mnozstvo - 1 WHERE idtovar = :idtovar";
+                $stmt = $this->connection->prepare($sql);
+                $stmt->bindParam(':idtovar', $productid);
+                $stmt->execute();
+                return true;
+
+            } else {
+                throw new Exception('Musíte byť prihlásený, aby ste mohli zakúpiť produkt');
+            }
+        } else {
+            throw new Exception('Produkt nebol nájdený');
+        }
+    }
+
     public function generateWriteReviewForm()
     {
         $productid = $_GET['product_id'] ?? null;
@@ -92,7 +128,7 @@ class ProductsFunctions extends Database
         $stmt->execute();
         $graphicsCards = $stmt->fetchAll();
 
-        $sql = "SELECT r.idrecenzia_tovara, r.text, r.hodnotenie, r.datum, p.meno, CONCAT(LEFT(p.priezvisko, 1), '.') AS priezvisko FROM recenzia_tovara r
+        $sql = "SELECT r.idrecenzia_tovara, r.text, r.hodnotenie, r.datum, p.meno, r.idpouzivatel, CONCAT(LEFT(p.priezvisko, 1), '.') AS priezvisko FROM recenzia_tovara r
         INNER JOIN tovar t ON r.idtovar = t.idtovar
         INNER JOIN pouzivatel p ON r.idpouzivatel = p.idpouzivatel
         WHERE t.idtovar = :idtovar";
@@ -101,16 +137,27 @@ class ProductsFunctions extends Database
         $stmt->execute();
         $reviews = $stmt->fetchAll();
 
-        $sql = "SELECT dorucene FROM objednavka_tovar WHERE idpouzivatel = :idpouzivatel AND idtovar = :idtovar LIMIT 1";
+        $reviewExists = false;
+        foreach ($reviews as $review) {
+            if ($review['idpouzivatel'] == $_SESSION['user_id']) {
+                $reviewExists = true;
+                break;
+            }
+        }
+
+        $sql = "SELECT dorucene FROM objednavka_tovar WHERE idpouzivatel = :idpouzivatel AND idtovar = :idtovar";
         $stmt = $this->connection->prepare($sql);
         $stmt->bindParam(':idpouzivatel', $_SESSION['user_id']);
         $stmt->bindParam(':idtovar', $idtovar);
         $stmt->execute();
-        $order = $stmt->fetch();
+        $orders = $stmt->fetchAll();
         $orderExists = false;
-        if (!empty($order)) {
-            if ($order['dorucene'] == 1) {
-                $orderExists = true;
+        if (!empty($orders)) {
+            foreach ($orders as $order) {
+                if ($order['dorucene'] == 1) {
+                    $orderExists = true;
+                    break;
+                }
             }
         }
 
@@ -180,8 +227,6 @@ class ProductsFunctions extends Database
                 } catch (Exception $e) {
                     echo '<p class="text-danger mt-5 text-center">Nastala chyba pri pridávaní recenzie: ' . $e->getMessage() . '</p>';
                 }
-            } else {
-                echo '<p class="text-danger mt-5 text-center">Recenzia už bola pridaná.</p>';
             }
         }
 
@@ -197,14 +242,14 @@ class ProductsFunctions extends Database
                     <div class="product-info">
                         <p class="name">' . $product['nazov'] . '</p>
                         <p class="description">' . $product['popis'] . '</p>
-                        <p class="availability ' . ($product['mnozstvo'] > 1 ? 'in-stock' : 'out-of-stock') . '">' . ($product['mnozstvo'] > 1 ? 'Na sklade' : 'Vypredané') . '</p>
+                        <p class="availability ' . ($product['mnozstvo'] > 0 ? 'in-stock' : 'out-of-stock') . '">' . ($product['mnozstvo'] > 0 ? 'Na sklade' : 'Vypredané') . '</p>
                         <p class="price">' . $product['cena'] . '</p>
                         <div class="row col-md-12">
-                        <form method="get" action="thxyou.php">
+                        <form method="post" action="thxyou.php">
                             <input type="hidden" name="product_id" value="' . $product['idtovar'] . '">
-                            <button type="submit" class="btn btn-primary mr-2 mb-2" style="width:160px;">Kúpiť</button>
+                            <button type="submit" class="btn btn-primary mr-2 mb-2" style="width:160px;" ' . ($product['mnozstvo'] == 0 ? "disabled" : "") . '>Kúpiť</button>
                         </form>';
-        if ($orderExists) {
+        if ($orderExists && !$reviewExists) {
 
             echo '          <form method="get" action="writereview.php">
                             <input type="hidden" name="product_id" value="' . $product['idtovar'] . '">
@@ -382,7 +427,7 @@ class ProductsFunctions extends Database
                               <div class="product_box">
                                  <figure><img src="' . $product['obrazok'] . '" alt="' . $product['nazov'] . '" style="object-fit: cover;" class="p-2"/></figure>
                                  <p class="name">' . $product['nazov'] . '</p>
-                                 <p class="availability ' . ($product['mnozstvo'] > 1 ? 'in-stock' : 'out-of-stock') . '">' . ($product['mnozstvo'] > 1 ? 'Na sklade' : 'Vypredané') . '</p>
+                                 <p class="availability ' . ($product['mnozstvo'] > 0 ? 'in-stock' : 'out-of-stock') . '">' . ($product['mnozstvo'] > 0 ? 'Na sklade' : 'Vypredané') . '</p>
                                  <p class="price">' . $product['cena'] . '</p>
                               </div>
                            </a>
