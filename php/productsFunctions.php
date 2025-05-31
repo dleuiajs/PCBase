@@ -423,9 +423,28 @@ class ProductsFunctions extends Database
 
         $nazov = $_GET['search'] ?? '';
         $sort = $_GET['sort'] ?? 'default';
+        $category = $_GET['category'] ?? 'all';
+        $availability = $_GET['availability'] ?? 'all';
+        $dictAvailability = [
+            'all' => '',
+            'available' => 'AND t.mnozstvo > 0',
+            'unavailable' => 'AND t.mnozstvo = 0'
+        ];
+        $minPrice = $_GET['min-price'] ?? "";
+        $maxPrice = $_GET['max-price'] ?? "";
+
+        $motherboard = $_GET['motherboard'] ?? 'all';
+        $cpu = $_GET['cpu'] ?? 'all';
+        $gpu = $_GET['gpu'] ?? 'all';
+        $ram = $_GET['ram'] ?? 'all';
+        $disk = $_GET['disk'] ?? 'all';
+        $os = $_GET['os'] ?? 'all';
+        $cooling = $_GET['cooling'] ?? 'all';
+
+
 
         echo ' <div class="tovary">
-         <div class="container">
+         <div class="container-fluid">
             <div class="row">
                <div class="col-md-12">
                   <div class="titlepage">
@@ -437,14 +456,26 @@ class ProductsFunctions extends Database
                <div class="col-md-12">
                   <div class="our_tovary" id="productsList">
                      <div class="row">
-                        <div class="col-md-12 margin_bottom1">
+                        <div class="col-md-12 mb-4">
                            <form id="request" method="get" action="#productsList" class="">
+                                <input type="hidden" name="category" value="' . htmlspecialchars($category) . '">
+                                <input type="hidden" name="availability" value="' . htmlspecialchars($availability) . '">
+                                <input type="hidden" name="min-price" value="' . htmlspecialchars($minPrice) . '">
+                                <input type="hidden" name="max-price" value="' . htmlspecialchars($maxPrice) . '">
+                                <input type="hidden" name="motherboard" value="' . htmlspecialchars($motherboard) . '">
+                                <input type="hidden" name="cpu" value="' . htmlspecialchars($cpu) . '">
+                                <input type="hidden" name="gpu" value="' . htmlspecialchars($gpu) . '">
+                                <input type="hidden" name="ram" value="' . htmlspecialchars($ram) . '">
+                                <input type="hidden" name="disk" value="' . htmlspecialchars($disk) . '">
+                                <input type="hidden" name="os" value="' . htmlspecialchars($os) . '">
+                                <input type="hidden" name="cooling" value="' . htmlspecialchars($cooling) . '">
+                            
                               <div class="row justify-content-between">
-                                 <div class="col-md-6 ">
+                                 <div class="col-md-8 ">
                                     <label for="search">Zadajte názov</label><br>
                                     <input class="search" type="text" name="search" placeholder="Zadajte názov" value="' . htmlspecialchars($nazov) . '">
                                  </div>
-                                 <div class="col-md-6 ">
+                                 <div class="col-md-4 ">
                                     <label for="sort">Zoradiť podľa:</label><br>
                                     <select id="sort" name="sort" onchange="this.form.submit()">
                                        <option value="default" ' . optionSelect($sort, "default") . '>Predvolené zoradenie</option>
@@ -455,10 +486,148 @@ class ProductsFunctions extends Database
                                  </div>
                               </div>
                            </form>
-                        </div>';
+                        </div>
+                    </div>';
+        echo '      <div class="row">
+                        <div class="col-md-3">
+                            <form method="get" action="#productsList">
+                                <input type="hidden" name="search" value="' . htmlspecialchars($nazov) . '">
+                                <input type="hidden" name="sort" value="' . htmlspecialchars($sort) . '">
+                                <label for="availability">Dostupnosť:</label>
+                                <select id="availability" name="availability" class="form-select mb-3" onchange="this.form.submit()">
+                                    <option value="all" ' . optionSelect($availability, "all") . '>Všetky</option>
+                                    <option value="available" ' . optionSelect($availability, 'available') . '>Na sklade</option>
+                                    <option value="unavailable" ' . optionSelect($availability, 'unavailable') . '>Vypredané</option>
+                                </select>
+                                <label for="category">Kategória:</label>
+                                <select id="category" name="category" class="form-select mb-3" onchange="this.form.submit()">
+                                    <option value="all" ' . optionSelect($category, "all") . '>Všetky kategórie</option>';
+        // SQL dotaz na získanie kategórií
+        $sql = 'SELECT idkategoria_tovara, nazov FROM kategoria_tovara';
+        $stmt = $this->connection->prepare($sql);
+        $stmt->execute();
+        $categories = $stmt->fetchAll();
+        foreach ($categories as $categorySQL) {
+            echo '<option value="' . $categorySQL['idkategoria_tovara'] . '" ' . optionSelect($category, $categorySQL['idkategoria_tovara']) . '>' . htmlspecialchars($categorySQL['nazov']) . '</option>';
+        }
+        echo '                  </select>';
+        echo '                  <label for="min-price">Cena:</label>
+                                <div class="form-row">
+                                    <div class="col-4">
+                                        <input type="number" id="price" name="min-price" class="form-control" placeholder="Min." min="0" step="1" value="' . htmlspecialchars($minPrice) . '">
+                                    </div>
+                                    <div class="col-4">
+                                        <input type="number" id="price" name="max-price" class="form-control mb-3" placeholder="Max." min="0" step="1" value="' . htmlspecialchars($maxPrice) . '">
+                                    </div>
+                                    <div class="col">
+                                        <button type="submit" class="btn btn-primary">Ok</button>
+                                    </div>
+                                </div>
+                                <label for="motherboard">Základná doska:</label>
+                                <select id="motherboard" name="motherboard" class="form-select mb-3" onchange="this.form.submit()">
+                                    <option value="all" ' . optionSelect($motherboard, "all") . '>Všetky</option>';
+        // SQL dotaz na získanie základných dosiek
+        $sql = 'SELECT idzakladna_doska, nazov FROM zakladna_doska';
+        $stmt = $this->connection->prepare($sql);
+        $stmt->execute();
+        $motherboards = $stmt->fetchAll();
+        foreach ($motherboards as $motherboardSQL) {
+            echo '<option value="' . $motherboardSQL['idzakladna_doska'] . '" ' . optionSelect($motherboard, $motherboardSQL['idzakladna_doska']) . '>' . htmlspecialchars($motherboardSQL['nazov']) . '</option>';
+        }
+        echo '                  </select>
+                                <label for="cpu">Procesor:</label>
+                                <select id="cpu" name="cpu" class="form-select mb-3" onchange="this.form.submit()">
+                                    <option value="all" ' . optionSelect($cpu, "all") . '>Všetky</option>';
+        // SQL dotaz na získanie procesorov
+        $sql = 'SELECT idprocesor, nazov FROM procesor';
+        $stmt = $this->connection->prepare($sql);
+        $stmt->execute();
+        $cpus = $stmt->fetchAll();
+        foreach ($cpus as $cpuSQL) {
+            echo '<option value="' . $cpuSQL['idprocesor'] . '" ' . optionSelect($cpu, $cpuSQL['idprocesor']) . '>' . htmlspecialchars($cpuSQL['nazov']) . '</option>';
+        }
+        echo '                  </select>
+                                <label for="gpu">Grafická karta:</label>
+                                <select id="gpu" name="gpu" class="form-select mb-3" onchange="this.form.submit()">
+                                    <option value="all" ' . optionSelect($gpu, "all") . '>Všetky</option>';
+        // SQL dotaz na získanie grafických kariet
+        $sql = 'SELECT idgraficka_karta, nazov FROM graficka_karta';
+        $stmt = $this->connection->prepare($sql);
+        $stmt->execute();
+        $gpus = $stmt->fetchAll();
+        foreach ($gpus as $gpuSQL) {
+            echo '<option value="' . $gpuSQL['idgraficka_karta'] . '" ' . optionSelect($gpu, $gpuSQL['idgraficka_karta']) . '>' . htmlspecialchars($gpuSQL['nazov']) . '</option>';
+        }
+        echo '                  </select>
+                                <label for="cooling">Chladenie:</label>
+                                <select id="cooling" name="cooling" class="form-select mb-3" onchange="this.form.submit()">
+                                    <option value="all" ' . optionSelect($cooling, "all") . '>Všetky</option>';
+        // SQL dotaz na získanie chladičov
+        $sql = 'SELECT idchladenie, nazov FROM chladenie';
+        $stmt = $this->connection->prepare($sql);
+        $stmt->execute();
+        $coolings = $stmt->fetchAll();
+        foreach ($coolings as $coolingSQL) {
+            echo '<option value="' . $coolingSQL['idchladenie'] . '" ' . optionSelect($cooling, $coolingSQL['idchladenie']) . '>' . htmlspecialchars($coolingSQL['nazov']) . '</option>';
+        }
+        echo '                  </select>
+                                <label for="ram">Operačná pamäť:</label>
+                                <select id="ram" name="ram" class="form-select mb-3" onchange="this.form.submit()">
+                                    <option value="all" ' . optionSelect($ram, "all") . '>Všetky</option>';
+        // SQL dotaz na získanie operačných pamätí
+        $sql = 'SELECT idoperacna_pamat, nazov FROM operacna_pamat';
+        $stmt = $this->connection->prepare($sql);
+        $stmt->execute();
+        $rams = $stmt->fetchAll();
+        foreach ($rams as $ramSQL) {
+            echo '<option value="' . $ramSQL['idoperacna_pamat'] . '" ' . optionSelect($ram, $ramSQL['idoperacna_pamat']) . '>' . htmlspecialchars($ramSQL['nazov']) . '</option>';
+        }
+        echo '                  </select>
+                                <label for="disk">Úložisko:</label>
+                                <select id="disk" name="disk" class="form-select mb-3" onchange="this.form.submit()">
+                                    <option value="all" ' . optionSelect($disk, "all") . '>Všetky</option>';
+        // SQL dotaz na získanie úložísk
+        $sql = 'SELECT idulozisko, nazov FROM ulozisko';
+        $stmt = $this->connection->prepare($sql);
+        $stmt->execute();
+        $disks = $stmt->fetchAll();
+        foreach ($disks as $diskSQL) {
+            echo '<option value="' . $diskSQL['idulozisko'] . '" ' . optionSelect($disk, $diskSQL['idulozisko']) . '>' . htmlspecialchars($diskSQL['nazov']) . '</option>';
+        }
+        echo '                  </select>
+                                <label for="os">Operačný systém:</label>
+                                <select id="os" name="os" class="form-select mb-3" onchange="this.form.submit()">
+                                    <option value="all" ' . optionSelect($os, "all") . '>Všetky</option>';
+        // SQL dotaz na získanie operačných systémov
+        $sql = 'SELECT idoperacny_system, nazov FROM operacny_system';
+        $stmt = $this->connection->prepare($sql);
+        $stmt->execute();
+        $oses = $stmt->fetchAll();
+        foreach ($oses as $osSQL) {
+            echo '<option value="' . $osSQL['idoperacny_system'] . '" ' . optionSelect($os, $osSQL['idoperacny_system']) . '>' . htmlspecialchars($osSQL['nazov']) . '</option>';
+        }
+        echo '                  </select>';
+        echo '              </form>
+                        </div>
+
+                        <!-- Products List -->
+                        <div class="col-md-9">
+                            <div class="row">';
         $sql = 'SELECT idtovar, nazov, popis, cena, obrazok, mnozstvo FROM tovar t
-        WHERE nazov LIKE :nazov
-        ' . $dictionarySort[$sort];
+        INNER JOIN podrobnosti_tovara p ON t.idpodrobnosti_tovara = p.idpodrobnosti_tovara
+        INNER JOIN podrobnosti_tovara_has_graficka_karta pg ON t.idpodrobnosti_tovara = pg.idpodrobnosti_tovara
+        WHERE t.nazov LIKE :nazov ' . ($category != "all" ? "AND t.idkategoria_tovara = $category" : "") .
+            ' ' . ($availability != "all" ? $dictAvailability[$availability] : "") .
+            ' ' . ($minPrice != "" ? "AND t.cena > $minPrice" : "") .
+            ' ' . ($maxPrice != "" ? "AND t.cena < $maxPrice" : "") .
+            ' ' . ($motherboard != "all" ? "AND p.idzakladna_doska = $motherboard" : "") .
+            ' ' . ($cpu != "all" ? "AND p.idprocesor = $cpu" : "") .
+            ' ' . ($gpu != "all" ? "AND pg.idgraficka_karta = $gpu" : "") .
+            ' ' . ($ram != "all" ? "AND p.idoperacna_pamat = $ram" : "") .
+            ' ' . ($disk != "all" ? "AND p.idulozisko = $disk" : "") .
+            ' ' . ($os != "all" ? "AND p.idoperacny_system = $os" : "") .
+            ' ' . ($cooling != "all" ? "AND p.idchladenie = $cooling" : "") .
+            ' ' . $dictionarySort[$sort];
         $stmt = $this->connection->prepare($sql);
         $nazov = '%' . $nazov . '%';
         $stmt->bindParam(':nazov', $nazov);
@@ -466,7 +635,7 @@ class ProductsFunctions extends Database
         $products = $stmt->fetchAll();
         if (empty($products)) {
             echo '<div class="col-md-12">
-            <p class="text-danger mb-4">Žiadne tovary nenájdené.</p>
+            <p class="alert alert-danger mb-4">Žiadne tovary nenájdené.</p>
             </div>';
         } else {
             foreach ($products as $product) {
@@ -482,11 +651,12 @@ class ProductsFunctions extends Database
                         </div>';
             }
         }
+        echo '</div></div>
+        </div> ';
         echo '</div>
                   </div>
                </div>
             </div>
-         </div>
       </div>
       </div>';
     }
