@@ -793,13 +793,9 @@ class ProductsFunctions extends Database
             $stmt->bindParam(':id', $id);
             $stmt->execute();
             $result = $stmt->fetch();
-            if ($result) {
-                $obrazok = $result['obrazok'];
-                if (file_exists($obrazok)) {
-                    unlink($obrazok);
-                }
-            } else {
-                throw new Exception("Obrázok neexistuje.");
+            $obrazok = $result['obrazok'];
+            if (file_exists($obrazok)) {
+                unlink($obrazok);
             }
             $sql = "DELETE FROM tovar WHERE idtovar = :id";
             $stmt = $this->connection->prepare($sql);
@@ -814,6 +810,26 @@ class ProductsFunctions extends Database
             $stmt->bindParam(':id', $id);
             $stmt->execute();
             $sql = "DELETE FROM objednavka_tovar WHERE idtovar = :id";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->bindParam(':id', $id);
+            $stmt->execute();
+
+            $sql = "SELECT obrazok FROM obrazok_recenzia WHERE idrecenzia_tovara IN (SELECT idrecenzia_tovara FROM recenzia_tovara WHERE idtovar = :id)";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->bindParam(':id', $id);
+            $stmt->execute();
+            $result = $stmt->fetchAll();
+            foreach ($result as $row) {
+                $obrazok = $row['obrazok'];
+                if (file_exists($obrazok)) {
+                    unlink($obrazok);
+                }
+            }
+            $sql = "DELETE FROM obrazok_recenzia WHERE idrecenzia_tovara IN (SELECT idrecenzia_tovara FROM recenzia_tovara WHERE idtovar = :id)";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->bindParam(':id', $id);
+            $stmt->execute();
+            $sql = "DELETE FROM recenzia_tovara WHERE idtovar = :id";
             $stmt = $this->connection->prepare($sql);
             $stmt->bindParam(':id', $id);
             $stmt->execute();
