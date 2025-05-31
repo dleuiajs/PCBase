@@ -304,6 +304,10 @@ class ProductsFunctions extends Database
                         <h3 class="text-center mb-4">Podrobnosti o tovare</h3>
                         <div class="product-specs">
                             <div class="spec-item">
+                                <span class="spec-label">Zakladná doska:</span>
+                                <span class="spec-value">' . $product['zakladna_doska'] . '</span>
+                            </div>
+                            <div class="spec-item">
                                 <span class="spec-label">Typ procesora:</span>
                                 <span class="spec-value">' . $product['procesor'] . '</span>
                             </div>';
