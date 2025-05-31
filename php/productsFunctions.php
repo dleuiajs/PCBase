@@ -99,6 +99,7 @@ class ProductsFunctions extends Database
 
     public function generateProduct($idtovar)
     {
+        // SQL dotaz na vlastnosti produktu
         $sql = "SELECT t.idtovar AS idtovar, t.nazov AS nazov, t.popis AS popis, t.cena AS cena, t.obrazok AS obrazok, t.mnozstvo AS mnozstvo, p.rozmery AS rozmery, p.hmotnost AS hmotnost, p.zaruka AS zaruka, p.idzakladna_doska AS idzakladna_doska, p.idprocesor AS idprocesor, p.idchladenie AS idchladenie, p.idnapajaci_zdroj AS idnapajaci_zdroj, p.idoperacna_pamat AS idoperacna_pamat, p.idulozisko AS idulozisko, p.idoperacny_system AS idoperacny_system, k.nazov AS kategoria, c.nazov AS chladenie, z.nazov AS zakladna_doska, pr.nazov AS procesor, o.nazov AS operacna_pamat, u.nazov AS ulozisko, n.nazov AS napajaci_zdroj, os.nazov AS operacny_system
         FROM tovar t
         INNER JOIN podrobnosti_tovara p ON t.idpodrobnosti_tovara = p.idpodrobnosti_tovara
@@ -120,6 +121,7 @@ class ProductsFunctions extends Database
             return;
         }
 
+        // SQL dotaz pre grafické karty 
         $sql = "SELECT p.idgraficka_karta, g.nazov FROM podrobnosti_tovara_has_graficka_karta p
         INNER JOIN graficka_karta g ON p.idgraficka_karta = g.idgraficka_karta
         WHERE idpodrobnosti_tovara = :idpodrobnosti_tovara";
@@ -128,40 +130,9 @@ class ProductsFunctions extends Database
         $stmt->execute();
         $graphicsCards = $stmt->fetchAll();
 
-        $sql = "SELECT r.idrecenzia_tovara, r.text, r.hodnotenie, r.datum, p.meno, r.idpouzivatel, CONCAT(LEFT(p.priezvisko, 1), '.') AS priezvisko FROM recenzia_tovara r
-        INNER JOIN tovar t ON r.idtovar = t.idtovar
-        INNER JOIN pouzivatel p ON r.idpouzivatel = p.idpouzivatel
-        WHERE t.idtovar = :idtovar";
-        $stmt = $this->connection->prepare($sql);
-        $stmt->bindParam(':idtovar', $idtovar);
-        $stmt->execute();
-        $reviews = $stmt->fetchAll();
-
-        $reviewExists = false;
-        foreach ($reviews as $review) {
-            if ($review['idpouzivatel'] == $_SESSION['user_id']) {
-                $reviewExists = true;
-                break;
-            }
-        }
-
-        $sql = "SELECT dorucene FROM objednavka_tovar WHERE idpouzivatel = :idpouzivatel AND idtovar = :idtovar";
-        $stmt = $this->connection->prepare($sql);
-        $stmt->bindParam(':idpouzivatel', $_SESSION['user_id']);
-        $stmt->bindParam(':idtovar', $idtovar);
-        $stmt->execute();
-        $orders = $stmt->fetchAll();
-        $orderExists = false;
-        if (!empty($orders)) {
-            foreach ($orders as $order) {
-                if ($order['dorucene'] == 1) {
-                    $orderExists = true;
-                    break;
-                }
-            }
-        }
-
+        // Spracovanie formulára pre pridanie recenzie
         if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['rating']) && isset($_POST['review'])) {
+            // Kontrola, či používateľ už napísal recenziu pre tento tovar
             $sql = "SELECT idrecenzia_tovara FROM recenzia_tovara WHERE idtovar = :idtovar AND idpouzivatel = :idpouzivatel";
             $stmt = $this->connection->prepare($sql);
             $stmt->bindParam(':idtovar', $idtovar);
@@ -193,6 +164,7 @@ class ProductsFunctions extends Database
                 }
 
                 try {
+                    // SQL dotaz na pridanie recenzie
                     $sql = "INSERT INTO recenzia_tovara (hodnotenie, text, idtovar, idpouzivatel, datum) VALUES (:hodnotenie, :text, :idtovar, :idpouzivatel, CURRENT_DATE())";
                     $stmt = $this->connection->prepare($sql);
                     $stmt->bindParam(':hodnotenie', $rating);
@@ -200,6 +172,8 @@ class ProductsFunctions extends Database
                     $stmt->bindParam(':idtovar', $idtovar);
                     $stmt->bindParam(':idpouzivatel', $_SESSION['user_id']);
                     $stmt->execute();
+
+                    // Získanie ID recenzie pre pripojenie obrázkov
                     $sql = "SELECT idrecenzia_tovara FROM recenzia_tovara WHERE idtovar = :idtovar AND idpouzivatel = :idpouzivatel";
                     $stmt = $this->connection->prepare($sql);
                     $stmt->bindParam(':idtovar', $idtovar);
@@ -213,6 +187,8 @@ class ProductsFunctions extends Database
                                 $targetDir = "uploads/reviews/";
                                 $targetFile = $targetDir . time() . "_" . basename($images["name"][$i]);
                                 move_uploaded_file($images["tmp_name"][$i], $targetFile);
+
+                                // SQL dotaz na pridanie obrázkov k recenzii
                                 $sql = "INSERT INTO obrazok_recenzia (idrecenzia_tovara, obrazok) VALUES (:idrecenzia_tovara, :obrazok)";
                                 $stmt = $this->connection->prepare($sql);
                                 $stmt->bindValue(':idrecenzia_tovara', $idrecenzia_tovara);
@@ -223,13 +199,74 @@ class ProductsFunctions extends Database
                     }
 
 
-                    echo '<p class="text-success mt-5 text-center">Recenzia bola úspešne pridaná.</p>';
+                    echo '<p class="alert alert-success mt-5 mx-4 text-center">Recenzia bola úspešne pridaná.</p>';
                 } catch (Exception $e) {
-                    echo '<p class="text-danger mt-5 text-center">Nastala chyba pri pridávaní recenzie: ' . $e->getMessage() . '</p>';
+                    echo '<p class="alert alert-danger mt-5 mx-4 text-center">Nastala chyba pri pridávaní recenzie: ' . $e->getMessage() . '</p>';
                 }
             }
         }
 
+        if (isset($_GET['action']) && $_GET['action'] == 'deletereview') {
+            try {
+                // SQL dotaz na kontrolu existencie recenzie
+                $sql = "SELECT idrecenzia_tovara FROM recenzia_tovara WHERE idtovar = :idtovar AND idpouzivatel = :idpouzivatel";
+                $stmt = $this->connection->prepare($sql);
+                $stmt->bindParam(':idtovar', $idtovar);
+                $stmt->bindParam(':idpouzivatel', $_SESSION['user_id']);
+                $stmt->execute();
+                $existingReview = $stmt->fetch();
+                if ($existingReview) {
+                    // SQL dotaz na vymazanie recenzie
+                    $sql = "DELETE FROM recenzia_tovara WHERE idtovar = :idtovar AND idpouzivatel = :idpouzivatel";
+                    $stmt = $this->connection->prepare($sql);
+                    $stmt->bindParam(':idtovar', $idtovar);
+                    $stmt->bindParam(':idpouzivatel', $_SESSION['user_id']);
+                    $stmt->execute();
+                    echo '<p class="alert alert-success mt-5 mx-4 text-center">Recenzia bola úspešne vymazaná.</p>';
+                } else {
+                    echo '<p class="alert alert-danger mt-5 mx-4 text-center">Chyba: Recenzia neexistuje.</p>';
+                }
+            } catch (Exception $e) {
+                echo '<p class="alert alert-danger mt-5 mx-4 text-center">Nastala chyba pri vymazávaní recenzie: ' . $e->getMessage() . '</p>';
+            }
+        }
+
+        // SQL dotaz pre recenzie
+        $sql = "SELECT r.idrecenzia_tovara, r.text, r.hodnotenie, r.datum, p.meno, r.idpouzivatel, CONCAT(LEFT(p.priezvisko, 1), '.') AS priezvisko FROM recenzia_tovara r
+        INNER JOIN tovar t ON r.idtovar = t.idtovar
+        INNER JOIN pouzivatel p ON r.idpouzivatel = p.idpouzivatel
+        WHERE t.idtovar = :idtovar";
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindParam(':idtovar', $idtovar);
+        $stmt->execute();
+        $reviews = $stmt->fetchAll();
+
+        $reviewExists = false;
+        foreach ($reviews as $review) {
+            if ($review['idpouzivatel'] == $_SESSION['user_id']) {
+                $reviewExists = true;
+                break;
+            }
+        }
+
+        // Kontrola, či používateľ objednal tovar
+        $sql = "SELECT dorucene FROM objednavka_tovar WHERE idpouzivatel = :idpouzivatel AND idtovar = :idtovar";
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindParam(':idpouzivatel', $_SESSION['user_id']);
+        $stmt->bindParam(':idtovar', $idtovar);
+        $stmt->execute();
+        $orders = $stmt->fetchAll();
+        $orderExists = false;
+        if (!empty($orders)) {
+            foreach ($orders as $order) {
+                if ($order['dorucene'] == 1) {
+                    $orderExists = true;
+                    break;
+                }
+            }
+        }
+
+        // Zobrazenie produktu
         echo '<div class="tovar">
         <div class="container">
             <div class="row align-items-center">
@@ -249,7 +286,7 @@ class ProductsFunctions extends Database
                             <input type="hidden" name="product_id" value="' . $product['idtovar'] . '">
                             <button type="submit" class="btn btn-primary mr-2 mb-2" style="width:160px;" ' . ($product['mnozstvo'] == 0 ? "disabled" : "") . '>Kúpiť</button>
                         </form>';
-        if ($orderExists && !$reviewExists) {
+        if ($orderExists && !$reviewExists) { // Ak bol tovar objednaný, ale nie je žiadna recenzia, zobrazíme tlačidlo
 
             echo '          <form method="get" action="writereview.php">
                             <input type="hidden" name="product_id" value="' . $product['idtovar'] . '">
@@ -310,7 +347,7 @@ class ProductsFunctions extends Database
                     </div>
                 </div>
             </div>';
-        if (!empty($reviews)) {
+        if (!empty($reviews)) { // Ak existujú recenzie, zobrazíme sekciu s recenziami
             echo '<!-- Customer Reviews Section -->
 <div class="row mt-5 mb-5">
     <div class="col-md-12">
@@ -329,6 +366,7 @@ class ProductsFunctions extends Database
                     <div class="stars mb-2 text-warning" style="font-size: 1.2rem;">' . $stars . '</div>
                     <p class="mb-2">' . nl2br(htmlspecialchars($review['text'])) . '</p>';
 
+                // SQL dotaz na získanie obrázkov recenzie
                 $sql = "SELECT obrazok FROM obrazok_recenzia WHERE idrecenzia_tovara = :idrecenzia_tovara";
                 $stmt = $this->connection->prepare($sql);
                 $stmt->bindParam(':idrecenzia_tovara', $review['idrecenzia_tovara']);
@@ -346,6 +384,16 @@ class ProductsFunctions extends Database
                     }
                     echo '</div></div>';
                 }
+                if ($review['idpouzivatel'] == $_SESSION['user_id']) {
+                    echo '                <div class="text-dark small row ">
+                    <form method="get" action="product.php" class="ml-3">
+                        <input type="hidden" name="id" value="' . $idtovar . '">
+                        <input type="hidden" name="action" value="deletereview">
+                        <button type="submit" class="btn btn-danger btn-sm">Vymazať recenziu</button>
+                    </form>
+                </div>';
+                }
+
 
                 echo '      </div>
                 <div class="text-muted small text-end">
