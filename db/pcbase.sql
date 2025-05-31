@@ -199,8 +199,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `pcbase`.`recenzia_tovara` (
   `idrecenzia_tovara` INT NOT NULL AUTO_INCREMENT,
-  `nazov` VARCHAR(45) NOT NULL,
-  `popis` VARCHAR(255) NOT NULL,
+  `text` VARCHAR(255) NOT NULL,
   `hodnotenie` INT NOT NULL,
   `datum` DATE NOT NULL,
   `idtovar` INT NOT NULL,
@@ -283,6 +282,17 @@ CREATE TABLE IF NOT EXISTS `pcbase`.`objednavka_kontakt` (
   `preskumane` TINYINT NOT NULL,
   `datum` DATETIME NOT NULL,
   PRIMARY KEY (`idobjednavka_kontakt`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `pcbase`.`obrazok_recenzia`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `pcbase`.`obrazok_recenzia` (
+  `idobrazok_recenzia` INT NOT NULL AUTO_INCREMENT,
+  `obrazok` VARCHAR(255) NOT NULL,
+  `idrecenzia_tovara` INT NOT NULL,
+  PRIMARY KEY (`idobrazok_recenzia`, `idrecenzia_tovara`))
 ENGINE = InnoDB;
 
 

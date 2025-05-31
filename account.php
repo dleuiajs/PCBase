@@ -141,14 +141,14 @@ if (isset($_GET['deleteaccount']) && $_GET['deleteaccount'] === 'true') {
                                 }
                             }
                             if (in_array($idrola, [2, 4, 5])) {
-                                echo "<h4>Pre správcov zostáv počítačov alebo produktov</h4>";
+                                echo "<h4>Pre správcov zostáv počítačov alebo tovarov</h4>";
                                 // Správa počítačových komponentov
                                 $pcbuildFunctions->generateAddComponentsForm($form);
                                 $pcbuildFunctions->removeComponentsForm($form);
 
                             }
                             if (in_array($idrola, [4, 5])) {
-                                echo "<h4>Pre správcov produktov</h4>";
+                                echo "<h4>Pre správcov tovarov</h4>";
                                 // Správa objednávok
                                 $productsFunctions->generateAddProductsForm($form);
                                 $productsFunctions->generateRemoveProductsForm($form);
