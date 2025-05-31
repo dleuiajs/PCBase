@@ -324,12 +324,32 @@ class ProductsFunctions extends Database
                 $stmt->execute();
                 $existingReview = $stmt->fetch();
                 if ($existingReview) {
+                    // Získanie ID recenzie
+                    $idReview = $existingReview['idrecenzia_tovara'];
                     // SQL dotaz na vymazanie recenzie
-                    $sql = "DELETE FROM recenzia_tovara WHERE idtovar = :idtovar AND idpouzivatel = :idpouzivatel";
+                    $sql = "DELETE FROM recenzia_tovara WHERE idrecenzia_tovara = :idrecenzia_tovara";
                     $stmt = $this->connection->prepare($sql);
-                    $stmt->bindParam(':idtovar', $idtovar);
-                    $stmt->bindParam(':idpouzivatel', $_SESSION['user_id']);
+                    $stmt->bindParam(':idrecenzia_tovara', $idReview);
                     $stmt->execute();
+
+                    // SQL dotaz na vymazanie súborov obrázkov recenzie
+                    $sql = "SELECT obrazok FROM obrazok_recenzia WHERE idrecenzia_tovara = :idrecenzia_tovara";
+                    $stmt = $this->connection->prepare($sql);
+                    $stmt->bindParam(':idrecenzia_tovara', $idReview);
+                    $stmt->execute();
+                    $result = $stmt->fetchAll();
+                    foreach ($result as $row) {
+                        $obrazok = $row['obrazok'];
+                        if (file_exists($obrazok)) {
+                            unlink($obrazok);
+                        }
+                    }
+                    // SQL dotaz na vymazanie obrázkov recenzie v databáze
+                    $sql = "DELETE FROM obrazok_recenzia WHERE idrecenzia_tovara = :idrecenzia_tovara";
+                    $stmt = $this->connection->prepare($sql);
+                    $stmt->bindParam(':idrecenzia_tovara', $idReview);
+                    $stmt->execute();
+
                     echo '<p class="alert alert-success mt-5 mx-4 text-center">Recenzia bola úspešne vymazaná.</p>';
                 } else {
                     echo '<p class="alert alert-danger mt-5 mx-4 text-center">Chyba: Recenzia neexistuje.</p>';
