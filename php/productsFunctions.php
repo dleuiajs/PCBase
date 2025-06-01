@@ -1075,7 +1075,7 @@ class ProductsFunctions extends Database
                 $stmt = $this->connection->prepare($sql);
                 if ($stmt->execute()) {
                     $row = $stmt->fetch();
-                    $id = $row ? $row['idtovar'] : 1;
+                    $id = $row ? $row['id'] : 1;
                 } else {
                     $id = 1;
                 }
