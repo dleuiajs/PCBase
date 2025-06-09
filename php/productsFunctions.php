@@ -677,7 +677,7 @@ class ProductsFunctions extends Database
                               <div class="row justify-content-between">
                                  <div class="col-md-8 ">
                                     <label for="search">Zadajte názov</label><br>
-                                    <input class="search" type="text" name="search" placeholder="Zadajte názov" value="' . htmlspecialchars($nazov) . '">
+                                    <input class="search" id="searchbar" type="text" name="search" placeholder="Zadajte názov" value="' . htmlspecialchars($nazov) . '">
                                  </div>
                                  <div class="col-md-4 ">
                                     <label for="sort">Zoradiť podľa:</label><br>
