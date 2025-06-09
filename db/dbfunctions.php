@@ -1,7 +1,15 @@
 <?php
 namespace databaza;
-require_once("db/config.php");
 use PDO, PDOException;
+
+// config databazy
+define("DATABASE", [
+    "HOST" => "localhost",
+    "DBNAME" => "pcbase",
+    "PORT" => 3306,
+    "USER_NAME" => "root",
+    "PASSWORD" => ""
+]);
 
 class Database
 {
