@@ -1,10 +1,12 @@
 <?php
 namespace pcbuild;
+
 error_reporting(E_ALL);
 ini_set("display_errors", "On");
 require_once(__ROOT__ . "/db/dbfunctions.php");
 require_once(__ROOT__ . "/php/helpers.php");
-use Exception, databaza\Database, functions\Helpers;
+require_once(__ROOT__ . "/php/productsFunctions.php");
+use Exception, databaza\Database, functions\Helpers, products\ProductsFunctions;
 
 class PcBuildFunctions extends Database
 {
@@ -61,8 +63,30 @@ class PcBuildFunctions extends Database
                 try {
                     $sql = "DELETE FROM " . $type . " WHERE id" . $type . " = :id";
                     $stmt = $this->connection->prepare($sql);
-                    $stmt->bindValue(':id', $_POST['idkomponent']);
+                    $stmt->bindParam(':id', $_POST['idkomponent']);
                     $stmt->execute();
+
+                    if ($type != "graficka_karta") {
+                        $sql = "SELECT idtovar FROM tovar t
+                                INNER JOIN podrobnosti_tovara pt ON t.idpodrobnosti_tovara = pt.idpodrobnosti_tovara
+                                WHERE pt.id" . $type . " = :id";
+                    } else {
+                        $sql = "SELECT idtovar FROM tovar t
+                                INNER JOIN podrobnosti_tovara_has_graficka_karta ptgk ON t.idpodrobnosti_tovara = ptgk.idpodrobnosti_tovara
+                                WHERE ptgk.idgraficka_karta = :id";
+
+                    }
+                    $stmt = $this->connection->prepare($sql);
+                    $stmt->bindParam(':id', $_POST['idkomponent']);
+                    $stmt->execute();
+                    $tovarIds = $stmt->fetchAll();
+                    if (!empty($tovarIds)) {
+                        $productFunctions = new ProductsFunctions();
+                        foreach ($tovarIds as $tovarId) {
+                            $productFunctions->removeProduct($tovarId['idtovar']);
+                        }
+                    }
+
                     $textinfo = '<p class="text-success mb-4">Komponent bol úspešne odstránený.</p>';
                 } catch (Exception $e) {
                     $textinfo = '<p class="text-danger mb-4">' . $e->getMessage() . '</p>';
