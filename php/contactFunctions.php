@@ -65,11 +65,11 @@ class ContactFunctions extends Database
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <strong>Používateľské meno:</strong>
-                            <div>' . $data["meno"] . '</div>
+                            <div>' . htmlspecialchars($data["meno"]) . '</div>
                         </div>
                         <div class="col-md-6">
                             <strong>E-mail:</strong>
-                            <div>' . $data["email"] . '</div>
+                            <div>' . htmlspecialchars($data["email"]) . '</div>
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -90,10 +90,10 @@ class ContactFunctions extends Database
                     </div>
                     <div class="mb-4">
                         <strong>Správa:</strong>
-                        <div class="border rounded p-3 bg-light mt-2" style="min-height:100px;">' . $data["sprava"] . '</div>
+                        <div class="border rounded p-3 bg-light mt-2" style="min-height:100px;">' . htmlspecialchars($data["sprava"]) . '</div>
                     </div>
                     <div class="mb-12">
-                        <a href="mailto:' . $data["email"] . '" class="btn btn-outline-primary col-md-12">
+                        <a href="mailto:' . htmlspecialchars($data["email"]) . '" class="btn btn-outline-primary col-md-12">
                             <i class="bi bi-envelope"></i> Odpovedať na e-mail
                         </a>
                         <div class="row mt-2">
@@ -162,8 +162,8 @@ class ContactFunctions extends Database
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between align-items-center mb-2">
                                         <div>
-                                            <h5 class="card-title mb-0 pb-0">' . $row['meno'] . '</h5>
-                                            <small class="text-muted">' . $row['email'] . '</small>
+                                            <h5 class="card-title mb-0 pb-0">' . htmlspecialchars($row['meno']) . '</h5>
+                                            <small class="text-muted">' . htmlspecialchars($row['email']) . '</small>
                                         </div>
                                         <span class="badge bg-' . ($row['preskumane'] == 0 ? 'warning text-dark">Nepreskúmané' : 'success text-white">Preskúmané') . '</span>
                                     </div>
@@ -172,7 +172,7 @@ class ContactFunctions extends Database
                                     </div>
                                     <div class="mb-2">
                                         <span class="font-weight-bold">Správa:</span>
-                                        <div class="text-muted limitedText">' . $row['sprava'] . '</div>
+                                        <div class="text-muted limitedText">' . htmlspecialchars($row['sprava']) . '</div>
                                     </div>
                                     <div class="text-end">
                                         <small class="text-secondary">' . $row['datum'] . '</small>

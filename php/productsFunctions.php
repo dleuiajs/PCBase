@@ -460,13 +460,13 @@ class ProductsFunctions extends Database
             <div class="row align-items-center">
                 <div class="col-md-6">
                     <div class="product-image">
-                        <img src="' . $product['obrazok'] . '" alt="' . $product['nazov'] . '" class="img-fluid">
+                        <img src="' . $product['obrazok'] . '" alt="' . htmlspecialchars($product['nazov']) . '" class="img-fluid">
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="product-info">
-                        <p class="name">' . $product['nazov'] . '</p>
-                        <p class="description">' . $product['popis'] . '</p>
+                        <p class="name">' . htmlspecialchars($product['nazov']) . '</p>
+                        <p class="description">' . htmlspecialchars($product['popis']) . '</p>
                         <p class="availability ' . ($product['mnozstvo'] > 0 ? 'in-stock' : 'out-of-stock') . '">' . ($product['mnozstvo'] > 0 ? 'Na sklade' : 'Vypredané') . '</p>
                         <p class="price">' . $product['cena'] . '</p>
                         <div class="row col-md-12">
@@ -516,36 +516,36 @@ class ProductsFunctions extends Database
             $gpuAmount++;
             echo '<div class="spec-item">
                                 <span class="spec-label">Grafická karta' . (count($graphicsCards) > 1 ? "#" . $gpuAmount : "") . ':</span>
-                                <span class="spec-value">' . $graphicsCard['nazov'] . '</span>
+                                <span class="spec-value">' . htmlspecialchars($graphicsCard['nazov']) . '</span>
                             </div>';
         }
         echo '<div class="spec-item">
                                 <span class="spec-label">RAM:</span>
-                                <span class="spec-value">' . $product['operacna_pamat'] . '</span>
+                                <span class="spec-value">' . htmlspecialchars($product['operacna_pamat']) . '</span>
                             </div>
                             <div class="spec-item">
                                 <span class="spec-label">Úložisko:</span>
-                                <span class="spec-value">' . $product['ulozisko'] . '</span>
+                                <span class="spec-value">' . htmlspecialchars($product['ulozisko']) . '</span>
                             </div>
                             <div class="spec-item">
                                 <span class="spec-label">Operačný systém:</span>
-                                <span class="spec-value">' . $product['operacny_system'] . '</span>
+                                <span class="spec-value">' . htmlspecialchars($product['operacny_system']) . '</span>
                             </div>
                             <div class="spec-item">
                                 <span class="spec-label">Chladenie:</span>
-                                <span class="spec-value">' . $product['chladenie'] . '</span>
+                                <span class="spec-value">' . htmlspecialchars($product['chladenie']) . '</span>
                             </div>
                             <div class="spec-item">
                                 <span class="spec-label">Rozmery:</span>
-                                <span class="spec-value">' . $product['rozmery'] . '</span>
+                                <span class="spec-value">' . htmlspecialchars($product['rozmery']) . '</span>
                             </div>
                             <div class="spec-item">
                                 <span class="spec-label">Hmotnosť:</span>
-                                <span class="spec-value">' . $product['hmotnost'] . '</span>
+                                <span class="spec-value">' . htmlspecialchars($product['hmotnost']) . '</span>
                             </div>
                             <div class="spec-item">
                                 <span class="spec-label">Záruka:</span>
-                                <span class="spec-value">' . $product['zaruka'] . '</span>
+                                <span class="spec-value">' . htmlspecialchars($product['zaruka']) . '</span>
                             </div>
                         </div>
                     </div>
@@ -566,7 +566,7 @@ class ProductsFunctions extends Database
                     <img src="images/avatar.png" alt="avatar" class="img-fluid rounded-circle mr-3" style="object-fit: cover; width: 50px; height: auto;">
                 </div>
                 <div class="review-content flex-grow-1">
-                    <h5>' . $review['meno'] . ' ' . $review['priezvisko'] . '</h5>
+                    <h5>' . htmlspecialchars($review['meno']) . ' ' . htmlspecialchars($review['priezvisko']) . '</h5>
                     <div class="stars mb-2 text-warning" style="font-size: 1.2rem;">' . $stars . '</div>
                     <p class="mb-2">' . nl2br(htmlspecialchars($review['text'])) . '</p>';
 
@@ -846,8 +846,8 @@ class ProductsFunctions extends Database
                 echo '<div class="col-md-3">
                            <a href="product.php?id=' . $product['idtovar'] . '">
                               <div class="product_box">
-                                 <figure><img src="' . $product['obrazok'] . '" alt="' . $product['nazov'] . '" style="object-fit: cover;" class="p-2"/></figure>
-                                 <p class="name">' . $product['nazov'] . '</p>
+                                 <figure><img src="' . $product['obrazok'] . '" alt="' . htmlspecialchars($product['nazov']) . '" style="object-fit: cover;" class="p-2"/></figure>
+                                 <p class="name">' . htmlspecialchars($product['nazov']) . '</p>
                                  <p class="availability ' . ($product['mnozstvo'] > 0 ? 'in-stock' : 'out-of-stock') . '">' . ($product['mnozstvo'] > 0 ? 'Na sklade' : 'Vypredané') . '</p>
                                  <p class="price">' . $product['cena'] . '</p>
                               </div>
@@ -937,7 +937,7 @@ class ProductsFunctions extends Database
                             <option value="" disabled selected>Vyberte tovar</option>';
         $products = $this->getData("tovar");
         foreach ($products as $product) {
-            echo '          <option value="' . $product['idtovar'] . '">' . $product['nazov'] . '</option>';
+            echo '          <option value="' . $product['idtovar'] . '">' . htmlspecialchars($product['nazov']) . '</option>';
         }
         echo '          </select>
                     </div>
@@ -981,7 +981,7 @@ class ProductsFunctions extends Database
                             <option value="" disabled selected>Vyberte kategóriu</option>';
             $categories = $this->getData("kategoria_tovara");
             foreach ($categories as $category) {
-                echo '          <option value="' . $category['idkategoria_tovara'] . '">' . $category['nazov'] . '</option>';
+                echo '          <option value="' . $category['idkategoria_tovara'] . '">' . htmlspecialchars($category['nazov']) . '</option>';
             }
             echo '          </select>
                     </div>
@@ -1003,7 +1003,7 @@ class ProductsFunctions extends Database
                             <option value="" disabled selected>Vyberte základnú dosku</option>';
             $motherboards = $this->getData("zakladna_doska");
             foreach ($motherboards as $motherboard) {
-                echo '          <option value="' . $motherboard['idzakladna_doska'] . '">' . $motherboard['nazov'] . '</option>';
+                echo '          <option value="' . $motherboard['idzakladna_doska'] . '">' . htmlspecialchars($motherboard['nazov']) . '</option>';
             }
             echo '          </select>
                     </div>
@@ -1013,7 +1013,7 @@ class ProductsFunctions extends Database
                             <option value="" disabled selected>Vyberte procesor</option>';
             $processors = $this->getData("procesor");
             foreach ($processors as $processor) {
-                echo '          <option value="' . $processor['idprocesor'] . '">' . $processor['nazov'] . '</option>';
+                echo '          <option value="' . $processor['idprocesor'] . '">' . htmlspecialchars($processor['nazov']) . '</option>';
             }
             echo '          </select>
                     </div>
@@ -1023,7 +1023,7 @@ class ProductsFunctions extends Database
                             <option value="" disabled selected>Vyberte chladenie</option>';
             $coolings = $this->getData("chladenie");
             foreach ($coolings as $cooling) {
-                echo '          <option value="' . $cooling['idchladenie'] . '">' . $cooling['nazov'] . '</option>';
+                echo '          <option value="' . $cooling['idchladenie'] . '">' . htmlspecialchars($cooling['nazov']) . '</option>';
             }
             echo '          </select>
                     </div>
@@ -1033,7 +1033,7 @@ class ProductsFunctions extends Database
                             <option value="" disabled selected>Vyberte napájací zdroj</option>';
             $powerSupplies = $this->getData("napajaci_zdroj");
             foreach ($powerSupplies as $powerSupply) {
-                echo '          <option value="' . $powerSupply['idnapajaci_zdroj'] . '">' . $powerSupply['nazov'] . '</option>';
+                echo '          <option value="' . $powerSupply['idnapajaci_zdroj'] . '">' . htmlspecialchars($powerSupply['nazov']) . '</option>';
             }
             echo '          </select>
                     </div>
@@ -1043,7 +1043,7 @@ class ProductsFunctions extends Database
                             <option value="" disabled selected>Vyberte operačnú pamäť</option>';
             $memories = $this->getData("operacna_pamat");
             foreach ($memories as $memory) {
-                echo '          <option value="' . $memory['idoperacna_pamat'] . '">' . $memory['nazov'] . '</option>';
+                echo '          <option value="' . $memory['idoperacna_pamat'] . '">' . htmlspecialchars($memory['nazov']) . '</option>';
             }
             echo '          </select>
                     </div>
@@ -1053,7 +1053,7 @@ class ProductsFunctions extends Database
                             <option value="" disabled selected>Vyberte grafickú kartu</option>';
             $graphicsCards = $this->getData("graficka_karta");
             foreach ($graphicsCards as $graphicsCard) {
-                echo '          <option value="' . $graphicsCard['idgraficka_karta'] . '">' . $graphicsCard['nazov'] . '</option>';
+                echo '          <option value="' . $graphicsCard['idgraficka_karta'] . '">' . htmlspecialchars($graphicsCard['nazov']) . '</option>';
             }
             echo '          </select>
                     </div>
@@ -1063,7 +1063,7 @@ class ProductsFunctions extends Database
                             <option value="" disabled selected>Vyberte úložisko</option>';
             $storage = $this->getData("ulozisko");
             foreach ($storage as $storageItem) {
-                echo '          <option value="' . $storageItem['idulozisko'] . '">' . $storageItem['nazov'] . '</option>';
+                echo '          <option value="' . $storageItem['idulozisko'] . '">' . htmlspecialchars($storageItem['nazov']) . '</option>';
             }
             echo '          </select>
                     </div>
@@ -1073,7 +1073,7 @@ class ProductsFunctions extends Database
                             <option value="" disabled selected>Vyberte operačný systém</option>';
             $operatingSystems = $this->getData("operacny_system");
             foreach ($operatingSystems as $operatingSystem) {
-                echo '          <option value="' . $operatingSystem['idoperacny_system'] . '">' . $operatingSystem['nazov'] . '</option>';
+                echo '          <option value="' . $operatingSystem['idoperacny_system'] . '">' . htmlspecialchars($operatingSystem['nazov']) . '</option>';
             }
             echo '          </select>
                     </div>';
@@ -1214,11 +1214,11 @@ class ProductsFunctions extends Database
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <strong>Používateľské meno:</strong>
-                            <div>' . $data["meno"] . ' ' . $data["priezvisko"] . '</div>
+                            <div>' . htmlspecialchars($data["meno"]) . ' ' . htmlspecialchars($data["priezvisko"]) . '</div>
                         </div>
                         <div class="col-md-6">
                             <strong>E-mail:</strong>
-                            <div>' . $data["email"] . '</div>
+                            <div>' . htmlspecialchars($data["email"]) . '</div>
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -1244,17 +1244,17 @@ class ProductsFunctions extends Database
                         </div>
                     </div>
                     <hr>
-                    <img src="' . $data['obrazok'] . '" style="width: 30%; height: auto;" class="img-fluid mb-2" alt="' . $data['nazov'] . '">
+                    <img src="' . $data['obrazok'] . '" style="width: 30%; height: auto;" class="img-fluid mb-2" alt="' . htmlspecialchars($data['nazov']) . '">
                     <div class="row mb-3">
                         <div class="col-md-12">
                             <strong>Názov tovaru:</strong>
-                            <div>' . $data["nazov"] . '</div>
+                            <div>' . htmlspecialchars($data["nazov"]) . '</div>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col-md-12">
                             <strong>Popis tovaru:</strong>
-                            <div>' . $data["popis"] . '</div>
+                            <div>' . htmlspecialchars($data["popis"]) . '</div>
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -1264,7 +1264,7 @@ class ProductsFunctions extends Database
                         </div>
                     </div>';
             echo '<div class="mb-12">
-                        <a href="mailto:' . $data["email"] . '" class="btn btn-outline-primary col-md-12">
+                        <a href="mailto:' . htmlspecialchars($data["email"]) . '" class="btn btn-outline-primary col-md-12">
                             <i class="bi bi-envelope"></i> Odpovedať na e-mail
                         </a>
                         <div class="row mt-2">
@@ -1343,18 +1343,18 @@ class ProductsFunctions extends Database
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between align-items-center mb-2">
                                         <div>
-                                            <h5 class="card-title mb-0 pb-0">' . $row['meno'] . ' ' . $row['priezvisko'] . '</h5>
-                                            <small class="text-muted">' . $row['email'] . '</small>
+                                            <h5 class="card-title mb-0 pb-0">' . htmlspecialchars($row['meno']) . ' ' . htmlspecialchars($row['priezvisko']) . '</h5>
+                                            <small class="text-muted">' . htmlspecialchars($row['email']) . '</small>
                                         </div>
                                         <span class="badge bg-' . ($row['dorucene'] == 0 ? 'warning text-dark">Nedoručené' : 'success text-white">Doručené') . '</span>
                                     </div>';
             echo '<div class="mb-2">
-                                        <span class="font-weight-bold">Tovar: </span>' . $row['nazov'] . '
+                                        <span class="font-weight-bold">Tovar: </span>' . htmlspecialchars($row['nazov']) . '
                                     </div>
                                     <div class="mb-2">
                                         <span class="font-weight-bold">Cena: </span>' . $row['cena'] . '€
                                     </div>';
-            echo '<img src="' . $row['obrazok'] . '" style="width: 20%; height: auto;" class="img-fluid mb-2" alt="' . $row['nazov'] . '">';
+            echo '<img src="' . $row['obrazok'] . '" style="width: 20%; height: auto;" class="img-fluid mb-2" alt="' . htmlspecialchars($row['nazov']) . '">';
             echo '<div class="text-end">
                                         <small class="text-secondary">' . $row['datum'] . '</small>
                                     </div>

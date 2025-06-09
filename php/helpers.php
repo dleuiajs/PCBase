@@ -4,7 +4,7 @@ class Helpers
 {
     public static function neuvedeneIfNull($value)
     {
-        return !empty($value) ? $value : 'Neuvedené';
+        return !empty($value) ? htmlspecialchars($value) : 'Neuvedené';
     }
 
     public static function optionSelect($variable, $value, $name)
