@@ -3,8 +3,8 @@ namespace contact;
 error_reporting(E_ALL);
 ini_set("display_errors", "On");
 require_once(__ROOT__ . "/db/dbfunctions.php");
-require_once(__ROOT__ . "/php/functions.php");
-use Exception, databaza\Database;
+require_once(__ROOT__ . "/php/helpers.php");
+use Exception, databaza\Database, functions\Helpers;
 
 class ContactFunctions extends Database
 {
@@ -75,7 +75,7 @@ class ContactFunctions extends Database
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <strong>Telefónne číslo:</strong>
-                            <div>' . neuvedeneIfNull($data['tel_cislo']) . '</div>
+                            <div>' . Helpers::neuvedeneIfNull($data['tel_cislo']) . '</div>
                         </div>
                         <div class="col-md-6">
                             <strong>Dátum odoslania:</strong>
@@ -138,17 +138,17 @@ class ContactFunctions extends Database
                 <div class="row justify-content-between">
                    <div class="col-md-6 ">
                       <select id="filter" name="filter" onchange="this.form.submit()">
-                         <option value="all" ' . optionSelect($filter, "all") . '>Zobraziť všetky</option>
-                         <option value="not-checked" ' . optionSelect($filter, "not-checked") . '>Nepreskúmané</option>
-                         <option value="checked" ' . optionSelect($filter, "checked") . '>Preskúmané</option>
+                         <option value="all" ' . Helpers::optionSelect($filter, "all") . '>Zobraziť všetky</option>
+                         <option value="not-checked" ' . Helpers::optionSelect($filter, "not-checked") . '>Nepreskúmané</option>
+                         <option value="checked" ' . Helpers::optionSelect($filter, "checked") . '>Preskúmané</option>
                          </select>
                    </div>
                    <div class="col-md-6 ">
                       <select id="sort" name="sort" onchange="this.form.submit()">
-                         <option value="date-desc" ' . optionSelect($sort, "date-desc") . '>Zoradiť od najnovších</option>
-                         <option value="date-asc" ' . optionSelect($sort, "date-asc") . '>Zoradiť od najstarších</option>
-                         <option value="name" ' . optionSelect($sort, "name") . '>Zoradiť podľa mena</option>
-                         <option value="email" ' . optionSelect($sort, "email") . '>Zoradiť podľa e-mailu</option>
+                         <option value="date-desc" ' . Helpers::optionSelect($sort, "date-desc") . '>Zoradiť od najnovších</option>
+                         <option value="date-asc" ' . Helpers::optionSelect($sort, "date-asc") . '>Zoradiť od najstarších</option>
+                         <option value="name" ' . Helpers::optionSelect($sort, "name") . '>Zoradiť podľa mena</option>
+                         <option value="email" ' . Helpers::optionSelect($sort, "email") . '>Zoradiť podľa e-mailu</option>
                       </select>
                    </div>
                 </div>
@@ -168,7 +168,7 @@ class ContactFunctions extends Database
                                         <span class="badge bg-' . ($row['preskumane'] == 0 ? 'warning text-dark">Nepreskúmané' : 'success text-white">Preskúmané') . '</span>
                                     </div>
                                     <div class="mb-2">
-                                        <span class="font-weight-bold">Telefón: </span>' . neuvedeneIfNull($row['tel_cislo']) . '
+                                        <span class="font-weight-bold">Telefón: </span>' . Helpers::neuvedeneIfNull($row['tel_cislo']) . '
                                     </div>
                                     <div class="mb-2">
                                         <span class="font-weight-bold">Správa:</span>

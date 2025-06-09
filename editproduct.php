@@ -1,12 +1,13 @@
 <?php
-require_once("php/functions.php");
-loadPart("head");
+require_once("php/websiteFunctions.php");
+use functions\WebsiteFunctions as WebFunc;
+WebFunc::loadPart("head");
 ?>
 
 <body class="main-layout inner_posituong">
     <header>
         <?php
-        loadPart("header");
+        WebFunc::loadPart("header");
         require_once("php/productsFunctions.php");
         use products\ProductsFunctions;
         $productsFunctions = new ProductsFunctions();
@@ -32,7 +33,7 @@ loadPart("head");
         }
     }
     ?>
-    <?php loadPart("footer"); ?>
+    <?php WebFunc::loadPart("footer"); ?>
 </body>
 
 </html>

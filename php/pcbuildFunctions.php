@@ -3,8 +3,8 @@ namespace pcbuild;
 error_reporting(E_ALL);
 ini_set("display_errors", "On");
 require_once(__ROOT__ . "/db/dbfunctions.php");
-require_once(__ROOT__ . "/php/functions.php");
-use Exception, databaza\Database;
+require_once(__ROOT__ . "/php/helpers.php");
+use Exception, databaza\Database, functions\Helpers;
 
 class PcBuildFunctions extends Database
 {
@@ -76,15 +76,15 @@ class PcBuildFunctions extends Database
                     <div class="form-group mb-3">
                         <label for="type">Vyberte typ komponentu:</label>
                         <select class="form-control" id="type" name="type" onchange="this.form.submit()" required>
-                            <option value="none" ' . optionSelect($type, "none") . '>Vyberte typ komponentu</option>
-                            <option value="zakladna_doska" ' . optionSelect($type, "zakladna_doska") . '>Základná doska</option>
-                            <option value="graficka_karta" ' . optionSelect($type, "graficka_karta") . '>Grafická karta</option>
-                            <option value="procesor" ' . optionSelect($type, "procesor") . '>Procesor</option>
-                            <option value="operacna_pamat" ' . optionSelect($type, "operacna_pamat") . '>Operačná pamäť</option>
-                            <option value="napajaci_zdroj" ' . optionSelect($type, "napajaci_zdroj") . '>Napájací zdroj</option>
-                            <option value="ulozisko" ' . optionSelect($type, "ulozisko") . '>Úložisko</option>
-                            <option value="chladenie" ' . optionSelect($type, "chladenie") . '>Chladenie</option>
-                            <option value="operacny_system" ' . optionSelect($type, "operacny_system") . '>Operačný systém</option>
+                            <option value="none" ' . Helpers::optionSelect($type, "none") . '>Vyberte typ komponentu</option>
+                            <option value="zakladna_doska" ' . Helpers::optionSelect($type, "zakladna_doska") . '>Základná doska</option>
+                            <option value="graficka_karta" ' . Helpers::optionSelect($type, "graficka_karta") . '>Grafická karta</option>
+                            <option value="procesor" ' . Helpers::optionSelect($type, "procesor") . '>Procesor</option>
+                            <option value="operacna_pamat" ' . Helpers::optionSelect($type, "operacna_pamat") . '>Operačná pamäť</option>
+                            <option value="napajaci_zdroj" ' . Helpers::optionSelect($type, "napajaci_zdroj") . '>Napájací zdroj</option>
+                            <option value="ulozisko" ' . Helpers::optionSelect($type, "ulozisko") . '>Úložisko</option>
+                            <option value="chladenie" ' . Helpers::optionSelect($type, "chladenie") . '>Chladenie</option>
+                            <option value="operacny_system" ' . Helpers::optionSelect($type, "operacny_system") . '>Operačný systém</option>
                         </select>
                     </div>';
         // načítanie údajov z formulára
@@ -155,15 +155,15 @@ class PcBuildFunctions extends Database
                     <div class="form-group mb-3">
                         <label for="type">Vyberte typ komponentu:</label>
                         <select class="form-control" id="type" name="type" onchange="this.form.submit()" required>
-                            <option value="none" ' . optionSelect($type, "none") . '>Vyberte typ komponentu</option>
-                            <option value="zakladna_doska" ' . optionSelect($type, "zakladna_doska") . '>Základná doska</option>
-                            <option value="graficka_karta" ' . optionSelect($type, "graficka_karta") . '>Grafická karta</option>
-                            <option value="procesor" ' . optionSelect($type, "procesor") . '>Procesor</option>
-                            <option value="operacna_pamat" ' . optionSelect($type, "operacna_pamat") . '>Operačná pamäť</option>
-                            <option value="napajaci_zdroj" ' . optionSelect($type, "napajaci_zdroj") . '>Napájací zdroj</option>
-                            <option value="ulozisko" ' . optionSelect($type, "ulozisko") . '>Úložisko</option>
-                            <option value="chladenie" ' . optionSelect($type, "chladenie") . '>Chladenie</option>
-                            <option value="operacny_system" ' . optionSelect($type, "operacny_system") . '>Operačný systém</option>
+                            <option value="none" ' . Helpers::optionSelect($type, "none") . '>Vyberte typ komponentu</option>
+                            <option value="zakladna_doska" ' . Helpers::optionSelect($type, "zakladna_doska") . '>Základná doska</option>
+                            <option value="graficka_karta" ' . Helpers::optionSelect($type, "graficka_karta") . '>Grafická karta</option>
+                            <option value="procesor" ' . Helpers::optionSelect($type, "procesor") . '>Procesor</option>
+                            <option value="operacna_pamat" ' . Helpers::optionSelect($type, "operacna_pamat") . '>Operačná pamäť</option>
+                            <option value="napajaci_zdroj" ' . Helpers::optionSelect($type, "napajaci_zdroj") . '>Napájací zdroj</option>
+                            <option value="ulozisko" ' . Helpers::optionSelect($type, "ulozisko") . '>Úložisko</option>
+                            <option value="chladenie" ' . Helpers::optionSelect($type, "chladenie") . '>Chladenie</option>
+                            <option value="operacny_system" ' . Helpers::optionSelect($type, "operacny_system") . '>Operačný systém</option>
                         </select>
                     </div>';
         if ($form == "add-computer-components" && $_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -291,7 +291,7 @@ class PcBuildFunctions extends Database
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <strong>Telefónne číslo:</strong>
-                            <div>' . neuvedeneIfNull($data['tel_cislo']) . '</div>
+                            <div>' . Helpers::neuvedeneIfNull($data['tel_cislo']) . '</div>
                         </div>
                         <div class="col-md-6">
                             <strong>Dátum odoslania:</strong>
@@ -301,7 +301,7 @@ class PcBuildFunctions extends Database
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <strong>Adresa:</strong>
-                            <div>' . neuvedeneIfNull($data["ulica"]) . ' ' . neuvedeneIfNull($data["cislo_domu"]) . ', ' . neuvedeneIfNull($data["mesto"]) . ', ' . neuvedeneIfNull($data["PSC"]) . ', ' . neuvedeneIfNull($data["krajina"]) . '</div>
+                            <div>' . Helpers::neuvedeneIfNull($data["ulica"]) . ' ' . Helpers::neuvedeneIfNull($data["cislo_domu"]) . ', ' . Helpers::neuvedeneIfNull($data["mesto"]) . ', ' . Helpers::neuvedeneIfNull($data["PSC"]) . ', ' . Helpers::neuvedeneIfNull($data["krajina"]) . '</div>
                         </div>
                         <div class="col-md-6">
                             <strong>Rozpočet:</strong>
@@ -400,19 +400,19 @@ class PcBuildFunctions extends Database
                 <div class="row justify-content-between">
                    <div class="col-md-6 ">
                       <select id="filter" name="filter" onchange="this.form.submit()">
-                         <option value="all" ' . optionSelect($filter, "all") . '>Zobraziť všetky</option>
-                         <option value="not-delivered" ' . optionSelect($filter, "not-delivered") . '>Nedoručené</option>
-                         <option value="delivered" ' . optionSelect($filter, "delivered") . '>Doručené</option>
+                         <option value="all" ' . Helpers::optionSelect($filter, "all") . '>Zobraziť všetky</option>
+                         <option value="not-delivered" ' . Helpers::optionSelect($filter, "not-delivered") . '>Nedoručené</option>
+                         <option value="delivered" ' . Helpers::optionSelect($filter, "delivered") . '>Doručené</option>
                          </select>
                    </div>
                    <div class="col-md-6 ">
                       <select id="sort" name="sort" onchange="this.form.submit()">
-                         <option value="date-desc" ' . optionSelect($sort, "date-desc") . '>Zoradiť od najnovších</option>
-                         <option value="date-asc" ' . optionSelect($sort, "date-asc") . '>Zoradiť od najstarších</option>
-                         <option value="name" ' . optionSelect($sort, "name") . '>Zoradiť podľa mena</option>
-                         <option value="email" ' . optionSelect($sort, "email") . '>Zoradiť podľa e-mailu</option>
-                                                  <option value="budget-desc" ' . optionSelect($sort, "budget-desc") . '>Zoradiť podľa rozpočtu (od najvyššieho)</option>
-                         <option value="budget-asc" ' . optionSelect($sort, "budget-asc") . '>Zoradiť podľa rozpočtu (od najnižšieho)</option>
+                         <option value="date-desc" ' . Helpers::optionSelect($sort, "date-desc") . '>Zoradiť od najnovších</option>
+                         <option value="date-asc" ' . Helpers::optionSelect($sort, "date-asc") . '>Zoradiť od najstarších</option>
+                         <option value="name" ' . Helpers::optionSelect($sort, "name") . '>Zoradiť podľa mena</option>
+                         <option value="email" ' . Helpers::optionSelect($sort, "email") . '>Zoradiť podľa e-mailu</option>
+                                                  <option value="budget-desc" ' . Helpers::optionSelect($sort, "budget-desc") . '>Zoradiť podľa rozpočtu (od najvyššieho)</option>
+                         <option value="budget-asc" ' . Helpers::optionSelect($sort, "budget-asc") . '>Zoradiť podľa rozpočtu (od najnižšieho)</option>
                       </select>
                    </div>
                 </div>

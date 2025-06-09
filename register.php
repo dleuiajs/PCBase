@@ -1,15 +1,16 @@
 <?php
 // load functions
-require_once("php/functions.php");
+require_once("php/websiteFunctions.php");
+use functions\WebsiteFunctions as WebFunc;
 // load head
-loadPart("head");
+WebFunc::loadPart("head");
 ?>
 <!-- body -->
 
 <body class="main-layout inner_posituong computer_page">
     <!-- header -->
     <?php
-    loadPart("header");
+    WebFunc::loadPart("header");
     $rand1 = rand(1, 9);
     $rand2 = rand(1, 9);
     // <!-- end header -->
@@ -57,7 +58,7 @@ loadPart("head");
     </div>';
     ?>
     <!--  footer -->
-    <?php loadPart("footer"); ?>
+    <?php WebFunc::loadPart("footer"); ?>
     <!-- end footer -->
 </body>
 

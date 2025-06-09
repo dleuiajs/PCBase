@@ -1,7 +1,8 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <?php
-require_once("php/functions.php");
-loadPart("head");
+require_once("php/websiteFunctions.php");
+use functions\WebsiteFunctions as WebFunc;
+WebFunc::loadPart("head");
 
 require_once(__ROOT__ . "\php\users.php");
 require_once(__ROOT__ . "\php\accountFunctions.php");
@@ -36,7 +37,7 @@ if (isset($_GET['deleteaccount']) && $_GET['deleteaccount'] === 'true') {
 
 <body class="main-layout inner_posituong">
     <header>
-        <?php loadPart("header"); ?>
+        <?php WebFunc::loadPart("header"); ?>
     </header>
 
     <div class="container my-5" style="max-width: 800px;">
@@ -355,7 +356,7 @@ if (isset($_GET['deleteaccount']) && $_GET['deleteaccount'] === 'true') {
 
     <?php
     // načítanie dolnej časti stránky
-    loadPart("footer");
+    WebFunc::loadPart("footer");
     ?>
 </body>
 

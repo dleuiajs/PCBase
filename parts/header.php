@@ -14,8 +14,9 @@
                 </div>
                 <!-- nav bar  -->
                 <?php
-                require_once("php/functions.php");
-                loadPart("navigation");
+                require_once("php/websiteFunctions.php");
+                use functions\WebsiteFunctions as WebFunc;
+                WebFunc::loadPart("navigation");
                 ?>
             </div>
         </div>

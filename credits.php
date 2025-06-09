@@ -1,12 +1,13 @@
 <?php
-require_once("php/functions.php");
-loadPart("head");
+require_once("php/websiteFunctions.php");
+use functions\WebsiteFunctions as WebFunc;
+WebFunc::loadPart("head");
 ?>
 
 <body class="main-layout inner_posituong">
     <header>
         <?php
-        loadPart("header");
+        WebFunc::loadPart("header");
         ?>
     </header>
     <main class="credits-section py-5 bg-light">
@@ -103,7 +104,7 @@ loadPart("head");
             </p>
         </div>
     </main>
-    <?php loadPart("footer"); ?>
+    <?php WebFunc::loadPart("footer"); ?>
 </body>
 
 </html>

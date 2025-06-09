@@ -1,21 +1,20 @@
 <?php
-require_once("php/functions.php");
-loadPart("head");
+require_once("php/websiteFunctions.php");
+use functions\WebsiteFunctions as WebFunc;
+WebFunc::loadPart("head");
 ?>
 
 <body class="main-layout inner_posituong">
-    <header>
-        <?php
-        loadPart("header"); ?>
-    </header>
-
     <?php
+    // načítanie hlavičky
+    WebFunc::loadPart("header");
+
     require_once("php/productsFunctions.php");
     use products\ProductsFunctions;
     $productsFunctions = new ProductsFunctions();
     $productsFunctions->generateWriteReviewForm();
     // načítanie dolnej časti stránky
-    loadPart("footer");
+    WebFunc::loadPart("footer");
     ?>
 </body>
 

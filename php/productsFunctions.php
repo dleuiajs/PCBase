@@ -3,8 +3,8 @@ namespace products;
 error_reporting(E_ALL);
 ini_set("display_errors", "On");
 require_once(__ROOT__ . "/db/dbfunctions.php");
-require_once(__ROOT__ . "/php/functions.php");
-use Exception, databaza\Database;
+require_once(__ROOT__ . "/php/helpers.php");
+use Exception, databaza\Database, functions\Helpers;
 
 class ProductsFunctions extends Database
 {
@@ -682,10 +682,10 @@ class ProductsFunctions extends Database
                                  <div class="col-md-4 ">
                                     <label for="sort">Zoradiť podľa:</label><br>
                                     <select id="sort" name="sort" onchange="this.form.submit()">
-                                       <option value="default" ' . optionSelect($sort, "default") . '>Predvolené zoradenie</option>
-                                       <option value="cena-asc" ' . optionSelect($sort, "cena-asc") . '>Cena: od najnižšej</option>
-                                       <option value="cena-desc" ' . optionSelect($sort, "cena-desc") . '>Cena: od najvyššej</option>
-                                       <option value="popularity" ' . optionSelect($sort, "popularity") . '>Podľa obľúbenosti</option>
+                                       <option value="default" ' . Helpers::optionSelect($sort, "default") . '>Predvolené zoradenie</option>
+                                       <option value="cena-asc" ' . Helpers::optionSelect($sort, "cena-asc") . '>Cena: od najnižšej</option>
+                                       <option value="cena-desc" ' . Helpers::optionSelect($sort, "cena-desc") . '>Cena: od najvyššej</option>
+                                       <option value="popularity" ' . Helpers::optionSelect($sort, "popularity") . '>Podľa obľúbenosti</option>
                                     </select>
                                  </div>
                               </div>
@@ -699,20 +699,20 @@ class ProductsFunctions extends Database
                                 <input type="hidden" name="sort" value="' . htmlspecialchars($sort) . '">
                                 <label for="availability">Dostupnosť:</label>
                                 <select id="availability" name="availability" class="form-select mb-3" onchange="this.form.submit()">
-                                    <option value="all" ' . optionSelect($availability, "all") . '>Všetky</option>
-                                    <option value="available" ' . optionSelect($availability, 'available') . '>Na sklade</option>
-                                    <option value="unavailable" ' . optionSelect($availability, 'unavailable') . '>Vypredané</option>
+                                    <option value="all" ' . Helpers::optionSelect($availability, "all") . '>Všetky</option>
+                                    <option value="available" ' . Helpers::optionSelect($availability, 'available') . '>Na sklade</option>
+                                    <option value="unavailable" ' . Helpers::optionSelect($availability, 'unavailable') . '>Vypredané</option>
                                 </select>
                                 <label for="category">Kategória:</label>
                                 <select id="category" name="category" class="form-select mb-3" onchange="this.form.submit()">
-                                    <option value="all" ' . optionSelect($category, "all") . '>Všetky kategórie</option>';
+                                    <option value="all" ' . Helpers::optionSelect($category, "all") . '>Všetky kategórie</option>';
         // SQL dotaz na získanie kategórií
         $sql = 'SELECT idkategoria_tovara, nazov FROM kategoria_tovara';
         $stmt = $this->connection->prepare($sql);
         $stmt->execute();
         $categories = $stmt->fetchAll();
         foreach ($categories as $categorySQL) {
-            echo '<option value="' . $categorySQL['idkategoria_tovara'] . '" ' . optionSelect($category, $categorySQL['idkategoria_tovara']) . '>' . htmlspecialchars($categorySQL['nazov']) . '</option>';
+            echo '<option value="' . $categorySQL['idkategoria_tovara'] . '" ' . Helpers::optionSelect($category, $categorySQL['idkategoria_tovara']) . '>' . htmlspecialchars($categorySQL['nazov']) . '</option>';
         }
         echo '                  </select>';
         echo '                  <label for="min-price">Cena:</label>
@@ -729,86 +729,86 @@ class ProductsFunctions extends Database
                                 </div>
                                 <label for="motherboard">Základná doska:</label>
                                 <select id="motherboard" name="motherboard" class="form-select mb-3" onchange="this.form.submit()">
-                                    <option value="all" ' . optionSelect($motherboard, "all") . '>Všetky</option>';
+                                    <option value="all" ' . Helpers::optionSelect($motherboard, "all") . '>Všetky</option>';
         // SQL dotaz na získanie základných dosiek
         $sql = 'SELECT idzakladna_doska, nazov FROM zakladna_doska';
         $stmt = $this->connection->prepare($sql);
         $stmt->execute();
         $motherboards = $stmt->fetchAll();
         foreach ($motherboards as $motherboardSQL) {
-            echo '<option value="' . $motherboardSQL['idzakladna_doska'] . '" ' . optionSelect($motherboard, $motherboardSQL['idzakladna_doska']) . '>' . htmlspecialchars($motherboardSQL['nazov']) . '</option>';
+            echo '<option value="' . $motherboardSQL['idzakladna_doska'] . '" ' . Helpers::optionSelect($motherboard, $motherboardSQL['idzakladna_doska']) . '>' . htmlspecialchars($motherboardSQL['nazov']) . '</option>';
         }
         echo '                  </select>
                                 <label for="cpu">Procesor:</label>
                                 <select id="cpu" name="cpu" class="form-select mb-3" onchange="this.form.submit()">
-                                    <option value="all" ' . optionSelect($cpu, "all") . '>Všetky</option>';
+                                    <option value="all" ' . Helpers::optionSelect($cpu, "all") . '>Všetky</option>';
         // SQL dotaz na získanie procesorov
         $sql = 'SELECT idprocesor, nazov FROM procesor';
         $stmt = $this->connection->prepare($sql);
         $stmt->execute();
         $cpus = $stmt->fetchAll();
         foreach ($cpus as $cpuSQL) {
-            echo '<option value="' . $cpuSQL['idprocesor'] . '" ' . optionSelect($cpu, $cpuSQL['idprocesor']) . '>' . htmlspecialchars($cpuSQL['nazov']) . '</option>';
+            echo '<option value="' . $cpuSQL['idprocesor'] . '" ' . Helpers::optionSelect($cpu, $cpuSQL['idprocesor']) . '>' . htmlspecialchars($cpuSQL['nazov']) . '</option>';
         }
         echo '                  </select>
                                 <label for="gpu">Grafická karta:</label>
                                 <select id="gpu" name="gpu" class="form-select mb-3" onchange="this.form.submit()">
-                                    <option value="all" ' . optionSelect($gpu, "all") . '>Všetky</option>';
+                                    <option value="all" ' . Helpers::optionSelect($gpu, "all") . '>Všetky</option>';
         // SQL dotaz na získanie grafických kariet
         $sql = 'SELECT idgraficka_karta, nazov FROM graficka_karta';
         $stmt = $this->connection->prepare($sql);
         $stmt->execute();
         $gpus = $stmt->fetchAll();
         foreach ($gpus as $gpuSQL) {
-            echo '<option value="' . $gpuSQL['idgraficka_karta'] . '" ' . optionSelect($gpu, $gpuSQL['idgraficka_karta']) . '>' . htmlspecialchars($gpuSQL['nazov']) . '</option>';
+            echo '<option value="' . $gpuSQL['idgraficka_karta'] . '" ' . Helpers::optionSelect($gpu, $gpuSQL['idgraficka_karta']) . '>' . htmlspecialchars($gpuSQL['nazov']) . '</option>';
         }
         echo '                  </select>
                                 <label for="cooling">Chladenie:</label>
                                 <select id="cooling" name="cooling" class="form-select mb-3" onchange="this.form.submit()">
-                                    <option value="all" ' . optionSelect($cooling, "all") . '>Všetky</option>';
+                                    <option value="all" ' . Helpers::optionSelect($cooling, "all") . '>Všetky</option>';
         // SQL dotaz na získanie chladičov
         $sql = 'SELECT idchladenie, nazov FROM chladenie';
         $stmt = $this->connection->prepare($sql);
         $stmt->execute();
         $coolings = $stmt->fetchAll();
         foreach ($coolings as $coolingSQL) {
-            echo '<option value="' . $coolingSQL['idchladenie'] . '" ' . optionSelect($cooling, $coolingSQL['idchladenie']) . '>' . htmlspecialchars($coolingSQL['nazov']) . '</option>';
+            echo '<option value="' . $coolingSQL['idchladenie'] . '" ' . Helpers::optionSelect($cooling, $coolingSQL['idchladenie']) . '>' . htmlspecialchars($coolingSQL['nazov']) . '</option>';
         }
         echo '                  </select>
                                 <label for="ram">Operačná pamäť:</label>
                                 <select id="ram" name="ram" class="form-select mb-3" onchange="this.form.submit()">
-                                    <option value="all" ' . optionSelect($ram, "all") . '>Všetky</option>';
+                                    <option value="all" ' . Helpers::optionSelect($ram, "all") . '>Všetky</option>';
         // SQL dotaz na získanie operačných pamätí
         $sql = 'SELECT idoperacna_pamat, nazov FROM operacna_pamat';
         $stmt = $this->connection->prepare($sql);
         $stmt->execute();
         $rams = $stmt->fetchAll();
         foreach ($rams as $ramSQL) {
-            echo '<option value="' . $ramSQL['idoperacna_pamat'] . '" ' . optionSelect($ram, $ramSQL['idoperacna_pamat']) . '>' . htmlspecialchars($ramSQL['nazov']) . '</option>';
+            echo '<option value="' . $ramSQL['idoperacna_pamat'] . '" ' . Helpers::optionSelect($ram, $ramSQL['idoperacna_pamat']) . '>' . htmlspecialchars($ramSQL['nazov']) . '</option>';
         }
         echo '                  </select>
                                 <label for="disk">Úložisko:</label>
                                 <select id="disk" name="disk" class="form-select mb-3" onchange="this.form.submit()">
-                                    <option value="all" ' . optionSelect($disk, "all") . '>Všetky</option>';
+                                    <option value="all" ' . Helpers::optionSelect($disk, "all") . '>Všetky</option>';
         // SQL dotaz na získanie úložísk
         $sql = 'SELECT idulozisko, nazov FROM ulozisko';
         $stmt = $this->connection->prepare($sql);
         $stmt->execute();
         $disks = $stmt->fetchAll();
         foreach ($disks as $diskSQL) {
-            echo '<option value="' . $diskSQL['idulozisko'] . '" ' . optionSelect($disk, $diskSQL['idulozisko']) . '>' . htmlspecialchars($diskSQL['nazov']) . '</option>';
+            echo '<option value="' . $diskSQL['idulozisko'] . '" ' . Helpers::optionSelect($disk, $diskSQL['idulozisko']) . '>' . htmlspecialchars($diskSQL['nazov']) . '</option>';
         }
         echo '                  </select>
                                 <label for="os">Operačný systém:</label>
                                 <select id="os" name="os" class="form-select mb-3" onchange="this.form.submit()">
-                                    <option value="all" ' . optionSelect($os, "all") . '>Všetky</option>';
+                                    <option value="all" ' . Helpers::optionSelect($os, "all") . '>Všetky</option>';
         // SQL dotaz na získanie operačných systémov
         $sql = 'SELECT idoperacny_system, nazov FROM operacny_system';
         $stmt = $this->connection->prepare($sql);
         $stmt->execute();
         $oses = $stmt->fetchAll();
         foreach ($oses as $osSQL) {
-            echo '<option value="' . $osSQL['idoperacny_system'] . '" ' . optionSelect($os, $osSQL['idoperacny_system']) . '>' . htmlspecialchars($osSQL['nazov']) . '</option>';
+            echo '<option value="' . $osSQL['idoperacny_system'] . '" ' . Helpers::optionSelect($os, $osSQL['idoperacny_system']) . '>' . htmlspecialchars($osSQL['nazov']) . '</option>';
         }
         echo '                  </select>';
         echo '              </form>
@@ -1224,7 +1224,7 @@ class ProductsFunctions extends Database
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <strong>Telefónne číslo:</strong>
-                            <div>' . neuvedeneIfNull($data['tel_cislo']) . '</div>
+                            <div>' . Helpers::neuvedeneIfNull($data['tel_cislo']) . '</div>
                         </div>
                         <div class="col-md-6">
                             <strong>Dátum odoslania:</strong>
@@ -1234,7 +1234,7 @@ class ProductsFunctions extends Database
                     <div class="row mb-3">
                         <div class="col-md-12">
                             <strong>Adresa:</strong>
-                            <div>' . neuvedeneIfNull($data["ulica"]) . ' ' . neuvedeneIfNull($data["cislo_domu"]) . ', ' . neuvedeneIfNull($data["mesto"]) . ', ' . neuvedeneIfNull($data["PSC"]) . ', ' . neuvedeneIfNull($data["krajina"]) . '</div>
+                            <div>' . Helpers::neuvedeneIfNull($data["ulica"]) . ' ' . Helpers::neuvedeneIfNull($data["cislo_domu"]) . ', ' . Helpers::neuvedeneIfNull($data["mesto"]) . ', ' . Helpers::neuvedeneIfNull($data["PSC"]) . ', ' . Helpers::neuvedeneIfNull($data["krajina"]) . '</div>
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -1311,19 +1311,19 @@ class ProductsFunctions extends Database
                 <div class="row justify-content-between">
                    <div class="col-md-6 ">
                       <select id="filter" name="filter" onchange="this.form.submit()">
-                         <option value="all" ' . optionSelect($filter, "all") . '>Zobraziť všetky</option>
-                         <option value="not-delivered" ' . optionSelect($filter, "not-delivered") . '>Nedoručené</option>
-                         <option value="delivered" ' . optionSelect($filter, "delivered") . '>Doručené</option>
+                         <option value="all" ' . Helpers::optionSelect($filter, "all") . '>Zobraziť všetky</option>
+                         <option value="not-delivered" ' . Helpers::optionSelect($filter, "not-delivered") . '>Nedoručené</option>
+                         <option value="delivered" ' . Helpers::optionSelect($filter, "delivered") . '>Doručené</option>
                          </select>
                    </div>
                    <div class="col-md-6 ">
                       <select id="sort" name="sort" onchange="this.form.submit()">
-                         <option value="date-desc" ' . optionSelect($sort, "date-desc") . '>Zoradiť od najnovších</option>
-                         <option value="date-asc" ' . optionSelect($sort, "date-asc") . '>Zoradiť od najstarších</option>
-                         <option value="name" ' . optionSelect($sort, "name") . '>Zoradiť podľa mena</option>
-                         <option value="cena-asc" ' . optionSelect($sort, "cena-asc") . '>Zoradiť podľa ceny (od najnižšej)</option>
-                         <option value="cena-desc" ' . optionSelect($sort, "cena-desc") . '>Zoradiť podľa ceny (od najvyššej)</option>
-                         <option value="budget-asc" ' . optionSelect($sort, "budget-asc") . '>Zoradiť podľa rozpočtu (od najnižšieho)</option>
+                         <option value="date-desc" ' . Helpers::optionSelect($sort, "date-desc") . '>Zoradiť od najnovších</option>
+                         <option value="date-asc" ' . Helpers::optionSelect($sort, "date-asc") . '>Zoradiť od najstarších</option>
+                         <option value="name" ' . Helpers::optionSelect($sort, "name") . '>Zoradiť podľa mena</option>
+                         <option value="cena-asc" ' . Helpers::optionSelect($sort, "cena-asc") . '>Zoradiť podľa ceny (od najnižšej)</option>
+                         <option value="cena-desc" ' . Helpers::optionSelect($sort, "cena-desc") . '>Zoradiť podľa ceny (od najvyššej)</option>
+                         <option value="budget-asc" ' . Helpers::optionSelect($sort, "budget-asc") . '>Zoradiť podľa rozpočtu (od najnižšieho)</option>
                       </select>
                    </div>
                 </div>
