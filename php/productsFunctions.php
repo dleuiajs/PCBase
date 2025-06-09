@@ -562,7 +562,7 @@ class ProductsFunctions extends Database
                 echo '<div class="review-card mb-4 p-3 shadow-sm rounded">
             <div class="d-flex align-items-start w-100">
                 <div>
-                    <img src="images/avatars/avatar1.jpg" alt="avatar" class="img-fluid rounded-circle mr-3" style="object-fit: cover; width: 50px; height: auto;">
+                    <img src="images/avatar.png" alt="avatar" class="img-fluid rounded-circle mr-3" style="object-fit: cover; width: 50px; height: auto;">
                 </div>
                 <div class="review-content flex-grow-1">
                     <h5>' . $review['meno'] . ' ' . $review['priezvisko'] . '</h5>
