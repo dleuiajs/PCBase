@@ -18,107 +18,59 @@ loadPart("head");
    ?>
    <!-- end header -->
    <!-- banner -->
-   <section class="banner_main">
+   <?php
+   $data = json_decode(file_get_contents("json/banner.json"), true);
+   // load banner
+   if (!isset($data['banner']) || empty($data['banner'])) {
+      echo '<div class="alert alert-danger" role="alert">Údaje o bannery neboli nájdené alebo sú prázdne.</div>';
+   } else {
+      echo '<section class="banner_main">
       <div id="banner1" class="carousel slide" data-ride="carousel">
-         <ol class="carousel-indicators">
-            <li data-target="#banner1" data-slide-to="0" class="active"></li>
-            <li data-target="#banner1" data-slide-to="1"></li>
-            <li data-target="#banner1" data-slide-to="2"></li>
-         </ol>
-         <div class="carousel-inner">
-            <div class="carousel-item active">
+         <ol class="carousel-indicators">';
+      for ($i = 0; $i < count($data['banner']); $i++) {
+         echo '<li data-target="#banner1" data-slide-to="' . $i . '"' . ($i === 0 ? ' class="active"' : '') . '></li>';
+      }
+      echo '</ol>
+         <div class="carousel-inner">';
+      foreach ($data['banner'] as $i => $item) {
+         echo '<div class="carousel-item ' . ($i === 0 ? 'active' : '') . '">
                <div class="container">
                   <div class="carousel-caption">
                      <div class="row">
                         <div class="col-md-6">
                            <div class="text-bg">
-                              <h1>Herné zostavy – výkon bez kompromisov!</h1>
-                              <h2>Maximálny herný zážitok</h3>
-                                 <p>
-                                    Vyber si herný počítač, ktorý zvládne najnovšie tituly na ultra nastaveniach.
-                                    Výkonná grafická karta, rýchly procesor a kvalitné chladenie ti zaručia plynulú hru
-                                    bez lagov.
-                                    Objav zostavy prispôsobené presne tvojim požiadavkám!
-                                 </p>
-                                 <a href="#">Kúpiť teraz</a> <a href="contact.html">Kontakt</a>
+                              <h1>' . $item['nadpis'] . '</h1>
+                              <h2>' . $item['podnadpis'] . '</h2>
+                                 <p>' . $item['popis'] . '</p>
+                                 <a href="' . $item['kupitOdkaz'] . '">Kúpiť teraz</a> <a href="contact.php">Kontakt</a>
                            </div>
                         </div>
                         <div class="col-md-6 center-vertical">
                            <div class="text_img">
-                              <figure><img src="images/banner_img_01.png" alt="#" /></figure>
+                              <figure><img src="' . $item['img'] . '" alt="#" /></figure>
                            </div>
                         </div>
                      </div>
                   </div>
                </div>
-            </div>
-            <div class="carousel-item">
-               <div class="container">
-                  <div class="carousel-caption">
-                     <div class="row">
-                        <div class="col-md-6">
-                           <div class="text-bg">
-                              <h1>Pracovné stanice – sila pre profesionálov!</h1>
-                              <h2>Výkon pre náročné úlohy</h3>
-                                 <p>
-                                    Renderovanie videí, 3D modelovanie, grafický dizajn – naše pracovné stanice sú
-                                    pripravené zvládnuť aj tie
-                                    najkomplexnejšie projekty. S rýchlym SSD, vysokou RAM a spoľahlivým procesorom bude
-                                    tvoja práca efektívnejšia než kedykoľvek predtým.
-                                 </p>
-                                 <a href="#">Kúpiť teraz</a> <a href="contact.html">Kontakt</a>
-                           </div>
-                        </div>
-                        <div class="col-md-6 center-vertical">
-                           <div class="text_img">
-                              <figure><img src="images/banner_img_02.png" alt="#" /></figure>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-            </div>
-            <div class="carousel-item">
-               <div class="container">
-                  <div class="carousel-caption">
-                     <div class="row">
-                        <div class="col-md-6">
-                           <div class="text-bg">
-                              <h1>Kancelárske a domáce PC – spoľahlivosť každý deň!</h1>
-                              <h2>Ideálne riešenie pre prácu a štúdium</h3>
-                                 <p>
-                                    Hľadáte spoľahlivý počítač na kancelársku prácu, online stretnutia alebo štúdium?
-                                    Naše zostavy poskytujú stabilný výkon, nízku spotrebu energie a dlhú životnosť za
-                                    zlomok ceny. Pracujte bez obáv s počítačom, ktorý vám umožní pracovať bez toho, aby
-                                    vás sklamal.
-                                 </p>
-                                 <a href="#">Kúpiť teraz</a> <a href="contact.html">Kontakt</a>
-                           </div>
-                        </div>
-                        <div class="col-md-6 center-vertical">
-                           <div class="text_img">
-                              <figure><img src="images/banner_img_03.png" alt="#" /></figure>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-            </div>
-
-
-         </div>
-         <a class="carousel-control-prev" href="#banner1" role="button" data-slide="prev">
-            <i class="fa fa-chevron-left" aria-hidden="true"></i>
-         </a>
-         <a class="carousel-control-next" href="#banner1" role="button" data-slide="next">
-            <i class="fa fa-chevron-right" aria-hidden="true"></i>
-         </a>
+            </div>';
+      }
+      echo '</div>
       </div>
-   </section>
+   </section>';
+   }
+   ?>
    <!-- end banner -->
    <!-- three_box -->
    <div class="three_box">
-      <div class="container">
+      <div class="container mb-5">
+         <div class="row">
+            <div class="col-md-12">
+               <div class="titlepage">
+                  <h2>Naše produkty</h2>
+               </div>
+            </div>
+         </div>
          <div class="row">
             <div class="col-md-4">
                <div class="box_text">
@@ -145,87 +97,15 @@ loadPart("head");
                </div>
             </div>
          </div>
+         <div class="row">
+            <div class="col-md-12 text-center mt-4">
+               <a class="btn btn-info" style="width:300px; height:50px; line-height:35px;" href="products.php">Zobraziť
+                  viac</a>
+            </div>
+         </div>
       </div>
    </div>
    <!-- three_box -->
-   <!-- products -->
-   <div class="products">
-      <div class="container">
-         <div class="row">
-            <div class="col-md-12">
-               <div class="titlepage">
-                  <h2>Naše produkty</h2>
-               </div>
-            </div>
-         </div>
-         <div class="row">
-            <div class="col-md-12">
-               <div class="our_products">
-                  <div class="row">
-                     <div class="col-md-4 margin_bottom1">
-                        <div class="product_box">
-                           <figure><img src="images/product3.png" alt="#" /></figure>
-                           <h3>Počítač</h3>
-                        </div>
-                     </div>
-                     <div class="col-md-4 margin_bottom1">
-                        <div class="product_box">
-                           <figure><img src="images/product1.png" alt="#" /></figure>
-                           <h3>Klávesnica</h3>
-                        </div>
-                     </div>
-                     <div class="col-md-4 margin_bottom1">
-                        <div class="product_box">
-                           <figure><img src="images/product2.png" alt="#" /></figure>
-                           <h3>Myš</h3>
-                        </div>
-                     </div>
-                     <div class="col-md-4 margin_bottom1">
-                        <div class="product_box">
-                           <figure><img src="images/product4.png" alt="#" /></figure>
-                           <h3>Reproduktory</h3>
-                        </div>
-                     </div>
-                     <div class="col-md-4 margin_bottom1">
-                        <div class="product_box">
-                           <figure><img src="images/product5.png" alt="#" /></figure>
-                           <h3>Internet</h3>
-                        </div>
-                     </div>
-                     <div class="col-md-4 margin_bottom1">
-                        <div class="product_box">
-                           <figure><img src="images/product6.png" alt="#" /></figure>
-                           <h3>Pevný disk</h3>
-                        </div>
-                     </div>
-                     <div class="col-md-4">
-                        <div class="product_box">
-                           <figure><img src="images/product7.png" alt="#" /></figure>
-                           <h3>Rams</h3>
-                        </div>
-                     </div>
-                     <div class="col-md-4">
-                        <div class="product_box">
-                           <figure><img src="images/product8.png" alt="#" /></figure>
-                           <h3>Batéria</h3>
-                        </div>
-                     </div>
-                     <div class="col-md-4">
-                        <div class="product_box">
-                           <figure><img src="images/product9.png" alt="#" /></figure>
-                           <h3>Optická mechanika</h3>
-                        </div>
-                     </div>
-                     <div class="col-md-12">
-                        <a class="read_more" href="products.php">Zobraziť viac</a>
-                     </div>
-                  </div>
-               </div>
-            </div>
-         </div>
-      </div>
-   </div>
-   <!-- end products -->
    <!-- laptop  section -->
    <div class="laptop">
       <div class="container">
@@ -248,91 +128,12 @@ loadPart("head");
    </div>
    <!-- end laptop  section -->
    <!-- customer -->
-   <div class="customer">
-      <div class="container">
-         <div class="row">
-            <div class="col-md-12">
-               <div class="titlepage">
-                  <h2>Recenzia zákazníka</h2>
-               </div>
-            </div>
-         </div>
-         <div class="row">
-            <div class="col-md-12">
-               <div id="myCarousel" class="carousel slide customer_Carousel " data-ride="carousel">
-                  <ol class="carousel-indicators">
-                     <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-                     <li data-target="#myCarousel" data-slide-to="1"></li>
-                     <li data-target="#myCarousel" data-slide-to="2"></li>
-                  </ol>
-                  <div class="carousel-inner">
-                     <div class="carousel-item active">
-                        <div class="container">
-                           <div class="carousel-caption ">
-                              <div class="row">
-                                 <div class="col-md-9 offset-md-3">
-                                    <div class="test_box">
-                                       <i><img src="images/cos.png" alt="#" /></i>
-                                       <h4>Peter Novák</h4>
-                                       <p>Som veľmi spokojný s nákupom! Počítač mi zostavili rýchlo a efektívne. Pracuje
-                                          bez problémov a je perfektný na hranie hier aj na prácu s grafikou. Služby sú
-                                          na vysokej úrovni, každému odporúčam tento obchod!</p>
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                     <div class="carousel-item">
-                        <div class="container">
-                           <div class="carousel-caption">
-                              <div class="row">
-                                 <div class="col-md-9 offset-md-3">
-                                    <div class="test_box">
-                                       <i><img src="images/cos.png" alt="#" /></i>
-                                       <h4>Ján Horváth</h4>
-                                       <p>Hľadal som ideálny herný počítač a našiel som ho tu! Počítač je neuveriteľne
-                                          rýchly, bez akýchkoľvek lagov, a grafika je úžasná. Zostava bola prispôsobená
-                                          presne mojim potrebám a požiadavkám. Dostal som perfektný produkt a som
-                                          maximálne spokojný so službami!</p>
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                     <div class="carousel-item">
-                        <div class="container">
-                           <div class="carousel-caption">
-                              <div class="row">
-                                 <div class="col-md-9 offset-md-3">
-                                    <div class="test_box">
-                                       <i><img src="images/cos.png" alt="#" /></i>
-                                       <h4>Katarína Pálová</h4>
-                                       <p>Nákup bol veľmi jednoduchý a rýchly. S pomocou predajcu som si vybrala správnu
-                                          konfiguráciu podľa toho, na čo budem počítač používať. Počítač je stabilný a
-                                          má výborný výkon. K tomu ešte skvelý zákaznícky servis, ktorý odpovedal na
-                                          všetky moje otázky.</p>
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-                  <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
-                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                     <span class="sr-only">Predchádzajúci</span>
-                  </a>
-                  <a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
-                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                     <span class="sr-only">Ďalší</span>
-                  </a>
-               </div>
-            </div>
-         </div>
-      </div>
-   </div>
+   <?php
+   require_once("php/productsFunctions.php");
+   use products\ProductsFunctions;
+   $productsFunctions = new ProductsFunctions();
+   $productsFunctions->generateLastReviews();
+   ?>
    <!-- end customer -->
 
    <!--  contact -->

@@ -1,0 +1,25 @@
+{
+    "banner":[
+        {
+        "nadpis": "Herné zostavy – výkon bez kompromisov!",
+        "podnadpis": "Maximálny herný zážitok",
+        "popis": "Vyber si herný počítač, ktorý zvládne najnovšie tituly na ultra nastaveniach. Výkonná grafická karta, rýchly procesor a kvalitné chladenie ti zaručia plynulú hru bez lagov. Objav zostavy prispôsobené presne tvojim požiadavkám!",
+        "kupitOdkaz": "products.php?category=3#productsList",
+        "img": "images/banner_img_01.png"
+        },
+        {
+            "nadpis":"Pracovné stanice – sila pre profesionálov!",
+            "podnadpis":"Výkon pre náročné úlohy",
+            "popis":"Renderovanie videí, 3D modelovanie, grafický dizajn – naše pracovné stanice sú pripravené zvládnuť aj tie najkomplexnejšie projekty. S rýchlym SSD, vysokou RAM a spoľahlivým procesorom bude tvoja práca efektívnejšia než kedykoľvek predtým.",
+            "kupitOdkaz":"products.php?category=4#productsList",
+            "img":"images/banner_img_02.png"
+        },
+        {
+            "nadpis":"Kancelárske a domáce PC – spoľahlivosť každý deň!",
+            "podnadpis":"Ideálne riešenie pre prácu a štúdium",
+            "popis":"Hľadáte spoľahlivý počítač na kancelársku prácu, online stretnutia alebo štúdium? Naše zostavy poskytujú stabilný výkon, nízku spotrebu energie a dlhú životnosť za zlomok ceny. Pracujte bez obáv s počítačom, ktorý vám umožní pracovať bez toho, aby vás sklamal.",
+            "kupitOdkaz":"products.php?category=1#productsList",
+            "img":"images/banner_img_03.png"
+        }
+    ]
+}
