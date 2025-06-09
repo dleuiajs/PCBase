@@ -52,15 +52,16 @@ class ProductsFunctions extends Database
 
     public function generateLastReviews()
     {
-        $sql = "SELECT p.meno, p.priezvisko, r.text, r.hodnotenie, r.datum FROM recenzia_tovara r
+        try {
+            $sql = "SELECT p.meno, p.priezvisko, r.text, r.hodnotenie, r.datum FROM recenzia_tovara r
                     INNER JOIN pouzivatel p ON r.idpouzivatel = p.idpouzivatel
-                    WHERE hodnotenie >= 4
+                    WHERE r.hodnotenie >= 4
                     ORDER BY r.datum DESC LIMIT 3";
-        $stmt = $this->connection->prepare($sql);
-        $stmt->execute();
-        $reviews = $stmt->fetchAll();
-        if (!empty($reviews)) {
-            echo '   <div class="customer">
+            $stmt = $this->connection->prepare($sql);
+            $stmt->execute();
+            $reviews = $stmt->fetchAll();
+            if (!empty($reviews)) {
+                echo '   <div class="customer">
       <div class="container">
          <div class="row">
             <div class="col-md-12">
@@ -72,16 +73,14 @@ class ProductsFunctions extends Database
          <div class="row">
             <div class="col-md-12">
                <div id="myCarousel" class="carousel slide customer_Carousel " data-ride="carousel">
-                  <ol class="carousel-indicators">
-                     <li data-target="#myCarousel" data-slide-to="0" class="active"></li>';
-            if (count($reviews) == 2)
-                echo '<li data-target="#myCarousel" data-slide-to="1"></li>';
-            elseif (count($reviews) == 3)
-                echo '<li data-target="#myCarousel" data-slide-to="2"></li>';
-            echo '</ol>
+                  <ol class="carousel-indicators">';
+                foreach ($reviews as $i => $review) {
+                    echo '<li data-target="#myCarousel" data-slide-to="' . $i . '" class="' . ($i == 0 ? "active" : "") . '"></li>';
+                }
+                echo '</ol>
                   <div class="carousel-inner">';
-            foreach ($reviews as $i => $review) {
-                echo '<div class="carousel-item ' . ($i == 0 ? "active" : "") . '">
+                foreach ($reviews as $i => $review) {
+                    echo '<div class="carousel-item ' . ($i == 0 ? "active" : "") . '">
                         <div class="container">
                            <div class="carousel-caption ">
                               <div class="row">
@@ -98,15 +97,17 @@ class ProductsFunctions extends Database
                            </div>
                         </div>
                      </div>';
-            }
-            echo '</div>
+                }
+                echo '</div>
                </div>
             </div>
          </div>
          </div>
    </div>';
+            }
+        } catch (Exception $e) {
+            echo '<p class="text-danger mb-4">Nastala chyba pri načítaní recenzií: ' . $e->getMessage() . '</p>';
         }
-
     }
 
     public function generateWriteReviewForm()
