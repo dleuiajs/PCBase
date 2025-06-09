@@ -40,7 +40,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <p>© 2025 Všetky práva vyhradené. PCBase. Dizajn od <a href="https://html.design/">Free Html
-                                Templates</a></p>
+                                Templates.</a> <a href="credits.php" class="text-info">Kredity</a></p>
                     </div>
                 </div>
             </div>
