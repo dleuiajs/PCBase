@@ -137,19 +137,19 @@ class ContactFunctions extends Database
                 <input type="hidden" name="page" value="contactmsg">
                 <div class="row justify-content-between">
                    <div class="col-md-6 ">
-                      <select id="filter" name="filter" onchange="this.form.submit()">
-                         <option value="all" ' . Helpers::optionSelect($filter, "all") . '>Zobraziť všetky</option>
-                         <option value="not-checked" ' . Helpers::optionSelect($filter, "not-checked") . '>Nepreskúmané</option>
-                         <option value="checked" ' . Helpers::optionSelect($filter, "checked") . '>Preskúmané</option>
-                         </select>
+                      <select id="filter" name="filter" onchange="this.form.submit()">';
+        Helpers::optionSelect($filter, "all", "Zobraziť všetky");
+        Helpers::optionSelect($filter, "not-checked", "Nepreskúmané");
+        Helpers::optionSelect($filter, "checked", "Preskúmané");
+        echo '</select>
                    </div>
                    <div class="col-md-6 ">
-                      <select id="sort" name="sort" onchange="this.form.submit()">
-                         <option value="date-desc" ' . Helpers::optionSelect($sort, "date-desc") . '>Zoradiť od najnovších</option>
-                         <option value="date-asc" ' . Helpers::optionSelect($sort, "date-asc") . '>Zoradiť od najstarších</option>
-                         <option value="name" ' . Helpers::optionSelect($sort, "name") . '>Zoradiť podľa mena</option>
-                         <option value="email" ' . Helpers::optionSelect($sort, "email") . '>Zoradiť podľa e-mailu</option>
-                      </select>
+                      <select id="sort" name="sort" onchange="this.form.submit()">';
+        Helpers::optionSelect($sort, "date-desc", "Zoradiť od najnovších");
+        Helpers::optionSelect($sort, "date-asc", "Zoradiť od najstarších");
+        Helpers::optionSelect($sort, "name", "Zoradiť podľa mena");
+        Helpers::optionSelect($sort, "email", "Zoradiť podľa e-mailu");
+        echo '</select>
                    </div>
                 </div>
             </form>';

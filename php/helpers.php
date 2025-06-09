@@ -7,9 +7,9 @@ class Helpers
         return !empty($value) ? $value : 'Neuvedené';
     }
 
-    public static function optionSelect($variable, $value)
+    public static function optionSelect($variable, $value, $name)
     {
-        return $variable == $value ? 'selected' : '';
+        echo '<option value="'.$value.'" ' . ($variable == $value ? 'selected' : '') . '>' . $name . '</option>';
     }
 }
 ?>
