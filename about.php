@@ -1,15 +1,16 @@
 <?php
 // load functions
-require_once("php/functions.php");
+require_once("php/websiteFunctions.php");
+use functions\WebsiteFunctions as WebFunc;
 // load head
-loadPart("head");
+WebFunc::loadPart("head");
 ?>
 <!-- body -->
 
 <body class="main-layout inner_posituong computer_page">
    <!-- header -->
    <?php
-   loadPart("header");
+   WebFunc::loadPart("header");
    ?>
    <!-- end header -->
    <!-- about section -->
@@ -46,7 +47,7 @@ loadPart("head");
    <!-- end about section -->
    <!--  footer -->
    <?php
-   loadPart("footer");
+   WebFunc::loadPart("footer");
    ?>
    <!-- end footer -->
 </body>

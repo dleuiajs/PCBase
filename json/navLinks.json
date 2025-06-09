@@ -4,7 +4,7 @@
     "computer.php": "Objednať zostavenie PC",
     "products.php": "Tovary",
     "contact.php": "Kontaktujte nás",
-    "search.php": "<i class=\"fa fa-search\" aria-hidden=\"true\"></i>",
+    "products.php#searchbar": "<i class=\"fa fa-search\" aria-hidden=\"true\"></i>",
     "login.php": "Prihlásenie",
     "account.php": "Môj účet"
 }

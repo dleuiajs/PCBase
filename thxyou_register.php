@@ -1,6 +1,7 @@
 <?php
-require_once("php/functions.php");
-loadPart("head");
+require_once("php/websiteFunctions.php");
+use functions\WebsiteFunctions as WebFunc;
+WebFunc::loadPart("head");
 ?>
 
 <body class="main-layout inner_posituong">
@@ -24,7 +25,7 @@ loadPart("head");
                 }
             }
         }
-        loadPart("header");
+        WebFunc::loadPart("header");
         ?>
     </header>
 
@@ -40,7 +41,7 @@ loadPart("head");
     }
     echo '</div>';
     // načítanie dolnej časti stránky
-    loadPart("footer");
+    WebFunc::loadPart("footer");
     ?>
 </body>
 

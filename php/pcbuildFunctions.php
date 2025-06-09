@@ -1,10 +1,12 @@
 <?php
 namespace pcbuild;
+
 error_reporting(E_ALL);
 ini_set("display_errors", "On");
 require_once(__ROOT__ . "/db/dbfunctions.php");
-require_once(__ROOT__ . "/php/functions.php");
-use Exception, databaza\Database;
+require_once(__ROOT__ . "/php/helpers.php");
+require_once(__ROOT__ . "/php/productsFunctions.php");
+use Exception, databaza\Database, functions\Helpers, products\ProductsFunctions;
 
 class PcBuildFunctions extends Database
 {
@@ -53,56 +55,48 @@ class PcBuildFunctions extends Database
 
     public function removeComponentsForm($form)
     {
-        $type = "none";
-        $columnNames = [];
-        if ($form == "remove-computer-components" && $_SERVER['REQUEST_METHOD'] === 'POST') {
-            // načítanie typu komponentu z POST
-            $type = $_POST['type'] ?? "none";
-
-            // načítanie názvov stĺpcov z databázy
-            if (in_array($type, ["zakladna_doska", "graficka_karta", "procesor", "operacna_pamat", "napajaci_zdroj", "ulozisko", "chladenie", "operacny_system"])) {
-                $columnNames = $this->getColumnNames($type);
-                array_shift($columnNames); // odstráni prvý prvok poľa (id)
-            }
-        }
-
-        // generovanie formulára
-        echo '<div class="card shadow mb-4" id="removeComponentsCard">
-            <div class="card-header bg-primary text-white">
-                <h4 class="mb-0 text-white"><i class="bi bi-trash mr-2"></i>Odstránenie počítačových komponentov</h4>
-            </div>
-            <div class="card-body">
-                <form id="request" action="?page=adminpanel&form=remove-computer-components#removeComponentsCard" method="post">
-                    <div class="form-group mb-3">
-                        <label for="type">Vyberte typ komponentu:</label>
-                        <select class="form-control" id="type" name="type" onchange="this.form.submit()" required>
-                            <option value="none" ' . optionSelect($type, "none") . '>Vyberte typ komponentu</option>
-                            <option value="zakladna_doska" ' . optionSelect($type, "zakladna_doska") . '>Základná doska</option>
-                            <option value="graficka_karta" ' . optionSelect($type, "graficka_karta") . '>Grafická karta</option>
-                            <option value="procesor" ' . optionSelect($type, "procesor") . '>Procesor</option>
-                            <option value="operacna_pamat" ' . optionSelect($type, "operacna_pamat") . '>Operačná pamäť</option>
-                            <option value="napajaci_zdroj" ' . optionSelect($type, "napajaci_zdroj") . '>Napájací zdroj</option>
-                            <option value="ulozisko" ' . optionSelect($type, "ulozisko") . '>Úložisko</option>
-                            <option value="chladenie" ' . optionSelect($type, "chladenie") . '>Chladenie</option>
-                            <option value="operacny_system" ' . optionSelect($type, "operacny_system") . '>Operačný systém</option>
-                        </select>
-                    </div>';
-        // načítanie údajov z formulára
-        $components = null;
-        if ($form == "remove-computer-components" && $_SERVER['REQUEST_METHOD'] === 'POST') {
-            if (isset($_POST['idkomponent']) && $_POST['idkomponent'] != "") {
+        $type = 'none';
+        // spracovanie formulára
+        if ($form == "remove-computer-components") {
+            $type = $_GET['type'] ?? 'none';
+            if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['idkomponent']) && $_POST['idkomponent'] != "") {
                 try {
-                    $sql = "DELETE FROM " . $_POST['type'] . " WHERE id" . $_POST['type'] . " = :id";
+                    $sql = "DELETE FROM " . $type . " WHERE id" . $type . " = :id";
                     $stmt = $this->connection->prepare($sql);
-                    $stmt->bindValue(':id', $_POST['idkomponent']);
+                    $stmt->bindParam(':id', $_POST['idkomponent']);
                     $stmt->execute();
+
+                    if ($type != "graficka_karta") {
+                        $sql = "SELECT idtovar FROM tovar t
+                                INNER JOIN podrobnosti_tovara pt ON t.idpodrobnosti_tovara = pt.idpodrobnosti_tovara
+                                WHERE pt.id" . $type . " = :id";
+                    } else {
+                        $sql = "SELECT idtovar FROM tovar t
+                                INNER JOIN podrobnosti_tovara_has_graficka_karta ptgk ON t.idpodrobnosti_tovara = ptgk.idpodrobnosti_tovara
+                                WHERE ptgk.idgraficka_karta = :id";
+
+                    }
+                    $stmt = $this->connection->prepare($sql);
+                    $stmt->bindParam(':id', $_POST['idkomponent']);
+                    $stmt->execute();
+                    $tovarIds = $stmt->fetchAll();
+                    if (!empty($tovarIds)) {
+                        $productFunctions = new ProductsFunctions();
+                        foreach ($tovarIds as $tovarId) {
+                            $productFunctions->removeProduct($tovarId['idtovar']);
+                        }
+                    }
+
                     $textinfo = '<p class="text-success mb-4">Komponent bol úspešne odstránený.</p>';
                 } catch (Exception $e) {
                     $textinfo = '<p class="text-danger mb-4">' . $e->getMessage() . '</p>';
                 }
             }
+        }
+        $components = null;
+        if (in_array($type, ["zakladna_doska", "graficka_karta", "procesor", "operacna_pamat", "napajaci_zdroj", "ulozisko", "chladenie", "operacny_system"])) {
             try {
-                $sql = "SELECT * FROM " . $_POST['type'];
+                $sql = "SELECT * FROM " . $type;
                 $stmt = $this->connection->prepare($sql);
                 $stmt->execute();
                 $components = $stmt->fetchAll();
@@ -110,12 +104,37 @@ class PcBuildFunctions extends Database
                 echo '<p class="text-danger mt-3">' . $e->getMessage() . '</p>';
             }
         }
+        // generovanie formulára
+        echo '<div class="card shadow mb-4" id="removeComponentsCard">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0 text-white"><i class="bi bi-trash mr-2"></i>Odstránenie počítačových komponentov</h4>
+            </div>
+            <div class="card-body">
+                <form id="request" action="#removeComponentsCard" method="get">
+                <input type="hidden" name="page" value="adminpanel">
+                <input type="hidden" name="form" value="remove-computer-components">
+                    <div class="form-group mb-3">
+                        <label for="type">Vyberte typ komponentu:</label>
+                        <select class="form-control" id="type" name="type" onchange="this.form.submit()" required>';
+        Helpers::optionSelect($type, "none", "Vyberte typ komponentu");
+        Helpers::optionSelect($type, "zakladna_doska", "Základná doska");
+        Helpers::optionSelect($type, "graficka_karta", "Grafická karta");
+        Helpers::optionSelect($type, "procesor", "Procesor");
+        Helpers::optionSelect($type, "operacna_pamat", "Operačná pamäť");
+        Helpers::optionSelect($type, "napajaci_zdroj", "Napájací zdroj");
+        Helpers::optionSelect($type, "ulozisko", "Úložisko");
+        Helpers::optionSelect($type, "chladenie", "Chladenie");
+        Helpers::optionSelect($type, "operacny_system", "Operačný systém");
+        echo '</select>
+                    </div>
+                    </form>';
         if ($components != null) {
-            echo '<div class="form-group mb-3">
+            echo '<form id="request" action="?page=adminpanel&form=remove-computer-components&type=' . $type . '#removeComponentsCard" method="post">
+            <div class="form-group mb-3">
                     <label for="idkomponent">Vyberte komponent:</label>
                     <select class="form-control" id="idkomponent" name="idkomponent">';
             foreach ($components as $row) {
-                echo '<option value="' . $row['id' . $_POST['type']] . '">' . $row['nazov'] . '</option>';
+                echo '<option value="' . $row['id' . $type] . '">' . htmlspecialchars($row['nazov']) . '</option>';
             }
             echo '  </select>
                 </div>';
@@ -132,60 +151,65 @@ class PcBuildFunctions extends Database
 
     public function generateAddComponentsForm($form)
     {
-        $type = "none";
+        $type = 'none';
         $columnNames = [];
-        if ($form == "add-computer-components" && $_SERVER['REQUEST_METHOD'] === 'POST') {
-            // načítanie typu komponentu z POST
-            $type = $_POST['type'] ?? "none";
-
-            // načítanie názvov stĺpcov z databázy
-            if (in_array($type, ["zakladna_doska", "graficka_karta", "procesor", "operacna_pamat", "napajaci_zdroj", "ulozisko", "chladenie", "operacny_system"])) {
-                $columnNames = $this->getColumnNames($type);
-                array_shift($columnNames); // odstráni prvý prvok poľa (id)
+        try {
+            if ($form == "add-computer-components") {
+                $type = $_GET['type'] ?? 'none';
+                // načítanie názvov stĺpcov z databázy
+                if (in_array($type, ["zakladna_doska", "graficka_karta", "procesor", "operacna_pamat", "napajaci_zdroj", "ulozisko", "chladenie", "operacny_system"])) {
+                    $columnNames = $this->getColumnNames($type);
+                    array_shift($columnNames); // odstráni prvý prvok poľa (id)
+                } else if ($type = "none") {
+                    $columnNames = [];
+                } else {
+                    throw new Exception("Neplatný typ komponentu.");
+                }
             }
-        }
 
-        // generovanie formulára
-        echo '<div class="card shadow mb-4" id="addComponentsCard">
+            // generovanie formulára
+            echo '<div class="card shadow mb-4" id="addComponentsCard">
             <div class="card-header bg-primary text-white">
                 <h4 class="mb-0 text-white"><i class="bi bi-plus-square mr-2"></i>Pridanie počítačových komponentov</h4>
             </div>
             <div class="card-body">
-                <form id="request" action="?page=adminpanel&form=add-computer-components#addComponentsCard" method="post">
+                <form id="request" action="#addComponentsCard" method="get">
+        <input type="hidden" name="page" value="adminpanel">
+        <input type="hidden" name="form" value="add-computer-components">
                     <div class="form-group mb-3">
                         <label for="type">Vyberte typ komponentu:</label>
-                        <select class="form-control" id="type" name="type" onchange="this.form.submit()" required>
-                            <option value="none" ' . optionSelect($type, "none") . '>Vyberte typ komponentu</option>
-                            <option value="zakladna_doska" ' . optionSelect($type, "zakladna_doska") . '>Základná doska</option>
-                            <option value="graficka_karta" ' . optionSelect($type, "graficka_karta") . '>Grafická karta</option>
-                            <option value="procesor" ' . optionSelect($type, "procesor") . '>Procesor</option>
-                            <option value="operacna_pamat" ' . optionSelect($type, "operacna_pamat") . '>Operačná pamäť</option>
-                            <option value="napajaci_zdroj" ' . optionSelect($type, "napajaci_zdroj") . '>Napájací zdroj</option>
-                            <option value="ulozisko" ' . optionSelect($type, "ulozisko") . '>Úložisko</option>
-                            <option value="chladenie" ' . optionSelect($type, "chladenie") . '>Chladenie</option>
-                            <option value="operacny_system" ' . optionSelect($type, "operacny_system") . '>Operačný systém</option>
-                        </select>
-                    </div>';
-        if ($form == "add-computer-components" && $_SERVER['REQUEST_METHOD'] === 'POST') {
-            foreach ($columnNames as $columnName) {
-                echo '<div class="form-group mb-3">
+                        <select class="form-control" id="type" name="type" onchange="this.form.submit()" required>';
+            Helpers::optionSelect($type, "none", "Vyberte typ komponentu");
+            Helpers::optionSelect($type, "zakladna_doska", "Základná doska");
+            Helpers::optionSelect($type, "graficka_karta", "Grafická karta");
+            Helpers::optionSelect($type, "procesor", "Procesor");
+            Helpers::optionSelect($type, "operacna_pamat", "Operačná pamäť");
+            Helpers::optionSelect($type, "napajaci_zdroj", "Napájací zdroj");
+            Helpers::optionSelect($type, "ulozisko", "Úložisko");
+            Helpers::optionSelect($type, "chladenie", "Chladenie");
+            Helpers::optionSelect($type, "operacny_system", "Operačný systém");
+            echo '</select>
+                    </div>
+                    </form>';
+            if ($form == "add-computer-components" && count($columnNames) > 0) {
+                echo '<form id="request" action="?page=adminpanel&form=add-computer-components&type=' . $type . '#addComponentsCard" method="post">';
+                foreach ($columnNames as $columnName) {
+                    echo '<div class="form-group mb-3">
                         <label for="' . $columnName . '">Zadajte ' . $columnName . '</label>
                         <input type="text" class="form-control" id="' . $columnName . '" name="' . $columnName . '" placeholder="Zadajte ' . $columnName . '" required>
                     </div>';
-            }
-            echo '<div class="form-group mb-3">
+                }
+                echo '<div class="form-group mb-3">
                     <button class="btn btn-primary" type="submit">Pridať</button>
                   </div>';
-        }
+            }
 
-        echo '        </form>
+            echo '        </form>
             </div>
         </div>';
-        // načítanie údajov z formulára
-        if ($form == "add-computer-components" && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nazov']) && $_POST['nazov'] != "") {
-            $data = $_POST;
-            array_shift($data); // odstráni prvý prvok poľa (type)
-            try {
+            // spracovanie formulára
+            if ($form == "add-computer-components" && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nazov']) && $_POST['nazov'] != "") {
+                $data = $_POST;
                 $sql = "INSERT INTO $type (" . implode(", ", array_keys($data)) . ") VALUES (:" . implode(", :", array_keys($data)) . ")";
                 $stmt = $this->connection->prepare($sql);
                 foreach ($data as $key => $value) {
@@ -193,9 +217,9 @@ class PcBuildFunctions extends Database
                 }
                 $stmt->execute();
                 echo '<p class="text-success mb-4">Údaje boli úspešne pridané.</p>';
-            } catch (Exception $e) {
-                echo '<p class="text-danger mb-4">' . $e->getMessage() . '</p>';
             }
+        } catch (Exception $e) {
+            echo '<p class="text-danger mb-4">' . $e->getMessage() . '</p>';
         }
     }
 
@@ -221,7 +245,7 @@ class PcBuildFunctions extends Database
             echo '<select id="' . $component . '" name="' . $component . '">';
             $data = $this->getData($component);
             foreach ($data as $row) {
-                echo '<option value="' . $row['id' . $component] . '">' . $row['nazov'] . '</option>';
+                echo '<option value="' . $row['id' . $component] . '">' . htmlspecialchars($row['nazov']) . '</option>';
             }
             echo '</select>';
             echo '</div>';
@@ -281,17 +305,17 @@ class PcBuildFunctions extends Database
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <strong>Používateľské meno:</strong>
-                            <div>' . $data["meno"] . ' ' . $data["priezvisko"] . '</div>
+                            <div>' . htmlspecialchars($data["meno"]) . ' ' . htmlspecialchars($data["priezvisko"]) . '</div>
                         </div>
                         <div class="col-md-6">
                             <strong>E-mail:</strong>
-                            <div>' . $data["email"] . '</div>
+                            <div>' . htmlspecialchars($data["email"]) . '</div>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <strong>Telefónne číslo:</strong>
-                            <div>' . neuvedeneIfNull($data['tel_cislo']) . '</div>
+                            <div>' . Helpers::neuvedeneIfNull($data['tel_cislo']) . '</div>
                         </div>
                         <div class="col-md-6">
                             <strong>Dátum odoslania:</strong>
@@ -301,7 +325,7 @@ class PcBuildFunctions extends Database
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <strong>Adresa:</strong>
-                            <div>' . neuvedeneIfNull($data["ulica"]) . ' ' . neuvedeneIfNull($data["cislo_domu"]) . ', ' . neuvedeneIfNull($data["mesto"]) . ', ' . neuvedeneIfNull($data["PSC"]) . ', ' . neuvedeneIfNull($data["krajina"]) . '</div>
+                            <div>' . Helpers::neuvedeneIfNull($data["ulica"]) . ' ' . Helpers::neuvedeneIfNull($data["cislo_domu"]) . ', ' . Helpers::neuvedeneIfNull($data["mesto"]) . ', ' . Helpers::neuvedeneIfNull($data["PSC"]) . ', ' . Helpers::neuvedeneIfNull($data["krajina"]) . '</div>
                         </div>
                         <div class="col-md-6">
                             <strong>Rozpočet:</strong>
@@ -320,40 +344,41 @@ class PcBuildFunctions extends Database
                                 <h5 class="text-info mb-1"><strong>Komponenty počítača:</strong></h5>
                                 <dl class="row mb-0">
                                     <dt class="col-sm-5">Základná doska:</dt>
-                                    <dd class="col-sm-7 mb-2">' . $data["zakladna_doska"] . '</dd>
+                                    <dd class="col-sm-7 mb-2">' . htmlspecialchars($data["zakladna_doska"]) . '</dd>
 
                                     <dt class="col-sm-5">Grafická karta:</dt>
-                                    <dd class="col-sm-7 mb-2">' . $data["graficka_karta"] . '</dd>
+                                    <dd class="col-sm-7 mb-2">' . htmlspecialchars($data["graficka_karta"]) . '</dd>
 
                                     <dt class="col-sm-5">Procesor:</dt>
-                                    <dd class="col-sm-7 mb-2">' . $data["procesor"] . '</dd>
+                                    <dd class="col-sm-7 mb-2">' . htmlspecialchars($data["procesor"]) . '</dd>
 
                                     <dt class="col-sm-5">Operačná pamäť:</dt>
-                                    <dd class="col-sm-7 mb-2">' . $data["operacna_pamat"] . '</dd>
+                                    <dd class="col-sm-7 mb-2">' . htmlspecialchars($data["operacna_pamat"]) . '</dd>
 
                                     <dt class="col-sm-5">Napájací zdroj:</dt>
-                                    <dd class="col-sm-7 mb-2">' . $data["napajaci_zdroj"] . '</dd>
+                                    <dd class="col-sm-7 mb-2">' . htmlspecialchars($data["napajaci_zdroj"]) . '</dd>
 
                                     <dt class="col-sm-5">Chladenie:</dt>
-                                    <dd class="col-sm-7 mb-2">' . $data["chladenie"] . '</dd>
+                                    <dd class="col-sm-7 mb-2">' . htmlspecialchars($data["chladenie"]) . '</dd>
 
                                     <dt class="col-sm-5">Operačný systém:</dt>
-                                    <dd class="col-sm-7 mb-2">' . $data["operacny_system"] . '</dd>
+                                    <dd class="col-sm-7 mb-2">' . htmlspecialchars($data["operacny_system"]) . '</dd>
 
                                     <dt class="col-sm-5">Úložisko:</dt>
-                                    <dd class="col-sm-7 mb-2">' . $data["ulozisko"] . '</dd>
+                                    <dd class="col-sm-7 mb-2">' . htmlspecialchars($data["ulozisko"]) . '</dd>
                                 </dl>
                             </div>
                         </div>
                     </div>';
-            if ($data['poznamka'] != null) {
+            $poznamka = htmlspecialchars($data["poznamka"]);
+            if ($poznamka != null) {
                 echo '<div class="mb-4">
                         <strong>Poznámka:</strong>
-                        <div class="border rounded p-3 bg-light mt-2" style="min-height:100px;">' . $data["poznamka"] . '</div>
+                        <div class="border rounded p-3 bg-light mt-2" style="min-height:100px;">' . $poznamka . '</div>
                     </div>';
             }
             echo '<div class="mb-12">
-                        <a href="mailto:' . $data["email"] . '" class="btn btn-outline-primary col-md-12">
+                        <a href="mailto:' . htmlspecialchars($data["email"]) . '" class="btn btn-outline-primary col-md-12">
                             <i class="bi bi-envelope"></i> Odpovedať na e-mail
                         </a>
                         <div class="row mt-2">
@@ -399,21 +424,21 @@ class PcBuildFunctions extends Database
                 <input type="hidden" name="page" value="pcbuildmsg">
                 <div class="row justify-content-between">
                    <div class="col-md-6 ">
-                      <select id="filter" name="filter" onchange="this.form.submit()">
-                         <option value="all" ' . optionSelect($filter, "all") . '>Zobraziť všetky</option>
-                         <option value="not-delivered" ' . optionSelect($filter, "not-delivered") . '>Nedoručené</option>
-                         <option value="delivered" ' . optionSelect($filter, "delivered") . '>Doručené</option>
-                         </select>
+                      <select id="filter" name="filter" onchange="this.form.submit()">';
+        Helpers::optionSelect($filter, "all", "Zobraziť všetky správy");
+        Helpers::optionSelect($filter, "not-delivered", "Nedoručené");
+        Helpers::optionSelect($filter, "delivered", "Doručené");
+        echo '</select>
                    </div>
                    <div class="col-md-6 ">
-                      <select id="sort" name="sort" onchange="this.form.submit()">
-                         <option value="date-desc" ' . optionSelect($sort, "date-desc") . '>Zoradiť od najnovších</option>
-                         <option value="date-asc" ' . optionSelect($sort, "date-asc") . '>Zoradiť od najstarších</option>
-                         <option value="name" ' . optionSelect($sort, "name") . '>Zoradiť podľa mena</option>
-                         <option value="email" ' . optionSelect($sort, "email") . '>Zoradiť podľa e-mailu</option>
-                                                  <option value="budget-desc" ' . optionSelect($sort, "budget-desc") . '>Zoradiť podľa rozpočtu (od najvyššieho)</option>
-                         <option value="budget-asc" ' . optionSelect($sort, "budget-asc") . '>Zoradiť podľa rozpočtu (od najnižšieho)</option>
-                      </select>
+                      <select id="sort" name="sort" onchange="this.form.submit()">';
+        Helpers::optionSelect($sort, "date-desc", "Zoradiť od najnovších");
+        Helpers::optionSelect($sort, "date-asc", "Zoradiť od najstarších");
+        Helpers::optionSelect($sort, "name", "Zoradiť podľa mena");
+        Helpers::optionSelect($sort, "email", "Zoradiť podľa e-mailu");
+        Helpers::optionSelect($sort, "budget-desc", "Zoradiť podľa rozpočtu (od najvyššieho)");
+        Helpers::optionSelect($sort, "budget-asc", "Zoradiť podľa rozpočtu (od najnižšieho)");
+        echo '</select>
                    </div>
                 </div>
             </form>';
@@ -438,22 +463,22 @@ class PcBuildFunctions extends Database
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between align-items-center mb-2">
                                         <div>
-                                            <h5 class="card-title mb-0 pb-0">' . $row['meno'] . ' ' . $row['priezvisko'] . '</h5>
-                                            <small class="text-muted">' . $row['email'] . '</small>
+                                            <h5 class="card-title mb-0 pb-0">' . htmlspecialchars($row['meno']) . ' ' . htmlspecialchars($row['priezvisko']) . '</h5>
+                                            <small class="text-muted">' . htmlspecialchars($row['email']) . '</small>
                                         </div>
                                         <span class="badge bg-' . ($row['dorucene'] == 0 ? 'warning text-dark">Nedoručené' : 'success text-white">Doručené') . '</span>
                                     </div>
                                     <div class="mb-2">
-                                        <span class="font-weight-bold">Komponenty: </span>' . $row['zakladna_doska'] . ', ' . $row['graficka_karta'] . ', ' . $row['procesor'] . ', ' . $row['napajaci_zdroj'] . ', ' . $row['ulozisko'] . ', ' . $row['operacna_pamat'] . ', ' . $row['chladenie'] . ', ' . $row['operacny_system'] . '
+                                        <span class="font-weight-bold">Komponenty: </span>' . htmlspecialchars($row['zakladna_doska']) . ', ' . htmlspecialchars($row['graficka_karta']) . ', ' . htmlspecialchars($row['procesor']) . ', ' . htmlspecialchars($row['napajaci_zdroj']) . ', ' . htmlspecialchars($row['ulozisko']) . ', ' . htmlspecialchars($row['operacna_pamat']) . ', ' . htmlspecialchars($row['chladenie']) . ', ' . htmlspecialchars($row['operacny_system']) . '
                                     </div>
                                     <div class="mb-2">
                                         <span class="font-weight-bold">Rozpočet: </span>' . $row['rozpocet'] . '€
                                     </div>';
-
-            if ($row['poznamka'] != null) {
+            $poznamka = htmlspecialchars($row['poznamka']);
+            if ($poznamka != null) {
                 echo '<div class="mb-2">
                         <span class="font-weight-bold">Poznámka:</span>
-                        <div class="text-muted limitedText">' . $row['poznamka'] . '</div>
+                        <div class="text-muted limitedText">' . $poznamka . '</div>
                       </div>';
             }
             echo '<div class="text-end">

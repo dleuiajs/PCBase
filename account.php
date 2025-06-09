@@ -1,7 +1,8 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <?php
-require_once("php/functions.php");
-loadPart("head");
+require_once("php/websiteFunctions.php");
+use functions\WebsiteFunctions as WebFunc;
+WebFunc::loadPart("head");
 
 require_once(__ROOT__ . "\php\users.php");
 require_once(__ROOT__ . "\php\accountFunctions.php");
@@ -36,7 +37,7 @@ if (isset($_GET['deleteaccount']) && $_GET['deleteaccount'] === 'true') {
 
 <body class="main-layout inner_posituong">
     <header>
-        <?php loadPart("header"); ?>
+        <?php WebFunc::loadPart("header"); ?>
     </header>
 
     <div class="container my-5" style="max-width: 800px;">
@@ -68,21 +69,21 @@ if (isset($_GET['deleteaccount']) && $_GET['deleteaccount'] === 'true') {
                         if (in_array('details', $elements)) {
                             echo "<div>";
                             echo "<h2>Podrobnosti o používateľovi</h2>";
-                            echo "Dobrý deň, <b>" . $users->getName() . "</b>!<br>";
-                            echo "Vaša rola je: <b>" . $users->getRole() . "</b><br>";
+                            echo "Dobrý deň, <b>" . htmlspecialchars($users->getName()) . "</b>!<br>";
+                            echo "Vaša rola je: <b>" . htmlspecialchars($users->getRole()) . "</b><br>";
                             echo "</div>";
 
                             echo "<div class='mt-2'>";
-                            echo "Váš email je: <b>" . getSessionValue('user_email') . "</b><br>";
-                            echo "Vaše telefónne číslo je: <b>" . getSessionValue('user_tel_cislo') . "</b><br>";
+                            echo "Váš email je: <b>" . htmlspecialchars(getSessionValue('user_email')) . "</b><br>";
+                            echo "Vaše telefónne číslo je: <b>" . htmlspecialchars(getSessionValue('user_tel_cislo')) . "</b><br>";
                             echo "</div>";
 
                             echo "<div class='mt-2'>";
-                            echo "Vaša krajina je: <b>" . getSessionValue('user_krajina') . "</b><br>";
-                            echo "Vaše mesto je: <b>" . getSessionValue('user_mesto') . "</b><br>";
-                            echo "Vaše PSČ je: <b>" . getSessionValue('user_psc') . "</b><br>";
-                            echo "Vaša ulica je: <b>" . getSessionValue('user_ulica') . "</b><br>";
-                            echo "Vaše číslo domu je: <b>" . getSessionValue('user_cislo_domu') . "</b><br>";
+                            echo "Vaša krajina je: <b>" . htmlspecialchars(getSessionValue('user_krajina')) . "</b><br>";
+                            echo "Vaše mesto je: <b>" . htmlspecialchars(getSessionValue('user_mesto')) . "</b><br>";
+                            echo "Vaše PSČ je: <b>" . htmlspecialchars(getSessionValue('user_psc')) . "</b><br>";
+                            echo "Vaša ulica je: <b>" . htmlspecialchars(getSessionValue('user_ulica')) . "</b><br>";
+                            echo "Vaše číslo domu je: <b>" . htmlspecialchars(getSessionValue('user_cislo_domu')) . "</b><br>";
                             echo '<div class="mt-2">
                                 <a href="?logout=true" class="text-decoration-underline">Odhlásiť sa</a>
                                 </div>';
@@ -114,7 +115,7 @@ if (isset($_GET['deleteaccount']) && $_GET['deleteaccount'] === 'true') {
                                             <select class="form-control" id="rola" name="rola">';
                                 $roles = $users->getRolesList();
                                 foreach ($roles as $role) {
-                                    echo '<option value="' . $role['idrola'] . '">' . $role['nazov'] . '</option>';
+                                    echo '<option value="' . $role['idrola'] . '">' . htmlspecialchars($role['nazov']) . '</option>';
                                 }
                                 echo '</select>
                                         </div>
@@ -355,7 +356,7 @@ if (isset($_GET['deleteaccount']) && $_GET['deleteaccount'] === 'true') {
 
     <?php
     // načítanie dolnej časti stránky
-    loadPart("footer");
+    WebFunc::loadPart("footer");
     ?>
 </body>
 

@@ -3,8 +3,8 @@ namespace contact;
 error_reporting(E_ALL);
 ini_set("display_errors", "On");
 require_once(__ROOT__ . "/db/dbfunctions.php");
-require_once(__ROOT__ . "/php/functions.php");
-use Exception, databaza\Database;
+require_once(__ROOT__ . "/php/helpers.php");
+use Exception, databaza\Database, functions\Helpers;
 
 class ContactFunctions extends Database
 {
@@ -65,17 +65,17 @@ class ContactFunctions extends Database
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <strong>Používateľské meno:</strong>
-                            <div>' . $data["meno"] . '</div>
+                            <div>' . htmlspecialchars($data["meno"]) . '</div>
                         </div>
                         <div class="col-md-6">
                             <strong>E-mail:</strong>
-                            <div>' . $data["email"] . '</div>
+                            <div>' . htmlspecialchars($data["email"]) . '</div>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <strong>Telefónne číslo:</strong>
-                            <div>' . neuvedeneIfNull($data['tel_cislo']) . '</div>
+                            <div>' . Helpers::neuvedeneIfNull($data['tel_cislo']) . '</div>
                         </div>
                         <div class="col-md-6">
                             <strong>Dátum odoslania:</strong>
@@ -90,10 +90,10 @@ class ContactFunctions extends Database
                     </div>
                     <div class="mb-4">
                         <strong>Správa:</strong>
-                        <div class="border rounded p-3 bg-light mt-2" style="min-height:100px;">' . $data["sprava"] . '</div>
+                        <div class="border rounded p-3 bg-light mt-2" style="min-height:100px;">' . htmlspecialchars($data["sprava"]) . '</div>
                     </div>
                     <div class="mb-12">
-                        <a href="mailto:' . $data["email"] . '" class="btn btn-outline-primary col-md-12">
+                        <a href="mailto:' . htmlspecialchars($data["email"]) . '" class="btn btn-outline-primary col-md-12">
                             <i class="bi bi-envelope"></i> Odpovedať na e-mail
                         </a>
                         <div class="row mt-2">
@@ -137,19 +137,19 @@ class ContactFunctions extends Database
                 <input type="hidden" name="page" value="contactmsg">
                 <div class="row justify-content-between">
                    <div class="col-md-6 ">
-                      <select id="filter" name="filter" onchange="this.form.submit()">
-                         <option value="all" ' . optionSelect($filter, "all") . '>Zobraziť všetky</option>
-                         <option value="not-checked" ' . optionSelect($filter, "not-checked") . '>Nepreskúmané</option>
-                         <option value="checked" ' . optionSelect($filter, "checked") . '>Preskúmané</option>
-                         </select>
+                      <select id="filter" name="filter" onchange="this.form.submit()">';
+        Helpers::optionSelect($filter, "all", "Zobraziť všetky");
+        Helpers::optionSelect($filter, "not-checked", "Nepreskúmané");
+        Helpers::optionSelect($filter, "checked", "Preskúmané");
+        echo '</select>
                    </div>
                    <div class="col-md-6 ">
-                      <select id="sort" name="sort" onchange="this.form.submit()">
-                         <option value="date-desc" ' . optionSelect($sort, "date-desc") . '>Zoradiť od najnovších</option>
-                         <option value="date-asc" ' . optionSelect($sort, "date-asc") . '>Zoradiť od najstarších</option>
-                         <option value="name" ' . optionSelect($sort, "name") . '>Zoradiť podľa mena</option>
-                         <option value="email" ' . optionSelect($sort, "email") . '>Zoradiť podľa e-mailu</option>
-                      </select>
+                      <select id="sort" name="sort" onchange="this.form.submit()">';
+        Helpers::optionSelect($sort, "date-desc", "Zoradiť od najnovších");
+        Helpers::optionSelect($sort, "date-asc", "Zoradiť od najstarších");
+        Helpers::optionSelect($sort, "name", "Zoradiť podľa mena");
+        Helpers::optionSelect($sort, "email", "Zoradiť podľa e-mailu");
+        echo '</select>
                    </div>
                 </div>
             </form>';
@@ -162,17 +162,17 @@ class ContactFunctions extends Database
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between align-items-center mb-2">
                                         <div>
-                                            <h5 class="card-title mb-0 pb-0">' . $row['meno'] . '</h5>
-                                            <small class="text-muted">' . $row['email'] . '</small>
+                                            <h5 class="card-title mb-0 pb-0">' . htmlspecialchars($row['meno']) . '</h5>
+                                            <small class="text-muted">' . htmlspecialchars($row['email']) . '</small>
                                         </div>
                                         <span class="badge bg-' . ($row['preskumane'] == 0 ? 'warning text-dark">Nepreskúmané' : 'success text-white">Preskúmané') . '</span>
                                     </div>
                                     <div class="mb-2">
-                                        <span class="font-weight-bold">Telefón: </span>' . neuvedeneIfNull($row['tel_cislo']) . '
+                                        <span class="font-weight-bold">Telefón: </span>' . Helpers::neuvedeneIfNull($row['tel_cislo']) . '
                                     </div>
                                     <div class="mb-2">
                                         <span class="font-weight-bold">Správa:</span>
-                                        <div class="text-muted limitedText">' . $row['sprava'] . '</div>
+                                        <div class="text-muted limitedText">' . htmlspecialchars($row['sprava']) . '</div>
                                     </div>
                                     <div class="text-end">
                                         <small class="text-secondary">' . $row['datum'] . '</small>
