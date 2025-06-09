@@ -53,26 +53,42 @@ class PcBuildFunctions extends Database
 
     public function removeComponentsForm($form)
     {
-        $type = "none";
-        $columnNames = [];
-        if ($form == "remove-computer-components" && $_SERVER['REQUEST_METHOD'] === 'POST') {
-            // načítanie typu komponentu z POST
-            $type = $_POST['type'] ?? "none";
-
-            // načítanie názvov stĺpcov z databázy
-            if (in_array($type, ["zakladna_doska", "graficka_karta", "procesor", "operacna_pamat", "napajaci_zdroj", "ulozisko", "chladenie", "operacny_system"])) {
-                $columnNames = $this->getColumnNames($type);
-                array_shift($columnNames); // odstráni prvý prvok poľa (id)
+        $type = 'none';
+        // spracovanie formulára
+        if ($form == "remove-computer-components") {
+            $type = $_GET['type'] ?? 'none';
+            if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['idkomponent']) && $_POST['idkomponent'] != "") {
+                try {
+                    $sql = "DELETE FROM " . $type . " WHERE id" . $type . " = :id";
+                    $stmt = $this->connection->prepare($sql);
+                    $stmt->bindValue(':id', $_POST['idkomponent']);
+                    $stmt->execute();
+                    $textinfo = '<p class="text-success mb-4">Komponent bol úspešne odstránený.</p>';
+                } catch (Exception $e) {
+                    $textinfo = '<p class="text-danger mb-4">' . $e->getMessage() . '</p>';
+                }
             }
         }
-
+        $components = null;
+        if (in_array($type, ["zakladna_doska", "graficka_karta", "procesor", "operacna_pamat", "napajaci_zdroj", "ulozisko", "chladenie", "operacny_system"])) {
+            try {
+                $sql = "SELECT * FROM " . $type;
+                $stmt = $this->connection->prepare($sql);
+                $stmt->execute();
+                $components = $stmt->fetchAll();
+            } catch (Exception $e) {
+                echo '<p class="text-danger mt-3">' . $e->getMessage() . '</p>';
+            }
+        }
         // generovanie formulára
         echo '<div class="card shadow mb-4" id="removeComponentsCard">
             <div class="card-header bg-primary text-white">
                 <h4 class="mb-0 text-white"><i class="bi bi-trash mr-2"></i>Odstránenie počítačových komponentov</h4>
             </div>
             <div class="card-body">
-                <form id="request" action="?page=adminpanel&form=remove-computer-components#removeComponentsCard" method="post">
+                <form id="request" action="#removeComponentsCard" method="get">
+                <input type="hidden" name="page" value="adminpanel">
+                <input type="hidden" name="form" value="remove-computer-components">
                     <div class="form-group mb-3">
                         <label for="type">Vyberte typ komponentu:</label>
                         <select class="form-control" id="type" name="type" onchange="this.form.submit()" required>';
@@ -86,36 +102,15 @@ class PcBuildFunctions extends Database
         Helpers::optionSelect($type, "chladenie", "Chladenie");
         Helpers::optionSelect($type, "operacny_system", "Operačný systém");
         echo '</select>
-                    </div>';
-        // načítanie údajov z formulára
-        $components = null;
-        if ($form == "remove-computer-components" && $_SERVER['REQUEST_METHOD'] === 'POST') {
-            if (isset($_POST['idkomponent']) && $_POST['idkomponent'] != "") {
-                try {
-                    $sql = "DELETE FROM " . $_POST['type'] . " WHERE id" . $_POST['type'] . " = :id";
-                    $stmt = $this->connection->prepare($sql);
-                    $stmt->bindValue(':id', $_POST['idkomponent']);
-                    $stmt->execute();
-                    $textinfo = '<p class="text-success mb-4">Komponent bol úspešne odstránený.</p>';
-                } catch (Exception $e) {
-                    $textinfo = '<p class="text-danger mb-4">' . $e->getMessage() . '</p>';
-                }
-            }
-            try {
-                $sql = "SELECT * FROM " . $_POST['type'];
-                $stmt = $this->connection->prepare($sql);
-                $stmt->execute();
-                $components = $stmt->fetchAll();
-            } catch (Exception $e) {
-                echo '<p class="text-danger mt-3">' . $e->getMessage() . '</p>';
-            }
-        }
+                    </div>
+                    </form>';
         if ($components != null) {
-            echo '<div class="form-group mb-3">
+            echo '<form id="request" action="?page=adminpanel&form=remove-computer-components&type=' . $type . '#removeComponentsCard" method="post">
+            <div class="form-group mb-3">
                     <label for="idkomponent">Vyberte komponent:</label>
                     <select class="form-control" id="idkomponent" name="idkomponent">';
             foreach ($components as $row) {
-                echo '<option value="' . $row['id' . $_POST['type']] . '">' . $row['nazov'] . '</option>';
+                echo '<option value="' . $row['id' . $type] . '">' . $row['nazov'] . '</option>';
             }
             echo '  </select>
                 </div>';
@@ -132,12 +127,10 @@ class PcBuildFunctions extends Database
 
     public function generateAddComponentsForm($form)
     {
-        $type = "none";
+        $type = 'none';
         $columnNames = [];
-        if ($form == "add-computer-components" && $_SERVER['REQUEST_METHOD'] === 'POST') {
-            // načítanie typu komponentu z POST
-            $type = $_POST['type'] ?? "none";
-
+        if ($form == "add-computer-components") {
+            $type = $_GET['type'] ?? 'none';
             // načítanie názvov stĺpcov z databázy
             if (in_array($type, ["zakladna_doska", "graficka_karta", "procesor", "operacna_pamat", "napajaci_zdroj", "ulozisko", "chladenie", "operacny_system"])) {
                 $columnNames = $this->getColumnNames($type);
@@ -151,7 +144,9 @@ class PcBuildFunctions extends Database
                 <h4 class="mb-0 text-white"><i class="bi bi-plus-square mr-2"></i>Pridanie počítačových komponentov</h4>
             </div>
             <div class="card-body">
-                <form id="request" action="?page=adminpanel&form=add-computer-components#addComponentsCard" method="post">
+                <form id="request" action="#addComponentsCard" method="get">
+        <input type="hidden" name="page" value="adminpanel">
+        <input type="hidden" name="form" value="add-computer-components">
                     <div class="form-group mb-3">
                         <label for="type">Vyberte typ komponentu:</label>
                         <select class="form-control" id="type" name="type" onchange="this.form.submit()" required>';
@@ -165,8 +160,10 @@ class PcBuildFunctions extends Database
         Helpers::optionSelect($type, "chladenie", "Chladenie");
         Helpers::optionSelect($type, "operacny_system", "Operačný systém");
         echo '</select>
-                    </div>';
-        if ($form == "add-computer-components" && $_SERVER['REQUEST_METHOD'] === 'POST') {
+                    </div>
+                    </form>';
+        if ($form == "add-computer-components" && count($columnNames) > 0) {
+            echo '<form id="request" action="?page=adminpanel&form=add-computer-components&type=' . $type . '#addComponentsCard" method="post">';
             foreach ($columnNames as $columnName) {
                 echo '<div class="form-group mb-3">
                         <label for="' . $columnName . '">Zadajte ' . $columnName . '</label>
@@ -184,7 +181,6 @@ class PcBuildFunctions extends Database
         // načítanie údajov z formulára
         if ($form == "add-computer-components" && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nazov']) && $_POST['nazov'] != "") {
             $data = $_POST;
-            array_shift($data); // odstráni prvý prvok poľa (type)
             try {
                 $sql = "INSERT INTO $type (" . implode(", ", array_keys($data)) . ") VALUES (:" . implode(", :", array_keys($data)) . ")";
                 $stmt = $this->connection->prepare($sql);

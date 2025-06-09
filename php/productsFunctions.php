@@ -922,7 +922,7 @@ class ProductsFunctions extends Database
     public function generateRemoveProductsForm($form)
     {
         $textinfo = null;
-        if ($form == "remove-products" && $_SERVER['REQUEST_METHOD'] === 'POST') {
+        if ($form == "remove-products" && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
             $textinfo = $this->removeProduct($_POST['id']);
         }
         echo '<div class="card shadow mb-4" id="removeProductsCard">
