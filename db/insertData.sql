@@ -100,4 +100,3 @@ INSERT INTO kategoria_tovara (nazov) VALUES
 ("Rozpočtové počítače"),
 ("Herné počítače"),
 ("Počítače na prácu");
-INSERT INTO tovar (nazov, popis, mnozstvo, cena, idpodrobnosti_tovara, idkategoria_tovara)
