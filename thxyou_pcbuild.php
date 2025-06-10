@@ -23,7 +23,7 @@ WebFunc::loadPart("head");
             echo '<h1>Ďakujeme za objednávku zostavy PC!</h1>';
             echo '<p>Spravíme vám zostavu PC do 3 dní</p>';
         } catch (Exception $e) {
-            echo '<h1 class="text-danger">Chyba pri odosielaní údajov: ' . $e->getMessage() . '</h1>';
+            echo '<h1 class="text-danger">Chyba: ' . $e->getMessage() . '</h1>';
         }
     }
     echo '</div>';

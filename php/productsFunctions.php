@@ -4,7 +4,8 @@ error_reporting(E_ALL);
 ini_set("display_errors", "On");
 require_once(__ROOT__ . "/db/dbfunctions.php");
 require_once(__ROOT__ . "/php/helpers.php");
-use Exception, databaza\Database, functions\Helpers;
+require_once(__ROOT__ . "/php/users.php");
+use Exception, databaza\Database, functions\Helpers, users\Users;
 
 class ProductsFunctions extends Database
 {
@@ -17,6 +18,10 @@ class ProductsFunctions extends Database
     public function buyProduct($productid, $userid)
     {
         if ($productid) {
+            $users = new Users();
+            if ($users->checkAddress() === false) {
+                throw new Exception('Musíte mať zadanú adresu pre doručenie, aby ste mohli zakúpiť produkt');
+            }
             $sql = "SELECT mnozstvo FROM tovar WHERE idtovar = :idtovar";
             $stmt = $this->connection->prepare($sql);
             $stmt->bindParam(':idtovar', $productid);

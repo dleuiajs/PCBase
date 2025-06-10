@@ -6,7 +6,8 @@ ini_set("display_errors", "On");
 require_once(__ROOT__ . "/db/dbfunctions.php");
 require_once(__ROOT__ . "/php/helpers.php");
 require_once(__ROOT__ . "/php/productsFunctions.php");
-use Exception, databaza\Database, functions\Helpers, products\ProductsFunctions;
+require_once(__ROOT__ . "/php/users.php");
+use Exception, databaza\Database, functions\Helpers, products\ProductsFunctions, users\Users;
 
 class PcBuildFunctions extends Database
 {
@@ -17,9 +18,13 @@ class PcBuildFunctions extends Database
     }
     public function handler()
     {
+        $users = new Users();
         $idpouzivatel = $_SESSION['user_id'];
         if (empty($idpouzivatel)) {
             throw new Exception("Nie ste prihlásený.");
+        }
+        if ($users->checkAddress() === false) {
+            throw new Exception('Musíte mať zadanú adresu pre doručenie.');
         }
         $rozpocet = $_POST['rozpocet'];
         $poznamka = $_POST['poznamka'] ?? null;
