@@ -184,7 +184,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `pcbase`.`tovar` (
   `idtovar` INT NOT NULL AUTO_INCREMENT,
   `nazov` VARCHAR(45) NOT NULL,
-  `popis` VARCHAR(255) NOT NULL,
+  `popis` VARCHAR(510) NOT NULL,
   `mnozstvo` INT NOT NULL,
   `cena` FLOAT NOT NULL,
   `obrazok` VARCHAR(255) NOT NULL,

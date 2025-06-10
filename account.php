@@ -244,6 +244,10 @@ if (isset($_GET['deleteaccount']) && $_GET['deleteaccount'] === 'true') {
                                     if (empty($_POST['meno']) && empty($_POST['priezvisko']) && empty($_POST['tel_cislo']) && empty($_POST['krajina']) && empty($_POST['mesto']) && empty($_POST['psc']) && empty($_POST['ulica']) && empty($_POST['cislo_domu'])) {
                                         throw new Exception("Žiadne údaje na aktualizáciu.");
                                     }
+                                    // ak sú polia príliš dlhé, vyhodíme výnimku
+                                    if (mb_strlen($_POST['meno']) > 45 || mb_strlen($_POST['priezvisko']) > 45 || mb_strlen($_POST['tel_cislo']) > 20 || mb_strlen($_POST['krajina']) > 45 || mb_strlen($_POST['mesto']) > 45 || mb_strlen($_POST['psc']) > 15 || mb_strlen($_POST['ulica']) > 45) {
+                                        throw new Exception("Niektoré polia prekračujú maximálnu dĺžku.");
+                                    }
                                     // ak je formulár odoslaný, upravíme profil
                                     $users->editProfile(
                                         valueOrSession('meno', 'user_meno'),
