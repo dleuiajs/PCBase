@@ -237,5 +237,11 @@ class Users extends Database
         session_unset();
         session_destroy();
     }
+
+    public function checkAddress()
+    {
+        return isset($_SESSION['user_krajina']) && isset($_SESSION['user_mesto']) &&
+            isset($_SESSION['user_psc']) && isset($_SESSION['user_ulica']) && isset($_SESSION['user_cislo_domu']);
+    }
 }
 ?>
