@@ -14,7 +14,7 @@ WebFunc::loadPart("head");
         use users\Users;
         // načítanie údajov o používateľovi
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            if ($_POST['captcha'] != $_POST['captcha1'] + $_POST['captcha2']) {
+            if ($_POST['captcha'] != $_POST['captcha_result']) {
                 $userException = "Nesprávny výsledok CAPTCHA!";
             } else {
                 try {

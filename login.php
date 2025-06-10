@@ -19,8 +19,7 @@ WebFunc::loadPart("head");
     echo '<div class="container my-5" style="max-width: 400px;">
         <h2>Prihlásenie</h2>
         <form id="request" action="thxyou_login.php" method="post">
-            <input type="hidden" name="captcha1" value="' . $rand1 . '">
-            <input type="hidden" name="captcha2" value="' . $rand2 . '">
+            <input type="hidden" name="captcha_result" value="' . $rand1 + $rand2 . '">
             <div class="form-group mb-3">
                 <label for="email">E-mail:</label>
                 <input type="email" class="form-control" id="email" name="email" placeholder="Zadajte váš e-mail"
