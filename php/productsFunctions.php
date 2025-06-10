@@ -313,37 +313,37 @@ class ProductsFunctions extends Database
         // Spracovanie formulára pre pridanie recenzie
         if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['rating']) && isset($_POST['review'])) {
             // Kontrola, či používateľ už napísal recenziu pre tento tovar
-            $sql = "SELECT idrecenzia_tovara FROM recenzia_tovara WHERE idtovar = :idtovar AND idpouzivatel = :idpouzivatel";
-            $stmt = $this->connection->prepare($sql);
-            $stmt->bindParam(':idtovar', $idtovar);
-            $stmt->bindParam(':idpouzivatel', $_SESSION['user_id']);
-            $stmt->execute();
-            $existingReview = $stmt->fetch();
-            if (!$existingReview) {
+            try {
+                $sql = "SELECT idrecenzia_tovara FROM recenzia_tovara WHERE idtovar = :idtovar AND idpouzivatel = :idpouzivatel";
+                $stmt = $this->connection->prepare($sql);
+                $stmt->bindParam(':idtovar', $idtovar);
+                $stmt->bindParam(':idpouzivatel', $_SESSION['user_id']);
+                $stmt->execute();
+                $existingReview = $stmt->fetch();
+                if (!$existingReview) {
+                    if (mb_strlen($_POST['review']) > 255)
+                        throw new Exception('Recenzia musí mať maximálne 255 znakov.');
+                    $rating = $_POST['rating'];
+                    $review = $_POST['review'];
+                    $images = $_FILES['images'] ?? null;
 
-                $rating = $_POST['rating'];
-                $review = $_POST['review'];
-                $images = $_FILES['images'] ?? null;
-
-                if ($images) {
-                    $imageCount = count($images['name']);
-                    if ($imageCount > 5) {
-                        echo '<p class="text-danger mt-5 text-center">Môžete nahrať maximálne 5 obrázkov.</p>';
-                    } else {
-                        for ($i = 0; $i < $imageCount; $i++) {
-                            if ($images['error'][$i] == 0) {
-                                $targetDir = "uploads/reviews/";
-                                if (!is_dir($targetDir)) {
-                                    mkdir($targetDir, 0777, true);
+                    if ($images) {
+                        $imageCount = count($images['name']);
+                        if ($imageCount > 5) {
+                            throw new Exception('Môžete nahrať maximálne 5 obrázkov.');
+                        } else {
+                            for ($i = 0; $i < $imageCount; $i++) {
+                                if ($images['error'][$i] == 0) {
+                                    $targetDir = "uploads/reviews/";
+                                    if (!is_dir($targetDir)) {
+                                        mkdir($targetDir, 0777, true);
+                                    }
+                                    $targetFile = $targetDir . time() . "_" . basename($images["name"][$i]);
+                                    move_uploaded_file($images["tmp_name"][$i], $targetFile);
                                 }
-                                $targetFile = $targetDir . time() . "_" . basename($images["name"][$i]);
-                                move_uploaded_file($images["tmp_name"][$i], $targetFile);
                             }
                         }
                     }
-                }
-
-                try {
                     // SQL dotaz na pridanie recenzie
                     $sql = "INSERT INTO recenzia_tovara (hodnotenie, text, idtovar, idpouzivatel, datum) VALUES (:hodnotenie, :text, :idtovar, :idpouzivatel, CURRENT_DATE())";
                     $stmt = $this->connection->prepare($sql);
@@ -378,11 +378,10 @@ class ProductsFunctions extends Database
                         }
                     }
 
-
                     echo '<p class="alert alert-success mt-5 mx-4 text-center">Recenzia bola úspešne pridaná.</p>';
-                } catch (Exception $e) {
-                    echo '<p class="alert alert-danger mt-5 mx-4 text-center">Nastala chyba pri pridávaní recenzie: ' . $e->getMessage() . '</p>';
                 }
+            } catch (Exception $e) {
+                echo '<p class="alert alert-danger mt-5 mx-4 text-center">Nastala chyba pri pridávaní recenzie: ' . $e->getMessage() . '</p>';
             }
         }
 
