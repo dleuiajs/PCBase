@@ -33,6 +33,10 @@ class Users extends Database
             throw new Exception("Heslo musí mať aspoň 6 znakov.");
         } else if (!preg_match('/[0-9]/', $heslo)) {
             throw new Exception("Heslo musí obsahovať aspoň jedno číslo.");
+        } else if (mb_strlen($meno) < 2 || mb_strlen($meno) > 45) {
+            throw new Exception("Meno musí mať medzi 2 a 45 znakmi.");
+        } else if (mb_strlen($priezvisko) < 2 || mb_strlen($priezvisko) > 45) {
+            throw new Exception("Priezvisko musí mať medzi 2 a 45 znakmi.");
         }
         $this->register($meno, $priezvisko, $email, $heslo);
     }

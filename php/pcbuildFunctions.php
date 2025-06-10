@@ -214,6 +214,9 @@ class PcBuildFunctions extends Database
         </div>';
             // spracovanie formulára
             if ($form == "add-computer-components" && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nazov']) && $_POST['nazov'] != "") {
+                if (mb_strlen($_POST['nazov']) < 3 || mb_strlen($_POST['nazov']) > 255) {
+                    throw new Exception("Názov tovaru musí mať dĺžku medzi 3 a 255 znakmi.");
+                }
                 $data = $_POST;
                 $sql = "INSERT INTO $type (" . implode(", ", array_keys($data)) . ") VALUES (:" . implode(", :", array_keys($data)) . ")";
                 $stmt = $this->connection->prepare($sql);

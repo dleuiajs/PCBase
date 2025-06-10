@@ -167,6 +167,13 @@ class ProductsFunctions extends Database
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             if ($_POST['action'] == 'edit') {
                 try {
+                    if (!empty($_POST['nazov']) && mb_strlen($_POST['nazov'] != 0) && (mb_strlen($_POST['nazov']) < 3 || mb_strlen($_POST['nazov']) > 45)) {
+                        throw new Exception("Názov tovaru musí mať dĺžku medzi 3 a 45 znakmi.");
+                    }
+                    if (!empty($_POST['popis']) && mb_strlen($_POST['popis'] != 0) && (mb_strlen($_POST['popis']) < 10 || mb_strlen($_POST['popis']) > 510)) {
+                        throw new Exception("Popis tovaru musí mať dĺžku medzi 10 a 510 znakmi.");
+                    }
+
                     // SQL dotaz na získanie údajov o produkte
                     $sql = "SELECT * FROM tovar t 
                     INNER JOIN podrobnosti_tovara p ON t.idpodrobnosti_tovara = p.idpodrobnosti_tovara
@@ -265,9 +272,9 @@ class ProductsFunctions extends Database
                     $stmt->bindParam(':idkategoria_tovara', $idkategoria_tovara);
                     $stmt->execute();
 
-                    echo '<p class="text-success mb-4">Tovar bol úspešne aktualizovaný.</p>';
+                    echo '<p class="alert alert-success mb-4">Tovar bol úspešne aktualizovaný.</p>';
                 } catch (Exception $e) {
-                    echo '<p class="text-danger mb-4">' . $e->getMessage() . '</p>';
+                    echo '<p class="alert alert-danger mb-4">' . $e->getMessage() . '</p>';
                 }
             }
         }
@@ -1118,6 +1125,13 @@ class ProductsFunctions extends Database
         </div>';
         if ($form == "add-products" && $_SERVER['REQUEST_METHOD'] === 'POST') {
             try {
+                if (mb_strlen($_POST['nazov']) < 3 || mb_strlen($_POST['nazov']) > 45) {
+                    throw new Exception("Názov tovaru musí mať dĺžku medzi 3 a 45 znakmi.");
+                }
+                if (mb_strlen($_POST['popis']) < 10 || mb_strlen($_POST['popis']) > 510) {
+                    throw new Exception("Popis tovaru musí mať dĺžku medzi 10 a 510 znakmi.");
+                }
+
                 // nahravanie obrazka
                 $targetDir = "uploads/";
                 if (!is_dir($targetDir)) {
