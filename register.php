@@ -17,8 +17,7 @@ WebFunc::loadPart("head");
     echo '<div class="container my-5" style="max-width: 400px;">
         <h2>Registrácia</h2>
         <form id="request" action="thxyou_register.php" method="post">
-                    <input type="hidden" name="captcha1" value="' . $rand1 . '">
-            <input type="hidden" name="captcha2" value="' . $rand2 . '">
+            <input type="hidden" name="captcha_result" value="' . $rand1 + $rand2 . '">
             <div class="form-group mb-3">
                 <label for="meno">Meno:</label>
                 <input class="form-control" id="meno" name="meno" placeholder="Zadajte váše meno" required>
